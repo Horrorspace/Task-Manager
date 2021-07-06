@@ -8,10 +8,14 @@ CREATE TABLE users(
 );
 CREATE TABLE tasks(
   id SERIAL PRIMARY KEY,
-  FOREIGN KEY (user_id) REFERENCES users (id)
-  created TIMESTAMP WITH TIME ZONE
-  date_to_do TIMESTAMP WITH TIME ZONE
-  task TEXT
+  FOREIGN KEY (user_id) REFERENCES users (id),
+  created TIMESTAMP WITH TIME ZONE,
+  date_to_do TIMESTAMP WITH TIME ZONE,
+  task TEXT,
+  is_priority BOOLEAN
+  is_complete BOOLEAN
+  is_cancel BOOLEAN
+  is_delete BOOLEAN
 );
 
 DROP TABLE tasks;
