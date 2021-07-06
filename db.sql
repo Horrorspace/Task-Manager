@@ -1,5 +1,5 @@
 CREATE DATABASE task_manager;
-CREATE ROLE admin WITH LOGIN 'admin' PASSWORD 'KQoEgwBi';
+CREATE ROLE admin WITH LOGIN PASSWORD 'KQoEgwBi';
 CREATE TABLE users(
   id SERIAL PRIMARY KEY,
   name VARCHAR(255), 
@@ -8,6 +8,7 @@ CREATE TABLE users(
 );
 CREATE TABLE tasks(
   id SERIAL PRIMARY KEY,
+  user_id SERIAL,
   FOREIGN KEY (user_id) REFERENCES users (id),
   created TIMESTAMP WITH TIME ZONE,
   date_to_do TIMESTAMP WITH TIME ZONE,
