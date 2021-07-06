@@ -18,6 +18,8 @@ CREATE TABLE tasks(
   is_cancel BOOLEAN,
   is_delete BOOLEAN
 );
+INSERT INTO users VALUES (0, 'admin', 'admin@hey.com', 'hwegweKWHJEG');
+SELECT * FROM users;
 
 DROP TABLE tasks;
 DROP TABLE users;
