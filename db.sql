@@ -19,7 +19,8 @@ CREATE TABLE tasks(
   is_delete BOOLEAN
 );
 INSERT INTO users VALUES (0, 'admin', 'admin@hey.com', 'hwegweKWHJEG');
-SELECT * FROM users;
+COPY users TO '/var/lib/postgresql/12/logs/task_manager/data.csv' WITH CSV DELIMITER ',';
+SELECT users.email FROM users;
 
 DROP TABLE tasks;
 DROP TABLE users;
