@@ -20,5 +20,5 @@ CREATE TABLE tasks(
 
 DROP TABLE tasks;
 DROP TABLE users;
-DROP ROLE db_user;
+DROP ROLE admin;
 DROP DATABASE task_manager;
