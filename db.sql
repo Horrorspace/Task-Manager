@@ -1,13 +1,13 @@
 CREATE DATABASE task_manager;
 CREATE ROLE admin WITH LOGIN PASSWORD 'KQoEgwBi';
 CREATE TABLE users(
-  id SERIAL PRIMARY KEY DEFAULT random()*(2147483647-1+1))+1,
+  id SERIAL PRIMARY KEY UNIQUE DEFAULT random()*(2147483647-1+1))+1,
   name VARCHAR(255), 
-  email VARCHAR(255),
+  email VARCHAR(255) UNIQUE,
   password VARCHAR(255) 
 );
 CREATE TABLE tasks(
-  id SERIAL PRIMARY KEY DEFAULT random()*(2147483647-1+1))+1,
+  id SERIAL PRIMARY KEY UNIQUE DEFAULT random()*(2147483647-1+1))+1,
   user_id SERIAL,
   FOREIGN KEY (user_id) REFERENCES users (id),
   created TIMESTAMP WITH TIME ZONE,
@@ -18,7 +18,7 @@ CREATE TABLE tasks(
   is_cancel BOOLEAN DEFAULT false,
   is_delete BOOLEAN DEFAULT false
 );
-INSERT INTO users VALUES (0, 'admin', 'admin@hey.com', 'hwegweKWHJEG');
+INSERT INTO users VALUES (1, 'admin', 'admin@hey.com', 'hwegweKWHJEG');
 COPY users TO '/var/lib/postgresql/12/logs/task_manager/data.csv' WITH CSV DELIMITER ',';
 SELECT users.email FROM users;
 
