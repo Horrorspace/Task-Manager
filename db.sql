@@ -20,7 +20,10 @@ CREATE TABLE tasks(
 );
 INSERT INTO users VALUES (1, 'admin', 'admin@hey.com', 'hwegweKWHJEG');
 COPY users TO '/var/lib/postgresql/12/logs/task_manager/data.csv' WITH CSV DELIMITER ',';
-SELECT users.email FROM users;
+INSERT INTO tasks VALUES (1, '1', 'admin@hey.com', 'hwegweKWHJEG');
+COPY users TO '/var/lib/postgresql/12/logs/task_manager/data.csv' WITH CSV DELIMITER ',';
+SELECT * FROM users;
+SELECT * FROM tasks;
 
 DROP TABLE tasks;
 DROP TABLE users;
