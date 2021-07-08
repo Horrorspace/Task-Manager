@@ -1,13 +1,25 @@
-/* CREATE FUNCTION get_new_id (IN id SERIAL, OUT i INT, OUT res SERIAL) RETURNS SERIAL
+CREATE OR REPLACE FUNCTION get_new_id (IN id SERIAL, OUT val SERIAL, OUT is_uniq BOOLEAN, OUT i INT, OUT res SERIAL) RETURNS SERIAL
   i := 0;
   WHILE i < 20 LOOP
     res := random()*(2147483647-1+1))+1;
     i := i + 1;
-    IF res <> id THEN
-      i := 100;
+    is_uniq := true;
+    FOR r IN SELECT id FROM users
+    LOOP
+      val := r;
+      IF res <> val 
+      THEN
+        is_uniq := true;
+      ELSE
+        is_uniq := false;
+      END IF;
+    END LOOP;
+    IF is_uniq = true
+    THEN
+      RETURN res;
     END IF;
   END LOOP;
-$$ LANGUAGE SQL; */
+$$ LANGUAGE SQL;
 
 CREATE DATABASE task_manager;
 CREATE ROLE admin WITH LOGIN PASSWORD 'KQoEgwBi';
