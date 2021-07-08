@@ -23,6 +23,7 @@ CREATE TABLE tasks(
   FOREIGN KEY (user_id) REFERENCES users (id),
   created TIMESTAMP WITH TIME ZONE,
   date_to_do TIMESTAMP WITH TIME ZONE,
+  title VARCHAR(255),
   task TEXT,
   is_priority BOOLEAN DEFAULT false,
   is_complete BOOLEAN DEFAULT false,
