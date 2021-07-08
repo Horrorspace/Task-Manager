@@ -1,9 +1,9 @@
-CREATE OR REPLACE FUNCTION get_new_id () RETURNS SERIAL AS $$
+CREATE OR REPLACE FUNCTION get_new_id () RETURNS INT AS $$
   DECLARE
-    i INT := 0;
+    i integer := 0;
     is_uniq BOOLEAN := true;
-    res SERIAL;
-    val SERIAL;
+    res INT;
+    val INT;
   BEGIN
     WHILE i < 20 LOOP
       res := random()*(2147483647-1+1))+1;
@@ -25,9 +25,9 @@ CREATE OR REPLACE FUNCTION get_new_id () RETURNS SERIAL AS $$
       END IF;
     END LOOP;
   END 
-$$ LANGUAGE SQL;
+$$ LANGUAGE PLpgSQL;
 
-CREATE DATABASE task_manager;
+/* CREATE DATABASE task_manager;
 CREATE ROLE admin WITH LOGIN PASSWORD 'KQoEgwBi';
 CREATE TABLE users(
   id SERIAL PRIMARY KEY DEFAULT random()*(2147483647-1+1))+1,
@@ -58,4 +58,4 @@ SELECT * FROM tasks;
 DROP TABLE tasks;
 DROP TABLE users;
 DROP ROLE admin;
-DROP DATABASE task_manager;
+DROP DATABASE task_manager; */

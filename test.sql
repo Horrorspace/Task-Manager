@@ -1,0 +1,11 @@
+CREATE OR REPLACE FUNCTION test() RETURNS INT AS $$
+    DECLARE
+        x INT := 2;
+    BEGIN
+        RETURN x + 1;
+    END
+$$ LANGUAGE PLpgSQL;
+
+SELECT test();
+
+DROP FUNCTION test();
