@@ -1,9 +1,9 @@
-CREATE FUNCTION get_new_id (OUT i INT, OUT res SERIAL) RETURNS SERIAL
+CREATE FUNCTION get_new_id (IN id SERIAL, OUT i INT, OUT res SERIAL) RETURNS SERIAL
   i := 0;
   WHILE i < 20 LOOP
     res := random()*(2147483647-1+1))+1;
     i := i + 1;
-    IF res  THEN
+    IF res <> id THEN
       i := 100;
     END IF;
   END LOOP;
