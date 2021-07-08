@@ -1,24 +1,30 @@
-CREATE OR REPLACE FUNCTION get_new_id (IN id SERIAL, OUT val SERIAL, OUT is_uniq BOOLEAN, OUT i INT, OUT res SERIAL) RETURNS SERIAL AS $$
-  i := 0;
-  WHILE i < 20 LOOP
-    res := random()*(2147483647-1+1))+1;
-    i := i + 1;
-    is_uniq := true;
-    FOR r IN SELECT id FROM users
-    LOOP
-      val := r;
-      IF res <> val 
+CREATE OR REPLACE FUNCTION get_new_id () RETURNS SERIAL AS $$
+  DECLARE
+    i INT := 0;
+    is_uniq BOOLEAN := true;
+    res SERIAL;
+    val SERIAL;
+  BEGIN
+    WHILE i < 20 LOOP
+      res := random()*(2147483647-1+1))+1;
+      i := i + 1;
+      is_uniq := true;
+      FOR r IN SELECT id FROM users
+      LOOP
+        val := r;
+        IF res <> val 
+        THEN
+          is_uniq := true;
+        ELSE
+          is_uniq := false;
+        END IF;
+      END LOOP;
+      IF is_uniq = true
       THEN
-        is_uniq := true;
-      ELSE
-        is_uniq := false;
+        RETURN res;
       END IF;
     END LOOP;
-    IF is_uniq = true
-    THEN
-      RETURN res;
-    END IF;
-  END LOOP;
+  END 
 $$ LANGUAGE SQL;
 
 CREATE DATABASE task_manager;
