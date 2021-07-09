@@ -7,7 +7,7 @@ CREATE OR REPLACE FUNCTION get_new_id () RETURNS INT AS $$
   BEGIN
     WHILE i < 20 LOOP
       res := random();
-      res := res*(2147483647-1+1))+1;
+      res := res*(2147483647-1+1)+1;
       i := i + 1;
       is_uniq := true;
       FOR r IN SELECT id FROM users
