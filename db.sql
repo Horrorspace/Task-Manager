@@ -4,6 +4,7 @@ CREATE OR REPLACE FUNCTION get_new_id () RETURNS INT AS $$
     is_uniq BOOLEAN := true;
     res FLOAT8;
     val FLOAT8;
+    r INT;
   BEGIN
     WHILE i < 20 LOOP
       res := random();
