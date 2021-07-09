@@ -46,16 +46,48 @@ CREATE OR REPLACE FUNCTION get_new_id(type VARCHAR(255)) RETURNS INT AS $$
   END 
 $$ LANGUAGE PLpgSQL;
 
-/* CREATE DATABASE task_manager;
+
+CREATE OR REPLACE FUNCTION get_random_id(type VARCHAR(255)) RETURNS INT AS $$
+  DECLARE
+    r INT;
+    val INT;
+  BEGIN
+    IF type = 'users' THEN
+      FOR r IN SELECT id FROM users
+      LOOP
+        val := r;
+      END LOOP;
+    ELSIF type = 'tasks' THEN
+      FOR r IN SELECT id FROM tasks
+      LOOP
+        val := r;
+      END LOOP;
+    ELSE
+        val := 1;
+    END IF;
+    RETURN val;
+  END
+$$ LANGUAGE PLpgSQL;
+
+
+CREATE OR REPLACE FUNCTION test_insert() RETURNS VOID AS $$
+  DECLARE
+  BEGIN
+    INSERT INTO users VALUES (get_new_id('users'), 'admin', 'admin@hey.com', 'hwegweKWHJEG');
+  END
+$$ LANGUAGE PLpgSQL;
+
+
+CREATE DATABASE task_manager;
 CREATE ROLE admin WITH LOGIN PASSWORD 'KQoEgwBi';
 CREATE TABLE users(
-  id SERIAL PRIMARY KEY DEFAULT get_new_id('users'),
+  id SERIAL PRIMARY KEY,
   name VARCHAR(255), 
   email VARCHAR(255) UNIQUE,
   password VARCHAR(255) 
 );
 CREATE TABLE tasks(
-  id SERIAL PRIMARY KEY DEFAULT get_new_id('tasks'),
+  id SERIAL PRIMARY KEY,
   user_id SERIAL,
   FOREIGN KEY (user_id) REFERENCES users (id),
   created TIMESTAMP WITH TIME ZONE,
@@ -67,14 +99,18 @@ CREATE TABLE tasks(
   is_cancel BOOLEAN DEFAULT false,
   is_delete BOOLEAN DEFAULT false
 );
-INSERT INTO users VALUES (1, 'admin', 'admin@hey.com', 'hwegweKWHJEG');
-COPY users TO '/var/lib/postgresql/12/logs/task_manager/data.csv' WITH CSV DELIMITER ',';
-INSERT INTO tasks (user_id, created, date_to_do, task) VALUES (1, '2004-10-19 10:23:54+02', 'admin@hey.com', 'hwegweKWHJEG');
-COPY users TO '/var/lib/postgresql/12/logs/task_manager/data.csv' WITH CSV DELIMITER ',';
+
+SELECT test_insert();
+--INSERT INTO users VALUES (get_new_id('users'), 'admin', 'admin@hey.com', 'hwegweKWHJEG');
+SELECT id FROM users;
+--COPY users TO '/var/lib/postgresql/12/logs/task_manager/data.csv' WITH CSV DELIMITER ',';
+INSERT INTO tasks (id, user_id, created, date_to_do, title, task) VALUES (get_new_id('tasks'), get_random_id('users'), '2004-10-19 10:23:54+02', '2004-10-19 10:23:54+02', 'TEST', 'testing');
+--COPY users TO '/var/lib/postgresql/12/logs/task_manager/data.csv' WITH CSV DELIMITER ',';
 SELECT * FROM users;
 SELECT * FROM tasks;
+
 
 DROP TABLE tasks;
 DROP TABLE users;
 DROP ROLE admin;
-DROP DATABASE task_manager; */
+DROP DATABASE task_manager;
