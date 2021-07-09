@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION get_new_id() RETURNS INT AS $$
+CREATE OR REPLACE FUNCTION get_new_id(type VARCHAR(255)) RETURNS INT AS $$
   DECLARE
     i integer := 0;
     is_uniq BOOLEAN := true;
@@ -11,18 +11,35 @@ CREATE OR REPLACE FUNCTION get_new_id() RETURNS INT AS $$
       res := res*(2147483647-1+1)+1;
       i := i + 1;
       is_uniq := true;
-      FOR r IN SELECT id FROM users
-      LOOP
-        val := r;
-        IF res <> val 
-        THEN
-          is_uniq := true;
-        ELSE
-          is_uniq := false;
-        END IF;
-      END LOOP;
+      IF type = 'users' THEN
+        FOR r IN SELECT id FROM users
+        LOOP
+          val := r;
+          IF res <> val 
+          THEN
+            is_uniq := true;
+          ELSE
+            is_uniq := false;
+          END IF;
+        END LOOP;
+      ELSIF type = 'tasks' THEN
+        FOR r IN SELECT id FROM tasks
+        LOOP
+          val := r;
+          IF res <> val 
+          THEN
+            is_uniq := true;
+          ELSE
+            is_uniq := false;
+          END IF;
+        END LOOP;
+      ELSE
+        res := 1;
+        is_uniq := false;
+      END IF;
       IF is_uniq = true
       THEN
+        i := 100;
         RETURN res;
       END IF;
     END LOOP;
@@ -32,13 +49,13 @@ $$ LANGUAGE PLpgSQL;
 /* CREATE DATABASE task_manager;
 CREATE ROLE admin WITH LOGIN PASSWORD 'KQoEgwBi';
 CREATE TABLE users(
-  id SERIAL PRIMARY KEY DEFAULT get_new_id(),
+  id SERIAL PRIMARY KEY DEFAULT get_new_id('users'),
   name VARCHAR(255), 
   email VARCHAR(255) UNIQUE,
   password VARCHAR(255) 
 );
 CREATE TABLE tasks(
-  id SERIAL PRIMARY KEY DEFAULT get_new_id(),
+  id SERIAL PRIMARY KEY DEFAULT get_new_id('tasks'),
   user_id SERIAL,
   FOREIGN KEY (user_id) REFERENCES users (id),
   created TIMESTAMP WITH TIME ZONE,
