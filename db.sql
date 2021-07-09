@@ -2,11 +2,12 @@ CREATE OR REPLACE FUNCTION get_new_id () RETURNS INT AS $$
   DECLARE
     i integer := 0;
     is_uniq BOOLEAN := true;
-    res INT;
-    val INT;
+    res FLOAT8;
+    val FLOAT8;
   BEGIN
     WHILE i < 20 LOOP
-      res := random()*(2147483647-1+1))+1;
+      res := random();
+      res := res*(2147483647-1+1))+1;
       i := i + 1;
       is_uniq := true;
       FOR r IN SELECT id FROM users
