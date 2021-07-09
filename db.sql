@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION get_new_id () RETURNS INT AS $$
+CREATE OR REPLACE FUNCTION get_new_id() RETURNS INT AS $$
   DECLARE
     i integer := 0;
     is_uniq BOOLEAN := true;
@@ -32,13 +32,13 @@ $$ LANGUAGE PLpgSQL;
 /* CREATE DATABASE task_manager;
 CREATE ROLE admin WITH LOGIN PASSWORD 'KQoEgwBi';
 CREATE TABLE users(
-  id SERIAL PRIMARY KEY DEFAULT random()*(2147483647-1+1))+1,
+  id SERIAL PRIMARY KEY DEFAULT get_new_id(),
   name VARCHAR(255), 
   email VARCHAR(255) UNIQUE,
   password VARCHAR(255) 
 );
 CREATE TABLE tasks(
-  id SERIAL PRIMARY KEY DEFAULT random()*(2147483647-1+1))+1,
+  id SERIAL PRIMARY KEY DEFAULT get_new_id(),
   user_id SERIAL,
   FOREIGN KEY (user_id) REFERENCES users (id),
   created TIMESTAMP WITH TIME ZONE,
