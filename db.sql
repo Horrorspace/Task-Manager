@@ -70,26 +70,6 @@ CREATE OR REPLACE FUNCTION get_random_id(type VARCHAR(255)) RETURNS INT AS $$
 $$ LANGUAGE PLpgSQL;
 
 
-CREATE OR REPLACE FUNCTION user_insert(name VARCHAR(255), email VARCHAR(255), password VARCHAR(255)) RETURNS VOID AS $$
-  DECLARE
-  BEGIN
-    INSERT INTO users VALUES (get_new_id('users'), name, email, password);
-  END
-$$ LANGUAGE PLpgSQL;
-
-
-CREATE OR REPLACE FUNCTION task_insert(user_id INT, date_to_do TIMESTAMP WITH TIME ZONE,
-title VARCHAR(255), task TEXT) RETURNS VOID AS $$
-  DECLARE
-    created_date TIMESTAMP WITH TIME ZONE := current_timestamp;
-  BEGIN
-    INSERT INTO tasks (id, user_id, created, date_to_do, title, task) 
-    VALUES (get_new_id('tasks'), get_random_id('users'), created_date,
-    '2004-10-19 10:23:54+02', 'TEST', 'testing');
-  END
-$$ LANGUAGE PLpgSQL;
-
-
 CREATE OR REPLACE FUNCTION get_id_by_email(email VARCHAR(255)) RETURNS INT AS $$
   DECLARE
     userid INT;
@@ -99,6 +79,44 @@ CREATE OR REPLACE FUNCTION get_id_by_email(email VARCHAR(255)) RETURNS INT AS $$
     RETURN userid;
   END
 $$ LANGUAGE PLpgSQL;
+
+
+CREATE OR REPLACE FUNCTION toggle_priority(id INT) RETURNS VOID AS $$
+  DECLARE
+    is_priority BOOLEAN;
+  BEGIN
+    SELECT tasks.is_priority INTO is_priority
+        FROM tasks WHERE tasks.id = toggle_priority.id;
+    IF is_priority = true THEN
+      UPDATE tasks SET is_priority = false WHERE tasks.id = toggle_priority.id;
+    ELSE
+      UPDATE tasks SET is_priority = true WHERE tasks.id = toggle_priority.id;
+    END IF;
+  END
+$$ LANGUAGE PLpgSQL;
+
+
+CREATE OR REPLACE FUNCTION user_insert(name VARCHAR(255), email VARCHAR(255), password VARCHAR(255)) RETURNS VOID AS $$
+  DECLARE
+  BEGIN
+    INSERT INTO users VALUES (get_new_id('users'), name, email, password);
+  END
+$$ LANGUAGE PLpgSQL;
+
+
+CREATE OR REPLACE FUNCTION task_insert(email VARCHAR(255), date_to_do TIMESTAMP WITH TIME ZONE,
+title VARCHAR(255), task TEXT) RETURNS VOID AS $$
+  DECLARE
+    user_id INT := get_id_by_email(task_insert.email);
+    created_date TIMESTAMP WITH TIME ZONE := current_timestamp;
+  BEGIN
+    INSERT INTO tasks (id, user_id, created, date_to_do, title, task) 
+    VALUES (get_new_id('tasks'), get_random_id('users'), created_date,
+    '2004-10-19 10:23:54+02', 'TEST', 'testing');
+  END
+$$ LANGUAGE PLpgSQL;
+
+
 
 
 CREATE DATABASE task_manager;
@@ -115,6 +133,9 @@ CREATE TABLE tasks(
   FOREIGN KEY (user_id) REFERENCES users (id),
   created TIMESTAMP WITH TIME ZONE,
   date_to_do TIMESTAMP WITH TIME ZONE,
+  date_complete TIMESTAMP WITH TIME ZONE DEFAULT current_timestamp,
+  date_cancel  TIMESTAMP WITH TIME ZONE DEFAULT current_timestamp,
+  date_delete  TIMESTAMP WITH TIME ZONE DEFAULT current_timestamp,
   title VARCHAR(255),
   task TEXT,
   is_priority BOOLEAN DEFAULT false,
@@ -131,28 +152,31 @@ SELECT user_insert('3', '3@hey.com', 'hwegweKWHJEG');
 
 
 SELECT id FROM users;
---COPY users TO '/var/lib/postgresql/12/logs/task_manager/data.csv' WITH CSV DELIMITER ',';
-SELECT task_insert(get_random_id('users'), '2004-10-19 10:23:54+02', 'TEST', 'testing');
-SELECT task_insert(get_random_id('users'), '2004-10-19 10:23:54+02', 'TEST', 'testing');
-SELECT task_insert(get_random_id('users'), '2004-10-19 10:23:54+02', 'TEST', 'testing');
-SELECT task_insert(get_random_id('users'), '2004-10-19 10:23:54+02', 'TEST', 'testing');
-SELECT task_insert(get_random_id('users'), '2004-10-19 10:23:54+02', 'TEST', 'testing');
-SELECT task_insert(get_random_id('users'), '2004-10-19 10:23:54+02', 'TEST', 'testing');
-SELECT task_insert(get_random_id('users'), '2004-10-19 10:23:54+02', 'TEST', 'testing');
---COPY users TO '/var/lib/postgresql/12/logs/task_manager/data.csv' WITH CSV DELIMITER ',';
 
-SELECT get_id_by_email('2@hey.com');
+SELECT task_insert('3@hey.com', '2004-10-19 10:23:54+02', 'TEST', 'testing');
+SELECT task_insert('3@hey.com', '2004-10-19 10:23:54+02', 'TEST', 'testing');
+SELECT task_insert('3@hey.com', '2004-10-19 10:23:54+02', 'TEST', 'testing');
+
+
+
 
 SELECT * FROM users;
-SELECT * FROM tasks;
+SELECT id, title FROM tasks;
 
+
+
+
+
+--COPY users TO '/var/lib/postgresql/12/logs/task_manager/data.csv' WITH CSV DELIMITER ',';
+--COPY users TO '/var/lib/postgresql/12/logs/task_manager/data.csv' WITH CSV DELIMITER ',';
 
 
 DROP FUNCTION get_id_by_email(email VARCHAR(255));
 DROP FUNCTION get_new_id(type VARCHAR(255));
 DROP FUNCTION get_random_id(type VARCHAR(255));
+DROP FUNCTION toggle_priority(id INT);
 DROP FUNCTION user_insert(name VARCHAR(255), email VARCHAR(255), password VARCHAR(255));
-DROP FUNCTION task_insert(user_id INT, date_to_do TIMESTAMP WITH TIME ZONE,
+DROP FUNCTION task_insert(email VARCHAR(255), date_to_do TIMESTAMP WITH TIME ZONE,
 title VARCHAR(255), task TEXT);
 
 
