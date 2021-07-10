@@ -90,6 +90,17 @@ title VARCHAR(255), task TEXT) RETURNS VOID AS $$
 $$ LANGUAGE PLpgSQL;
 
 
+CREATE OR REPLACE FUNCTION get_id_by_email(email VARCHAR(255)) RETURNS INT AS $$
+  DECLARE
+    userid INT;
+  BEGIN
+    SELECT users.id INTO userid
+        FROM users WHERE users.email = get_id_by_email.email;
+    RETURN userid;
+  END
+$$ LANGUAGE PLpgSQL;
+
+
 CREATE DATABASE task_manager;
 CREATE ROLE admin WITH LOGIN PASSWORD 'KQoEgwBi';
 CREATE TABLE users(
@@ -113,14 +124,36 @@ CREATE TABLE tasks(
 );
 
 SELECT user_insert('admin', 'admin@hey.com', 'hwegweKWHJEG');
---INSERT INTO users VALUES (get_new_id('users'), 'admin', 'admin@hey.com', 'hwegweKWHJEG');
+SELECT user_insert('1', '1@hey.com', 'hwegweKWHJEG');
+SELECT user_insert('2', '2@hey.com', 'hwegweKWHJEG');
+SELECT user_insert('3', '3@hey.com', 'hwegweKWHJEG');
+
+
+
 SELECT id FROM users;
 --COPY users TO '/var/lib/postgresql/12/logs/task_manager/data.csv' WITH CSV DELIMITER ',';
 SELECT task_insert(get_random_id('users'), '2004-10-19 10:23:54+02', 'TEST', 'testing');
---INSERT INTO tasks (id, user_id, created, date_to_do, title, task) VALUES (get_new_id('tasks'), get_random_id('users'), '2004-10-19 10:23:54+02', '2004-10-19 10:23:54+02', 'TEST', 'testing');
+SELECT task_insert(get_random_id('users'), '2004-10-19 10:23:54+02', 'TEST', 'testing');
+SELECT task_insert(get_random_id('users'), '2004-10-19 10:23:54+02', 'TEST', 'testing');
+SELECT task_insert(get_random_id('users'), '2004-10-19 10:23:54+02', 'TEST', 'testing');
+SELECT task_insert(get_random_id('users'), '2004-10-19 10:23:54+02', 'TEST', 'testing');
+SELECT task_insert(get_random_id('users'), '2004-10-19 10:23:54+02', 'TEST', 'testing');
+SELECT task_insert(get_random_id('users'), '2004-10-19 10:23:54+02', 'TEST', 'testing');
 --COPY users TO '/var/lib/postgresql/12/logs/task_manager/data.csv' WITH CSV DELIMITER ',';
+
+SELECT get_id_by_email('2@hey.com');
+
 SELECT * FROM users;
 SELECT * FROM tasks;
+
+
+
+DROP FUNCTION get_id_by_email(email VARCHAR(255));
+DROP FUNCTION get_new_id(type VARCHAR(255));
+DROP FUNCTION get_random_id(type VARCHAR(255));
+DROP FUNCTION user_insert(name VARCHAR(255), email VARCHAR(255), password VARCHAR(255));
+DROP FUNCTION task_insert(user_id INT, date_to_do TIMESTAMP WITH TIME ZONE,
+title VARCHAR(255), task TEXT);
 
 
 DROP TABLE tasks;
