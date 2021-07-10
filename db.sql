@@ -78,12 +78,13 @@ CREATE OR REPLACE FUNCTION user_insert(name VARCHAR(255), email VARCHAR(255), pa
 $$ LANGUAGE PLpgSQL;
 
 
-CREATE OR REPLACE FUNCTION task_insert(user_id INT, created TIMESTAMP WITH TIME ZONE,
-date_to_do TIMESTAMP WITH TIME ZONE, title VARCHAR(255), task TEXT) RETURNS VOID AS $$
+CREATE OR REPLACE FUNCTION task_insert(user_id INT, date_to_do TIMESTAMP WITH TIME ZONE,
+title VARCHAR(255), task TEXT) RETURNS VOID AS $$
   DECLARE
+    created_date TIMESTAMP WITH TIME ZONE := current_timestamp;
   BEGIN
     INSERT INTO tasks (id, user_id, created, date_to_do, title, task) 
-    VALUES (get_new_id('tasks'), get_random_id('users'), '2004-10-19 10:23:54+02',
+    VALUES (get_new_id('tasks'), get_random_id('users'), created_date,
     '2004-10-19 10:23:54+02', 'TEST', 'testing');
   END
 $$ LANGUAGE PLpgSQL;
@@ -115,7 +116,7 @@ SELECT user_insert('admin', 'admin@hey.com', 'hwegweKWHJEG');
 --INSERT INTO users VALUES (get_new_id('users'), 'admin', 'admin@hey.com', 'hwegweKWHJEG');
 SELECT id FROM users;
 --COPY users TO '/var/lib/postgresql/12/logs/task_manager/data.csv' WITH CSV DELIMITER ',';
-SELECT task_insert();
+SELECT task_insert(get_random_id('users'), '2004-10-19 10:23:54+02', 'TEST', 'testing');
 --INSERT INTO tasks (id, user_id, created, date_to_do, title, task) VALUES (get_new_id('tasks'), get_random_id('users'), '2004-10-19 10:23:54+02', '2004-10-19 10:23:54+02', 'TEST', 'testing');
 --COPY users TO '/var/lib/postgresql/12/logs/task_manager/data.csv' WITH CSV DELIMITER ',';
 SELECT * FROM users;
