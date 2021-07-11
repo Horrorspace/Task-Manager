@@ -1,0 +1,34 @@
+{
+  "name": "task-manager",
+  "version": "1.0.0",
+  "description": "FullStack application for planning tasks",
+  "main": "index.js",
+  "scripts": {
+    "build": "cross-env NODE_ENV=production webpack --mode production",
+    "dev": "cross-env NODE_ENV=development webpack --mode development",
+    "start": "cross-env NODE_ENV=development webpack serve --mode development --open"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Horrorspace/Task-Manager.git"
+  },
+  "keywords": [
+    "ts",
+    "typescript",
+    "react",
+    "redux",
+    "express"
+  ],
+  "author": {
+    "name": "eugenii",
+    "email": "utkineugeniy@gmail.com"
+  },
+  "license": "",
+  "bugs": {
+    "url": "https://github.com/Horrorspace/Task-Manager/issues"
+  },
+  "homepage": "https://github.com/Horrorspace/Task-Manager#readme",
+  "devDependencies": {
+    "cross-env": "^7.0.3"
+  }
+}
