@@ -167,9 +167,24 @@ $$ LANGUAGE PLpgSQL;
 
 CREATE OR REPLACE FUNCTION date_todo_up(id INT, date_to_do TIMESTAMP WITH TIME ZONE) RETURNS VOID AS $$
   DECLARE
-    is_delete BOOLEAN;
   BEGIN
     UPDATE tasks SET date_to_do = date_todo_up.date_to_do WHERE tasks.id = date_todo_up.id;
+  END
+$$ LANGUAGE PLpgSQL;
+
+
+CREATE OR REPLACE FUNCTION title_up(id INT, title VARCHAR(255)) RETURNS VOID AS $$
+  DECLARE
+  BEGIN
+    UPDATE tasks SET title = title_up.title WHERE tasks.id = title_up.id;
+  END
+$$ LANGUAGE PLpgSQL;
+
+
+CREATE OR REPLACE FUNCTION task_up(id INT, task TEXT) RETURNS VOID AS $$
+  DECLARE
+  BEGIN
+    UPDATE tasks SET tasks = task_up.tasks WHERE tasks.id = task_up.id;
   END
 $$ LANGUAGE PLpgSQL;
 
