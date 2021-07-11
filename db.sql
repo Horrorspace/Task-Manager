@@ -96,6 +96,54 @@ CREATE OR REPLACE FUNCTION toggle_priority(id INT) RETURNS VOID AS $$
 $$ LANGUAGE PLpgSQL;
 
 
+CREATE OR REPLACE FUNCTION toggle_complete(id INT) RETURNS VOID AS $$
+  DECLARE
+    is_complete BOOLEAN;
+  BEGIN
+    SELECT tasks.is_complete INTO is_complete
+        FROM tasks WHERE tasks.id = toggle_complete.id;
+    IF is_complete = true THEN
+      UPDATE tasks SET is_complete = false WHERE tasks.id = toggle_complete.id;
+    ELSE
+      UPDATE tasks SET is_complete = true WHERE tasks.id = toggle_complete.id;
+      UPDATE tasks SET date_complete = current_timestamp WHERE tasks.id = toggle_complete.id;
+    END IF;
+  END
+$$ LANGUAGE PLpgSQL;
+
+
+CREATE OR REPLACE FUNCTION toggle_cancel(id INT) RETURNS VOID AS $$
+  DECLARE
+    is_cancel BOOLEAN;
+  BEGIN
+    SELECT tasks.is_cancel INTO is_cancel
+        FROM tasks WHERE tasks.id = toggle_cancel.id;
+    IF is_cancel = true THEN
+      UPDATE tasks SET is_cancel = false WHERE tasks.id = toggle_cancel.id;
+    ELSE
+      UPDATE tasks SET is_cancel = true WHERE tasks.id = toggle_cancel.id;
+      UPDATE tasks SET date_cancel = current_timestamp WHERE tasks.id = toggle_cancel.id;
+    END IF;
+  END
+$$ LANGUAGE PLpgSQL;
+
+
+CREATE OR REPLACE FUNCTION toggle_delete(id INT) RETURNS VOID AS $$
+  DECLARE
+    is_delete BOOLEAN;
+  BEGIN
+    SELECT tasks.is_delete INTO is_delete
+        FROM tasks WHERE tasks.id = toggle_delete.id;
+    IF is_delete = true THEN
+      UPDATE tasks SET is_delete = false WHERE tasks.id = toggle_delete.id;
+    ELSE
+      UPDATE tasks SET is_delete = true WHERE tasks.id = toggle_delete.id;
+      UPDATE tasks SET date_delete = current_timestamp WHERE tasks.id = toggle_delete.id;
+    END IF;
+  END
+$$ LANGUAGE PLpgSQL;
+
+
 CREATE OR REPLACE FUNCTION user_insert(name VARCHAR(255), email VARCHAR(255), password VARCHAR(255)) RETURNS VOID AS $$
   DECLARE
   BEGIN
@@ -113,6 +161,15 @@ title VARCHAR(255), task TEXT) RETURNS VOID AS $$
     INSERT INTO tasks (id, user_id, created, date_to_do, title, task) 
     VALUES (get_new_id('tasks'), get_random_id('users'), created_date,
     '2004-10-19 10:23:54+02', 'TEST', 'testing');
+  END
+$$ LANGUAGE PLpgSQL;
+
+
+CREATE OR REPLACE FUNCTION date_todo_up(id INT, date_to_do TIMESTAMP WITH TIME ZONE) RETURNS VOID AS $$
+  DECLARE
+    is_delete BOOLEAN;
+  BEGIN
+    UPDATE tasks SET date_to_do = date_todo_up.date_to_do WHERE tasks.id = date_todo_up.id;
   END
 $$ LANGUAGE PLpgSQL;
 
@@ -157,11 +214,12 @@ SELECT task_insert('3@hey.com', '2004-10-19 10:23:54+02', 'TEST', 'testing');
 SELECT task_insert('3@hey.com', '2004-10-19 10:23:54+02', 'TEST', 'testing');
 SELECT task_insert('3@hey.com', '2004-10-19 10:23:54+02', 'TEST', 'testing');
 
-
+SELECT toggle_priority(get_random_id('tasks'));
+SELECT date_todo_up(get_random_id('tasks'), '2012-10-19 10:23:54+02');
 
 
 SELECT * FROM users;
-SELECT id, title FROM tasks;
+SELECT id, title, is_priority, date_to_do FROM tasks;
 
 
 
