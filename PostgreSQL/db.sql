@@ -184,7 +184,7 @@ $$ LANGUAGE PLpgSQL;
 CREATE OR REPLACE FUNCTION task_up(id INT, task TEXT) RETURNS VOID AS $$
   DECLARE
   BEGIN
-    UPDATE tasks SET tasks = task_up.tasks WHERE tasks.id = task_up.id;
+    UPDATE tasks SET task = task_up.task WHERE tasks.id = task_up.id;
   END
 $$ LANGUAGE PLpgSQL;
 
@@ -222,23 +222,18 @@ SELECT user_insert('2', '2@hey.com', 'hwegweKWHJEG');
 SELECT user_insert('3', '3@hey.com', 'hwegweKWHJEG');
 
 
-
-SELECT id FROM users;
-
 SELECT task_insert('3@hey.com', '2004-10-19 10:23:54+02', 'TEST', 'testing');
 SELECT task_insert('3@hey.com', '2004-10-19 10:23:54+02', 'TEST', 'testing');
 SELECT task_insert('3@hey.com', '2004-10-19 10:23:54+02', 'TEST', 'testing');
 
 SELECT toggle_priority(get_random_id('tasks'));
 SELECT date_todo_up(get_random_id('tasks'), '2012-10-19 10:23:54+02');
+SELECT title_up(get_random_id('tasks'), 'UP');
+SELECT task_up(get_random_id('tasks'), 'Update');
 
 
 SELECT * FROM users;
-SELECT id, title, is_priority, date_to_do FROM tasks;
-
-
-
-
+SELECT id, title, task, is_priority, date_to_do FROM tasks;
 
 --COPY users TO '/var/lib/postgresql/12/logs/task_manager/data.csv' WITH CSV DELIMITER ',';
 --COPY users TO '/var/lib/postgresql/12/logs/task_manager/data.csv' WITH CSV DELIMITER ',';
