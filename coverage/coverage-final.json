@@ -1,0 +1,2 @@
+{"/media/user/Локальный диск1/Web/Task-Manager/Task-Manager/src/main/app.ts": {"path":"/media/user/Локальный диск1/Web/Task-Manager/Task-Manager/src/main/app.ts","statementMap":{"0":{"start":{"line":2,"column":4},"end":{"line":2,"column":17}}},"fnMap":{"0":{"name":"sum","decl":{"start":{"line":1,"column":24},"end":{"line":1,"column":27}},"loc":{"start":{"line":1,"column":58},"end":{"line":3,"column":1}},"line":1}},"branchMap":{},"s":{"0":1},"f":{"0":1},"b":{},"_coverageSchema":"1a1c01bbd47fc00a2c39e90264f33305004495a9","hash":"da8c5f4abbbfab5ef57b15d8f5eb177c394d7822"}
+}
