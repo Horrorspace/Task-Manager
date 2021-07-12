@@ -216,6 +216,8 @@ CREATE TABLE tasks(
   is_delete BOOLEAN DEFAULT false
 );
 
+
+/*
 SELECT user_insert('admin', 'admin@hey.com', 'hwegweKWHJEG');
 SELECT user_insert('1', '1@hey.com', 'hwegweKWHJEG');
 SELECT user_insert('2', '2@hey.com', 'hwegweKWHJEG');
@@ -234,21 +236,7 @@ SELECT task_up(get_random_id('tasks'), 'Update');
 
 SELECT * FROM users;
 SELECT id, title, task, is_priority, date_to_do FROM tasks;
+*/
 
 --COPY users TO '/var/lib/postgresql/12/logs/task_manager/data.csv' WITH CSV DELIMITER ',';
 --COPY users TO '/var/lib/postgresql/12/logs/task_manager/data.csv' WITH CSV DELIMITER ',';
-
-
-DROP FUNCTION get_id_by_email(email VARCHAR(255));
-DROP FUNCTION get_new_id(type VARCHAR(255));
-DROP FUNCTION get_random_id(type VARCHAR(255));
-DROP FUNCTION toggle_priority(id INT);
-DROP FUNCTION user_insert(name VARCHAR(255), email VARCHAR(255), password VARCHAR(255));
-DROP FUNCTION task_insert(email VARCHAR(255), date_to_do TIMESTAMP WITH TIME ZONE,
-title VARCHAR(255), task TEXT);
-
-
-DROP TABLE tasks;
-DROP TABLE users;
-DROP ROLE admin;
-DROP DATABASE task_manager;
