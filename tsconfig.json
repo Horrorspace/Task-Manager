@@ -67,6 +67,6 @@
   "exclude": [],
   "files": [
     "./src/main/app.ts",
-    "./src/main/models/db.ts"
+    "src/main/models/tasks.ts"
   ]
 }

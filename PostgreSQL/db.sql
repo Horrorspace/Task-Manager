@@ -188,6 +188,20 @@ CREATE OR REPLACE FUNCTION task_up(id INT, task TEXT) RETURNS VOID AS $$
   END
 $$ LANGUAGE PLpgSQL;
 
+CREATE OR REPLACE FUNCTION user_del(email VARCHAR(255)) RETURNS VOID AS $$
+  DECLARE
+  BEGIN
+    DELETE FROM users WHERE users.email = user_del.email;
+  END
+$$ LANGUAGE PLpgSQL;
+
+
+CREATE OR REPLACE FUNCTION task_del(id INT) RETURNS VOID AS $$
+  DECLARE
+  BEGIN
+    DELETE FROM tasks WHERE tasks.id = task_del.id;
+  END
+$$ LANGUAGE PLpgSQL;
 
 
 

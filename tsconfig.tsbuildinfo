@@ -353,9 +353,9 @@
         "version": "fd29886b17d20dc9a8145d3476309ac313de0ee3fe57db4ad88de91de1882fd8",
         "signature": "fd29886b17d20dc9a8145d3476309ac313de0ee3fe57db4ad88de91de1882fd8"
       },
-      "./src/main/models/db.ts": {
-        "version": "e59616b0644fe3eba99a5abe73f8dc528ff5bbfa7b3cf0df632338117f146f23",
-        "signature": "f3ee4d481c84f36242859fdd40e4fbd3e306c2fff38c54c077b39021a45eaaa5"
+      "./src/main/models/tasks.ts": {
+        "version": "e358889e84c465c6ff173eb16907c719eeadeb3cebe6efc5045137a094fa7921",
+        "signature": "65f0dd7d92e73484b580c8728f4d6e69a673b5444bc455fed995a9ae8a55cf59"
       },
       "./node_modules/@babel/types/lib/index.d.ts": {
         "version": "a17ba25a194979a88bfd925e849d76b63f68c4160b69a99c5d723eac5ffddaf0",
@@ -1036,7 +1036,7 @@
         "./node_modules/@types/node/timers.d.ts",
         "./node_modules/@types/node/timers/promises.d.ts"
       ],
-      "./src/main/models/db.ts": [
+      "./src/main/models/tasks.ts": [
         "./node_modules/@types/pg/index.d.ts",
         "./node_modules/@types/node/timers.d.ts",
         "./node_modules/@types/node/timers/promises.d.ts"
@@ -1735,6 +1735,9 @@
         "./node_modules/@types/node/timers.d.ts",
         "./node_modules/@types/node/timers/promises.d.ts"
       ],
+      "./src/main/models/tasks.ts": [
+        "./node_modules/@types/pg/index.d.ts"
+      ],
       "./node_modules/@babel/types/lib/index.d.ts": [
         "./node_modules/@types/node/timers.d.ts",
         "./node_modules/@types/node/timers/promises.d.ts"
@@ -2018,7 +2021,7 @@
       "./node_modules/@types/stack-utils/index.d.ts",
       "./node_modules/@types/yargs-parser/index.d.ts",
       "./node_modules/@types/yargs/index.d.ts",
-      "./src/main/models/db.ts"
+      "./src/main/models/tasks.ts"
     ]
   },
   "version": "3.8.3"
