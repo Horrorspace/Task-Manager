@@ -81,6 +81,28 @@ CREATE OR REPLACE FUNCTION get_id_by_email(email VARCHAR(255)) RETURNS INT AS $$
 $$ LANGUAGE PLpgSQL;
 
 
+CREATE OR REPLACE FUNCTION get_user_name(email VARCHAR(255)) RETURNS INT AS $$
+  DECLARE
+    username VARCHAR(255);
+  BEGIN
+    SELECT users.name INTO username
+        FROM users WHERE users.email = get_user_name.email;
+    RETURN username;
+  END
+$$ LANGUAGE PLpgSQL;
+
+
+CREATE OR REPLACE FUNCTION get_user_pass(email VARCHAR(255)) RETURNS INT AS $$
+  DECLARE
+    pass VARCHAR(255);
+  BEGIN
+    SELECT users.pass INTO pass
+        FROM users WHERE users.email = get_user_name.email;
+    RETURN pass;
+  END
+$$ LANGUAGE PLpgSQL;
+
+
 CREATE OR REPLACE FUNCTION toggle_priority(id INT) RETURNS VOID AS $$
   DECLARE
     is_priority BOOLEAN;
