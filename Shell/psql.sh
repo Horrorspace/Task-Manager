@@ -1,3 +1,3 @@
 cd -
 cd PostgreSQL
-psql -U postgres -W -f db.sql
+psql -U admin -d task_manager -W -f db.sql

@@ -66,6 +66,7 @@
   },
   "exclude": [],
   "files": [
-    "./src/main/app.ts"
+    "./src/main/app.ts",
+    "./src/main/models/db.ts"
   ]
 }

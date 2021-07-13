@@ -1,0 +1,1 @@
+su postgres -c '/lib/postgresql/12/bin/pg_ctl start -D /etc/postgresql/12/main'

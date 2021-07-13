@@ -15,5 +15,5 @@ DROP FUNCTION task_up(id INT, task TEXT);
 
 DROP TABLE tasks;
 DROP TABLE users;
-DROP ROLE admin;
 DROP DATABASE task_manager;
+DROP ROLE admin;
