@@ -354,8 +354,8 @@
         "signature": "fd29886b17d20dc9a8145d3476309ac313de0ee3fe57db4ad88de91de1882fd8"
       },
       "./src/main/models/tasks.ts": {
-        "version": "692e202bd5a2b8d0fc3c6851bbe43bf88d7a849fa9705f09a879856a779026c9",
-        "signature": "7fe678657083728c337f34ced3ca8b589a9e1d8203e106a87116856e39292bd0"
+        "version": "d728efe8f10cad969215795f23645eff28b633e5c15602b351002bf8b5e5b783",
+        "signature": "da8f781c690c138f4bfc3908172f54d5d545b7d68179f34784caf1633cc2a051"
       },
       "./node_modules/@babel/types/lib/index.d.ts": {
         "version": "a17ba25a194979a88bfd925e849d76b63f68c4160b69a99c5d723eac5ffddaf0",
