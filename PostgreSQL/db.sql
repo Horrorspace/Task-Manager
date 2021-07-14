@@ -210,6 +210,27 @@ CREATE OR REPLACE FUNCTION task_up(id INT, task TEXT) RETURNS VOID AS $$
   END
 $$ LANGUAGE PLpgSQL;
 
+CREATE OR REPLACE FUNCTION name_up(id INT, name VARCHAR(255)) RETURNS VOID AS $$
+  DECLARE
+  BEGIN
+    UPDATE users SET name = name_up.name WHERE users.id = name_up.id;
+  END
+$$ LANGUAGE PLpgSQL;
+
+CREATE OR REPLACE FUNCTION email_up(id INT, email VARCHAR(255)) RETURNS VOID AS $$
+  DECLARE
+  BEGIN
+    UPDATE users SET email = email_up.email WHERE users.id = email_up.id;
+  END
+$$ LANGUAGE PLpgSQL;
+
+CREATE OR REPLACE FUNCTION pass_up(id INT, password VARCHAR(255)) RETURNS VOID AS $$
+  DECLARE
+  BEGIN
+    UPDATE users SET password = pass_up.password WHERE users.id = pass_up.id;
+  END
+$$ LANGUAGE PLpgSQL;
+
 CREATE OR REPLACE FUNCTION user_del(email VARCHAR(255)) RETURNS VOID AS $$
   DECLARE
   BEGIN

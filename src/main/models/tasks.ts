@@ -1,34 +1,6 @@
 import {Pool, QueryResult, QueryResultRow} from 'pg'
-
-interface IUser {
-    name: string;
-    email: string;
-    password: string;
-};
-
-interface IUserResult extends IUser {
-    id: number;
-}
-
-interface ITask {
-    email: string;
-    dateToDo: string;
-    title: string;
-    task: string;
-}
-
-interface ITaskResult extends ITask {
-    id: number;
-    userId: number;
-    createdDate: string;
-    dateOfComplete: string;
-    dateOfCancel: string;
-    dateOfDelete: string;
-    isPriority: boolean;
-    isComplete: boolean;
-    isCancel: boolean;
-    isDelete: boolean;
-}
+import {IUser, IUserResult, IUserName, IUserEmail, IUserPass} from 'src/main/interfaces/user'
+import {ITask, ITaskResult, ITaskDateToDo, ITaskTitle, ITaskText} from 'src/main/interfaces/task'
 
 
 export default class tasks {
@@ -73,6 +45,30 @@ export default class tasks {
         const insert: QueryResult = await tasks.pool.query(`SELECT toggle_delete(${id});`);
         return insert;
     };
+    public static async userNameUp({id, name}: IUserName): Promise<QueryResult> {
+        const insert: QueryResult = await tasks.pool.query(`SELECT name_up(${id}, '${name}');`);
+        return insert;
+    };
+    public static async userEmailUp({id, email}: IUserEmail): Promise<QueryResult> {
+        const insert: QueryResult = await tasks.pool.query(`SELECT email_up(${id}, '${email}');`);
+        return insert;
+    };
+    public static async userPassUp({id, pass}: IUserPass): Promise<QueryResult> {
+        const insert: QueryResult = await tasks.pool.query(`SELECT pass_up(${id}, '${pass}');`);
+        return insert;
+    };
+    public static async taskDateToDoUp({id, dateToDo}: ITaskDateToDo): Promise<QueryResult> {
+        const insert: QueryResult = await tasks.pool.query(`SELECT date_todo_up(${id}, '${dateToDo}');`);
+        return insert;
+    };
+    public static async taskTitleUp({id, title}: ITaskTitle): Promise<QueryResult> {
+        const insert: QueryResult = await tasks.pool.query(`SELECT title_up(${id}, '${title}');`);
+        return insert;
+    };
+    public static async taskTextUp({id, task}: ITaskText): Promise<QueryResult> {
+        const insert: QueryResult = await tasks.pool.query(`SELECT task_up(${id}, '${task}');`);
+        return insert;
+    };
     public static async deleteUser(email: string): Promise<QueryResult> {
         const insert: QueryResult = await tasks.pool.query(`SELECT user_del('${email}');`);
         return insert;
@@ -94,7 +90,7 @@ const testUser: IUser = {
 
 
 async function testFunc1(): Promise<void> {
-    let result: IUserResult[] = await tasks.getUser('admin@hey.com');
+    let result: IUserResult[] = await tasks.getUser('admin@test.com');
     console.log(result);
     await tasks.insertUser(testUser);
     result = await tasks.getUser('admin@hey.com');
