@@ -81,10 +81,10 @@ export default class tasks {
 
 
 
-
+/*
 const testUser: IUser = {
     name: 'admin',
-    email: 'admin@hey.com',
+    email: 'admin@test.com',
     password: 'test'
 }
 
@@ -102,11 +102,4 @@ async function testFunc1(): Promise<void> {
 
 
 testFunc1();
-
-/*
-tasks.getAllData().then(res => console.log(res.rows));
-tasks.insertUser(testUser);
-tasks.getAllData().then(res => console.log(res.rows));
-tasks.deleteUser('admin@hey.com');
-tasks.getAllData().then(res => console.log(res.rows));
 */
