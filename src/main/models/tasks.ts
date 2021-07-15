@@ -17,7 +17,7 @@ export default class tasks {
         return resultRows as IUserResult[];
     };
     public static async getUserTasks(id: number): Promise<ITaskResult[]> {
-        const dbData: QueryResult = await tasks.pool.query(`SELECT * FROM tasks WHERE id = ${id};`);
+        const dbData: QueryResult = await tasks.pool.query(`SELECT * FROM tasks WHERE user_id = ${id};`);
         const resultRows: QueryResultRow = dbData.rows;
         return resultRows as ITaskResult[];
     };
