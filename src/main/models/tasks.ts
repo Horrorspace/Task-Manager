@@ -1,7 +1,7 @@
 import {Pool, QueryResult, QueryResultRow} from 'pg'
 import pg from 'pg'
-import {IUser, IUserResult, IUserName, IUserEmail, IUserPass} from 'src/main/interfaces/user'
-import {ITask, ITaskResult, ITaskDateToDo, ITaskTitle, ITaskText, ITaskResultRaw} from 'src/main/interfaces/task'
+import {IUser, IUserResult, IUserName, IUserEmail, IUserPass} from 'interfaces/user'
+import {ITask, ITaskResult, ITaskDateToDo, ITaskTitle, ITaskText, ITaskResultRaw} from 'interfaces/task'
 
 pg.types.setTypeParser(pg.types.builtins.TIMESTAMPTZ, val => String(val));
 
