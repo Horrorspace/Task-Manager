@@ -1,7 +1,9 @@
 import {Pool, QueryResult, QueryResultRow} from 'pg'
+import pg from 'pg'
 import {IUser, IUserResult, IUserName, IUserEmail, IUserPass} from 'src/main/interfaces/user'
-import {ITask, ITaskResult, ITaskDateToDo, ITaskTitle, ITaskText} from 'src/main/interfaces/task'
+import {ITask, ITaskResult, ITaskDateToDo, ITaskTitle, ITaskText, ITaskResultRaw} from 'src/main/interfaces/task'
 
+pg.types.setTypeParser(pg.types.builtins.TIMESTAMPTZ, val => String(val));
 
 export default class tasks {
     private static readonly pool: Pool = new Pool({
@@ -11,6 +13,11 @@ export default class tasks {
         port: 5432,
         database: "task_manager"
     });
+    public static async getAllUsers(): Promise<IUserResult[]> {
+        const dbData: QueryResult = await tasks.pool.query(`SELECT * FROM users;`);
+        const resultRows: QueryResultRow = dbData.rows;
+        return resultRows as IUserResult[];
+    };
     public static async getUser(email: string): Promise<IUserResult[]> {
         const dbData: QueryResult = await tasks.pool.query(`SELECT * FROM users WHERE email = '${email}';`);
         const resultRows: QueryResultRow = dbData.rows;
@@ -19,7 +26,25 @@ export default class tasks {
     public static async getUserTasks(id: number): Promise<ITaskResult[]> {
         const dbData: QueryResult = await tasks.pool.query(`SELECT * FROM tasks WHERE user_id = ${id};`);
         const resultRows: QueryResultRow = dbData.rows;
-        return resultRows as ITaskResult[];
+        resultRows as ITaskResultRaw[];
+        const result: ITaskResult[] = resultRows.map((val: ITaskResultRaw): ITaskResult => {
+            return {
+                id: val.id,
+                userId: val.user_id,
+                created: val.created,
+                dateToDo: val.date_to_do,
+                dateOfComplete: val.date_complete,
+                dateOfCancel: val.date_cancel,
+                dateOfDelete: val.date_delete,
+                title: val.title,
+                task: val.task,
+                isPriority: val.is_priority,
+                isComplete: val.is_complete,
+                isCancel: val.is_cancel,
+                isDelete: val.is_delete,
+            }
+        })
+        return result;
     };
     public static async insertUser({name, email, password}: IUser): Promise<QueryResult> {
         const insert: QueryResult = await tasks.pool.query(`SELECT user_insert('${name}', '${email}', '${password}');`);
