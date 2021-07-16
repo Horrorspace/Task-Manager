@@ -181,8 +181,8 @@ title VARCHAR(255), task TEXT) RETURNS VOID AS $$
     created_date TIMESTAMP WITH TIME ZONE := current_timestamp;
   BEGIN
     INSERT INTO tasks (id, user_id, created, date_to_do, title, task) 
-    VALUES (get_new_id('tasks'), get_random_id('users'), created_date,
-    '2004-10-19 10:23:54+02', 'TEST', 'testing');
+    VALUES (get_new_id('tasks'), user_id, created_date,
+    date_to_do, title, task);
   END
 $$ LANGUAGE PLpgSQL;
 
