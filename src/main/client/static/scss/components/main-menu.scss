@@ -1,0 +1,26 @@
+.main {
+    @include flex-content(column, center, center);
+    min-height: calc(100vh - #{$headerHeight} - #{$footerHeight});
+    width: 100%;
+    background-color: $mainColorDark;
+}
+
+.menu-wrap {
+    @include flex-content(column, center, center);
+    width: $MaxWidth;
+}
+
+.menu-list {
+    @include flex-content(row, center, center);
+    margin: 0;
+    padding: 0;
+}
+
+.menu-link {
+    @include flex-content(column, space-between, center);
+    width: 165px;
+    height: 200px;
+    margin-left:  15px;
+    margin-top:  15px;
+    background-color: $mainColorLight;
+}

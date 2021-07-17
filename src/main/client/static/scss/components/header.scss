@@ -1,0 +1,18 @@
+.header {
+    @include flex-content(column, center, center);
+    min-height: $headerHeight;
+    width: 100%;
+    background-color: $mainColorLight;
+}
+
+.header-wrap {
+    @include flex-content(row, space-between, center);
+    min-height: $headerHeight;
+    width: $MaxWidth;
+}
+
+.title {
+    margin: 0;
+    margin-left: 17px;
+    @include font($LightFontColor, 26, 300)
+}

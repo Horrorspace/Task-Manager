@@ -1,0 +1,11 @@
+.app {
+    @include flex-content(column, space-between, center);
+    width: 100%;
+    min-height: 100vh;
+  }
+  
+  .wrap {
+    @include flex-content(column, space-between, center);
+    width: 100%;
+    min-height: 100vh;
+  }
