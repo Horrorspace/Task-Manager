@@ -16,11 +16,35 @@
     padding: 0;
 }
 
+.menu-item {
+    @include flex-content();
+    width: 165px;
+    height: 200px;
+    margin-left: 15px;
+    margin-top:  15px;
+}
+
 .menu-link {
     @include flex-content(column, space-between, center);
     width: 165px;
     height: 200px;
-    margin-left:  15px;
-    margin-top:  15px;
     background-color: $mainColorLight;
+    text-decoration: none;
+}
+
+.menu-picture {
+    margin: 0;
+    margin-top: 38px;
+}
+
+.menu-title {
+    @include font($GreenFontColor, 18px, 300);
+    margin: 0;
+    padding-top: 10px;
+}
+
+.menu-description {
+    @include font($LightFontColor, 14px, 300);
+    margin: 0;
+    margin-bottom: 33px;
 }
