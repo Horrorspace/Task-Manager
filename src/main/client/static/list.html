@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer">
+        <link href="app.css" rel="stylesheet">
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Tasks</title>
+    </head>
+    <body class="app" id="root">
+        <div class="wrap">
+            <header class="header">
+                <div class="header-wrap">
+                    <h1 class="title">All Tasks</h1>
+                    <button class="options-btn" type="button">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </header>
+            <main class="main">
+                <div class="main-wrap">
+                    <ul class="days-list">
+                        <li class="day-item">
+                            <div class="day-title-wrap">
+                                <h2 class="day-title">Today</h2>
+                                <button class="day-add-btn" type="button">
+                                    <i class="day-add-ico far fa-plus-square"></i>
+                                </button>
+                            </div>
+                            <ul class="tasks-list">
+                                <li class="task-item">
+                                    <button class="task-complete-btn">
+                                        <i class="task-complete-ico far fa-square"></i>
+                                    </button>
+                                    <h3 class="task-title">Edit project</h3>
+                                    <div class="task-time-wrap">
+                                        <p class="task-time">10:00 AM</p>
+                                    </div>
+                                </li>
+                                <li class="task-item">
+                                    <button class="task-complete-btn">
+                                        <i class="task-complete-ico fas fa-check-square"></i>
+                                    </button>
+                                    <h3 class="task-title">Run</h3>
+                                    <div class="task-time-wrap">
+                                        <p class="task-time">06:00 AM</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </main>
+            <footer class="footer">
+                <nav class="navigation">
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a class="nav-link" href="main.html">
+                                <i class="nav-ico far fa-check-square"></i>
+                                <h2 class="nav-title">Tasks</h2>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="nav-ico far fa-calendar-check"></i>
+                                <h2 class="nav-title">Calendar</h2>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="nav-ico far fas fa-sliders-h"></i>
+                                <h2 class="nav-title">Settings</h2>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </footer>
+        </div>
+    </body>
+</html>

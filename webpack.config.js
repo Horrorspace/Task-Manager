@@ -32,7 +32,23 @@ module.exports = {
                     to: path.resolve(__dirname, 'build/src/main/client')
                 },
                 {
+                    from: path.resolve(__dirname, 'src/main/client/static/list.html'),
+                    to: path.resolve(__dirname, 'build/src/main/client')
+                },
+                {
                     from: path.resolve(__dirname, 'src/main/client/static/img/Path 14.svg'),
+                    to: path.resolve(__dirname, 'build/src/main/client/img')
+                },
+                {
+                    from: path.resolve(__dirname, 'src/main/client/static/img/CompositeLayer.svg'),
+                    to: path.resolve(__dirname, 'build/src/main/client/img')
+                },
+                {
+                    from: path.resolve(__dirname, 'src/main/client/static/img/Path 19.svg'),
+                    to: path.resolve(__dirname, 'build/src/main/client/img')
+                },
+                {
+                    from: path.resolve(__dirname, 'src/main/client/static/img/Union 1.svg'),
                     to: path.resolve(__dirname, 'build/src/main/client/img')
                 }
             ],

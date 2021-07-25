@@ -1,0 +1,111 @@
+.days-list {
+    margin: 0;
+    padding: 0;
+}
+
+.day-item {
+    padding: 0;
+}
+
+.day-title {
+    @include font($GreenFontColor, 20px, 300);
+    margin: 0;
+    opacity: $opacity;
+}
+
+.day-add-btn {
+    height: 24px;
+    width: 24px;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    opacity: $opacity;
+    background-color: transparent;
+
+    &:active {
+        outline: none;
+    }
+
+    &:hover, &:focus {
+        opacity: 1;
+    }
+}
+
+.day-add-ico {
+    @include flex-content(column, center, center);
+    height: 24px;
+    width: 24px;
+    margin: 0;
+    font-size: 23px;
+    color: $GreenFontColor;
+}
+
+.tasks-list {
+    @include flex-content(column, space-between, center);
+    width: calc(#{$MaxWidth} - 30px);
+    margin-top: 15px;
+    margin-right: 15px;
+    margin-left: 15px;
+    margin-bottom: 0;
+    padding: 0;
+}
+
+.task-item {
+    @include flex-content(row, space-between, center);
+    width: calc(#{$MaxWidth} - 60px);
+    min-height: 50px;
+    background-color: $mainColorLight;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-bottom: 10px;
+}
+
+.task-title {
+    @include font($LightFontColor, 18px, 300);
+    margin: 0;
+    opacity: $opacity;
+}
+
+.task-time-wrap {
+    @include flex-content(column, center, center);
+    min-width: 75px;
+    min-height: 20px;
+
+    border: 1px, solid, $GreenFontColor;
+    border-radius: 10px;
+    background-color: $GreenFontColor;
+    opacity: $opacity;
+}
+
+.task-time {
+    @include font($LightFontColor, 14px, 700);
+    margin: 0;
+    opacity: $opacity;
+}
+
+.task-complete-btn {
+    height: 17px;
+    width: 17px;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    opacity: $opacity;
+    background-color: transparent;
+
+    &:active {
+        outline: none;
+    }
+
+    &:hover, &:focus {
+        opacity: 1;
+    }
+}
+
+.task-complete-ico {
+    @include flex-content(column, center, center);
+    height: 17px;
+    width: 17px;
+    margin: 0;
+    font-size: 16px;
+    color: $LightFontColor;
+}
