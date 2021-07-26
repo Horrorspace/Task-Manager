@@ -1,5 +1,8 @@
 .footer {
     @include flex-content(column, center, center);
+    /*position: absolute;
+    bottom: 0;
+    left: 0;*/
     min-height: $footerHeight;
     width: 100%;
     background-color: $mainColorLight;

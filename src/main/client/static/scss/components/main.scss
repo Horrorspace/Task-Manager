@@ -1,5 +1,5 @@
 .main {
-    @include flex-content(column, center, center);
+    @include flex-content(column, start, center);
     min-height: calc(100vh - #{$headerHeight} - #{$footerHeight});
     width: 100%;
     background-color: $mainColorDark;
