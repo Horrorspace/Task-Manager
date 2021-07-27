@@ -1,4 +1,9 @@
 
+.calendar {
+    @include flex-content(column, center, center);
+    width: 100%;
+}
+
 .calendar-days-list {
     @include flex-content(row, space-between, center);
     margin: 0;
