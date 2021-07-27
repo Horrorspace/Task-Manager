@@ -12,10 +12,20 @@
         <div class="wrap">
             <header class="header">
                 <div class="header-wrap">
-                    <h1 class="title">All Tasks</h1>
-                    <button class="options-btn" type="button">
-                        <i class="fas fa-bars"></i>
-                    </button>
+                    <div class="title-wrap">
+                        <button class="title-btn hidden" type="button">
+                            <i class="title-ico fas fa-ellipsis-v"></i>
+                        </button>
+                        <h1 class="title">All Tasks</h1>
+                    </div>
+                    <div class="options-wrap">
+                        <button class="options-btn" type="button">
+                            <i class="options-ico fas fa-th"></i>
+                        </button>
+                        <button class="options-btn" type="button">
+                            <i class="options-ico fas fa-bars"></i>
+                        </button>
+                    </div>
                 </div>
             </header>
             <main class="main">
@@ -29,7 +39,7 @@
                                 </button>
                             </div>
                             <ul class="tasks-list">
-                                <li class="task-item">
+                                <li class="task-item" role="button" tabindex="0">
                                     <button class="task-complete-btn">
                                         <i class="task-complete-ico far fa-square"></i>
                                     </button>
@@ -38,7 +48,7 @@
                                         <p class="task-time">10:00 AM</p>
                                     </div>
                                 </li>
-                                <li class="task-item">
+                                <li class="task-item" role="button" tabindex="0">
                                     <button class="task-complete-btn">
                                         <i class="task-complete-ico fas fa-check-square"></i>
                                     </button>
@@ -57,7 +67,7 @@
                                 </button>
                             </div>
                             <ul class="tasks-list">
-                                <li class="task-item">
+                                <li class="task-item" role="button" tabindex="0">
                                     <button class="task-complete-btn">
                                         <i class="task-complete-ico far fa-square"></i>
                                     </button>
@@ -66,7 +76,7 @@
                                         <p class="task-time">10:00 AM</p>
                                     </div>
                                 </li>
-                                <li class="task-item">
+                                <li class="task-item" role="button" tabindex="0">
                                     <button class="task-complete-btn">
                                         <i class="task-complete-ico fas fa-check-square"></i>
                                     </button>
@@ -85,7 +95,7 @@
                                 </button>
                             </div>
                             <ul class="tasks-list">
-                                <li class="task-item">
+                                <li class="task-item" role="button" tabindex="0">
                                     <button class="task-complete-btn">
                                         <i class="task-complete-ico far fa-square"></i>
                                     </button>
@@ -94,7 +104,7 @@
                                         <p class="task-time">10:00 AM</p>
                                     </div>
                                 </li>
-                                <li class="task-item">
+                                <li class="task-item" role="button" tabindex="0">
                                     <button class="task-complete-btn">
                                         <i class="task-complete-ico fas fa-check-square"></i>
                                     </button>
@@ -118,7 +128,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="calendar.html">
                                 <i class="nav-ico far fa-calendar-check"></i>
                                 <h2 class="nav-title">Calendar</h2>
                             </a>

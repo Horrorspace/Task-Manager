@@ -67,6 +67,14 @@
     padding-left: 15px;
     padding-right: 15px;
     margin-bottom: 10px;
+
+    &:hover {
+        background-color: $mainColorHover;
+
+        .task-complete-btn, .task-title, .task-time-wrap, .task-time {
+            opacity: 1;
+        }
+    }
 }
 
 .task-title {

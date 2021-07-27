@@ -1,1 +1,40 @@
 
+.calendar-days-list {
+    @include flex-content(row, space-between, center);
+    margin: 0;
+    padding: 0;
+}
+
+.calendar-day-item {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.calendar-day-wrap {
+    @include flex-content(column, space-between, center);
+    width: 30px;
+    min-height: 50px;
+    margin: 0;
+}
+
+.day-of-week {
+    @include font($LightFontColor, 14px, 300);
+    text-transform: uppercase;
+    margin: 0;
+    opacity: $opacity;
+}
+
+.day-number {
+    @include font($LightFontColor, 14px, 300);
+    margin: 0;
+    opacity: $opacity;
+}
+
+.day-tasks-ico {
+    @include flex-content(column, center, center);
+    height: 14px;
+    width: 14px;
+    margin: 0;
+    font-size: 5px;
+    color: $LightFontColor;
+}

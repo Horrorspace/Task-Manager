@@ -13,10 +13,42 @@
     margin-right: 30px;
 }
 
+.title-wrap {
+    @include flex-content(row, space-between, center);
+}
+
 .title {
     @include font($LightFontColor, 26, 300);
     margin: 0;
     opacity: $opacity;
+}
+
+.title-btn {
+    height: 27px;
+    width: 27px;
+    border: 0;
+    margin: 0;
+    margin-right: 10px;
+    padding: 0;
+    opacity: $opacity;
+    background-color: transparent;
+
+    &:active {
+        outline: none;
+    }
+
+    &:hover, &:focus {
+        opacity: 1;
+    } 
+}
+
+.title-ico {
+    font-size: 26px;
+    color: $LightFontColor;
+}
+
+.options-wrap {
+    @include flex-content(row, space-between, center);
 }
 
 .options-btn {
@@ -24,14 +56,10 @@
     width: 27px;
     border: 0;
     margin: 0;
+    margin-left: 15px;
     padding: 0;
     opacity: $opacity;
     background-color: transparent;
-
-    i {
-        font-size: 26px;
-        color: $LightFontColor;
-    }
 
     &:active {
         outline: none;
@@ -40,4 +68,9 @@
     &:hover, &:focus {
         opacity: 1;
     }
+}
+
+.options-ico {
+    font-size: 26px;
+    color: $LightFontColor;
 }

@@ -2,9 +2,22 @@
     @include flex-content(column, start, center);
     height: calc(100vh - #{$headerHeight} - #{$footerHeight});
     width: 100%;
-    overflow: scroll;
+    overflow: auto;
+    overflow-block: scroll;
     -webkit-overflow-scrolling: touch;
     background-color: $mainColorDark;
+
+    &::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: $scrolColorDark;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: $scrolColorLight;
+    }
 }
 
 .main-wrap {
