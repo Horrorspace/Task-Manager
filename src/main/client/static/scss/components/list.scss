@@ -1,3 +1,8 @@
+.task-list {
+    @include flex-content(column, center, center);
+    width: 100%;
+}
+
 .days-list {
     margin: 0;
     padding: 0;
