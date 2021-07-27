@@ -1,3 +1,8 @@
+.main-menu {
+    @include flex-content(column, center, center);
+    width: 100%;
+}
+
 .menu-list {
     @include flex-content(row, space-between, center);
     width: 315px;
