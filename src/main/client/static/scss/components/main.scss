@@ -1,5 +1,6 @@
 .main {
     @include flex-content(column, start, center);
+    flex-wrap: nowrap;
     height: calc(100vh - #{$headerHeight} - #{$footerHeight});
     width: 100%;
     overflow: auto;

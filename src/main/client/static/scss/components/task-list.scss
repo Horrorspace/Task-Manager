@@ -68,6 +68,7 @@
     @include flex-content(row, space-between, center);
     width: calc(#{$MaxWidth} - 60px);
     min-height: 50px;
+    cursor: pointer;
     background-color: $mainColorLight;
     padding-left: 15px;
     padding-right: 15px;

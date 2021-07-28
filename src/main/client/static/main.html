@@ -19,12 +19,37 @@
                         <h1 class="title">My List</h1>
                     </div>
                     <div class="options-wrap">
-                        <button class="options-btn hidden" type="button">
+                        <a class="options-link hidden" href="main.html">
                             <i class="options-ico fas fa-th"></i>
-                        </button>
+                        </a>
                         <button class="options-btn" type="button">
                             <i class="options-ico fas fa-bars"></i>
+                            <i class="options-ico far fa-times-circle hidden"></i>
                         </button>
+                    </div>
+                    <div class="filters-wrap hidden">
+                        <ul class="filters-list">
+                            <li class="filter-item" role="button" tabindex="0">
+                                <i class="filter-ico fas fa-filter"></i>
+                                <h3 class="filter-setting">Sort by:</h3>
+                                <p class="filter-value">Time descending</p>
+                            </li>
+                            <li class="filter-item" role="button" tabindex="0">
+                                <i class="filter-ico fas fa-check-square"></i>
+                                <h3 class="filter-setting">Show completed:</h3>
+                                <p class="filter-value">Yes</p>
+                            </li>
+                            <li class="filter-item" role="button" tabindex="0">
+                                <i class="filter-ico fas fa-star"></i>
+                                <h3 class="filter-setting">Only important:</h3>
+                                <p class="filter-value">No</p>
+                            </li>
+                            <li class="filter-item" role="button" tabindex="0">
+                                <i class="filter-ico far fa-calendar-check"></i>
+                                <h3 class="filter-setting">Only today tasks:</h3>
+                                <p class="filter-value">No</p>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </header>
