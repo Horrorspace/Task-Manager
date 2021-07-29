@@ -25,3 +25,9 @@
     @include flex-content(column, center, center);
     width: $MaxWidth;
 }
+
+@media screen and (min-width: $mobile-breakpoint) {
+    .main-wrap {
+        width: $MaxWidthDesktop;
+    }
+}

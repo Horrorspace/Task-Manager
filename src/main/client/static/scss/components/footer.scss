@@ -56,3 +56,13 @@
     margin: 0;
     opacity: $opacity;
 }
+
+@media screen and (min-width: $mobile-breakpoint) {
+    .navigation {
+        width: $MaxWidthDesktop;
+    }
+    
+    .nav-list {
+        width: calc(#{$MaxWidthDesktop} - 60px);
+    }
+}

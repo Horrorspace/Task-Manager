@@ -9,17 +9,29 @@
         <title>Tasks</title>
     </head>
     <body class="app" id="root">
+        <div class="add-task-wrap">
+            <h2 class="add-task-main-title"></h2>
+            <input class="add-task-title" type="text">
+            <input class="add-task-text" type="text">
+            <div class="add-task-options"></div>
+            <div class="add-task-buttons"></div>
+        </div>
+        <div class="overlay">
+            <button class="overlay-btn">
+                <i class="overlay-ico fas fa-times"></i>
+            </button>
+        </div>
         <div class="wrap">
             <header class="header">
                 <div class="header-wrap">
                     <div class="title-wrap">
-                        <button class="title-btn" type="button">
+                        <button class="title-btn hidden" type="button">
                             <i class="title-ico fas fa-ellipsis-v"></i>
                         </button>
-                        <h1 class="title">August 2020</h1>
+                        <h1 class="title">All Tasks</h1>
                     </div>
                     <div class="options-wrap">
-                        <a class="options-link hidden" href="main.html">
+                        <a class="options-link" href="main.html">
                             <i class="options-ico fas fa-th"></i>
                         </a>
                         <button class="options-btn" type="button">
@@ -29,82 +41,16 @@
                 </div>
             </header>
             <main class="main">
-                <section class="calendar">
-                    <div class="calendar-wrap">
-                        <ul class="calendar-days-list">
-                            <li class="calendar-day-item" role="button" tabindex="0">
-                                <div class="calendar-day-wrap">
-                                    <h3 class="day-of-week">Thu</h3>
-                                    <p class="day-number">03</p>
-                                    <i class="day-tasks-ico fas fa-circle"></i>
-                                </div>
-                            </li>
-                            <li class="calendar-day-item" role="button" tabindex="0">
-                                <div class="calendar-day-wrap">
-                                    <h3 class="day-of-week">Thu</h3>
-                                    <p class="day-number">03</p>
-                                    <i class="day-tasks-ico fas fa-circle"></i>
-                                </div>
-                            </li>
-                            <li class="calendar-day-item" role="button" tabindex="0">
-                                <div class="calendar-day-wrap">
-                                    <h3 class="day-of-week">Thu</h3>
-                                    <p class="day-number">03</p>
-                                    <i class="day-tasks-ico fas fa-circle"></i>
-                                </div>
-                            </li>
-                            <li class="calendar-day-item" role="button" tabindex="0">
-                                <div class="calendar-day-wrap">
-                                    <h3 class="day-of-week">Thu</h3>
-                                    <p class="day-number">03</p>
-                                    <i class="day-tasks-ico fas fa-circle"></i>
-                                </div>
-                            </li>
-                            <li class="calendar-day-item" role="button" tabindex="0">
-                                <div class="calendar-day-wrap">
-                                    <h3 class="day-of-week">Thu</h3>
-                                    <p class="day-number">03</p>
-                                    <i class="day-tasks-ico fas fa-circle"></i>
-                                </div>
-                            </li>
-                            <li class="calendar-day-item" role="button" tabindex="0">
-                                <div class="calendar-day-wrap">
-                                    <h3 class="day-of-week">Thu</h3>
-                                    <p class="day-number">03</p>
-                                    <i class="day-tasks-ico fas fa-circle"></i>
-                                </div>
-                            </li>
-                            <li class="calendar-day-item" role="button" tabindex="0">
-                                <div class="calendar-day-wrap">
-                                    <h3 class="day-of-week">Thu</h3>
-                                    <p class="day-number">03</p>
-                                    <i class="day-tasks-ico fas fa-circle"></i>
-                                </div>
-                            </li>
-                        </ul>
-                        <div class="calendar-menu">
-                            <button class="calendar-btn" type="button">
-                                <i class="calendar-ico fas fa-chevron-left"></i>
-                             </button>
-                            <button class="calendar-btn" type="button">
-                                <i class="calendar-ico fas fa-chevron-down"></i>
-                             </button>
-                            <button class="calendar-btn" type="button">
-                                <i class="calendar-ico fas fa-chevron-right"></i>
-                             </button>
-                        </div>
-                    </div>
-                </section>
                 <div class="main-wrap">
                     <section class="task-list">
-                        <ul class="days-list">
-                            <li class="day-item">
-                                <div class="day-title-wrap">
-                                    <h2 class="day-title">Today</h2>
-                                    <button class="day-add-btn" type="button">
-                                        <i class="day-add-ico far fa-plus-square"></i>
-                                    </button>
-                                </div>
+                    <ul class="days-list">
+                        <li class="day-item">
+                            <div class="day-title-wrap">
+                                <h2 class="day-title">Today</h2>
+                                <button class="day-add-btn" type="button">
+                                    <i class="day-add-ico far fa-plus-square"></i>
+                                </button>
+                            </div>
                                 <ul class="tasks-list">
                                     <li class="task-item" role="button" tabindex="0">
                                         <button class="task-complete-btn">
@@ -183,7 +129,7 @@
                                 </ul>
                             </li>
                         </ul>
-                    </section>
+                        </section>
                 </div>
             </main>
             <footer class="footer">
@@ -196,7 +142,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="calendar.html">
                                 <i class="nav-ico far fa-calendar-check"></i>
                                 <h2 class="nav-title">Calendar</h2>
                             </a>

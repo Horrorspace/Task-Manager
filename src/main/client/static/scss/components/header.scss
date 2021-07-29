@@ -100,7 +100,7 @@
     position: absolute;
     top: calc(#{$headerHeight} - 6px);
     right: 0;
-    z-index: 999;
+    z-index: 100;
     width: 250px;
     background-color: $mainColorLight;
 
@@ -156,4 +156,10 @@
     margin: 0;
     margin-right: 15px;
     opacity: $opacity;
+}
+
+@media screen and (min-width: $mobile-breakpoint) {
+    .header-wrap {
+        width: calc(#{$MaxWidthDesktop} - 60px);
+    }
 }

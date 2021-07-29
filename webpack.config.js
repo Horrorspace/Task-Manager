@@ -40,6 +40,14 @@ module.exports = {
                     to: path.resolve(__dirname, 'build/src/main/client')
                 },
                 {
+                    from: path.resolve(__dirname, 'src/main/client/static/settings.html'),
+                    to: path.resolve(__dirname, 'build/src/main/client')
+                },
+                {
+                    from: path.resolve(__dirname, 'src/main/client/static/AddTask.html'),
+                    to: path.resolve(__dirname, 'build/src/main/client')
+                },
+                {
                     from: path.resolve(__dirname, 'src/main/client/static/img/Path 14.svg'),
                     to: path.resolve(__dirname, 'build/src/main/client/img')
                 },

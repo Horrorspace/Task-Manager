@@ -1,0 +1,31 @@
+.overlay {
+    width: 100%;
+    min-height: 100vh;
+    position: absolute;
+    top: 0;
+    background-color: rgba(0,0,0, 0.5);
+    background-attachment: fixed;
+    background-position: center;
+    z-index: 200;
+}
+
+.overlay-btn {
+    position: absolute;
+    height: 27px;
+    width: 27px;
+    top: 0;
+    right: 0;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    opacity: $opacity;
+    background-color: transparent;
+
+    &:active {
+        outline: none;
+    }
+
+    &:hover, &:focus {
+        opacity: 1;
+    }
+}

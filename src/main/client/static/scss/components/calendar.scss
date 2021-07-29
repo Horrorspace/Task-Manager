@@ -92,3 +92,9 @@
     font-size: 15px;
     color: $LightFontColor;
 }
+
+@media screen and (min-width: $mobile-breakpoint) {
+    .calendar-wrap {
+        width: calc(#{$MaxWidthDesktop} - 30px);
+     }
+}

@@ -132,3 +132,18 @@
     font-size: 16px;
     color: $LightFontColor;
 }
+
+
+@media screen and (min-width: $mobile-breakpoint) {
+    .day-title-wrap {
+        width: calc(#{$MaxWidthDesktop} - 30px);
+    }
+
+    .tasks-list {
+        width: calc(#{$MaxWidthDesktop} - 30px);
+    }
+    
+    .task-item {
+        width: calc(#{$MaxWidthDesktop} - 60px);
+    }
+}
