@@ -31,6 +31,7 @@
 }
 
 .add-task-wrap {
+    @include flex-content(column, space-between, center);
     position: absolute;
     bottom: 0;
     z-index: 300;
