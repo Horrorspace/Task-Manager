@@ -1,0 +1,100 @@
+.calendar {
+    @include flex-content(column, center, center);
+    width: 100%;
+    background-color: #43435e;
+}
+
+.calendar-wrap {
+   margin-top: 10px;
+   margin-bottom: 10px;
+   width: calc(#{$MaxWidth} - 30px);
+   margin-right: 15px;
+   margin-left: 15px;   
+}
+
+.calendar-days-list {
+    @include flex-content(row, space-between, center);
+    margin: 0;
+    padding: 0;
+}
+
+.calendar-day-item {
+    padding-left: 5px;
+    padding-right: 5px;
+    cursor: pointer;
+
+    &:hover, &:focus {
+        .day-of-week, .day-number, .day-tasks-ico {
+            opacity: 1;
+        }
+    }
+}
+
+.calendar-day-wrap {
+    @include flex-content(column, space-between, center);
+    width: 30px;
+    min-height: 50px;
+    margin: 0;
+}
+
+.day-of-week {
+    @include font($LightFontColor, 14px, 300);
+    text-transform: uppercase;
+    margin: 0;
+    opacity: 0.5;
+}
+
+.day-number {
+    @include font($LightFontColor, 14px, 300);
+    margin: 0;
+    opacity: 0.5;
+}
+
+.day-tasks-ico {
+    @include flex-content(column, center, center);
+    height: 14px;
+    width: 14px;
+    margin: 0;
+    font-size: 5px;
+    opacity: 0.5;
+    color: $LightFontColor;
+}
+
+.calendar-menu {
+    @include flex-content(row, space-between, center);
+    width: 100%;
+    margin-top: 10px;
+}
+
+.calendar-btn {
+    height: 16px;
+    width: 16px;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    opacity: 0.5;
+    background-color: transparent;
+
+    &:active {
+        outline: none;
+    }
+
+    &:hover, &:focus {
+        opacity: 1;
+    }
+}
+
+.calendar-ico {
+    @include flex-content(column, center, center);
+    height: 16px;
+    width: 16px;
+    margin: 0;
+    font-size: 15px;
+    color: $LightFontColor;
+}
+
+@media screen and (min-width: $mobile-breakpoint) {
+    .calendar-wrap {
+        width: calc(#{$MaxWidthDesktop} - 30px);
+     }
+}

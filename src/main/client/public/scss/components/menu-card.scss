@@ -1,0 +1,49 @@
+.menu-link {
+    @include flex-content(column, space-between, center);
+    width: 150px;
+    height: 180px;
+    background-color: $mainColorLight;
+    text-decoration: none;
+
+    &:hover {
+        background-color: $mainColorHover;
+
+        .menu-ico, .menu-title, .menu-description {
+            opacity: 1;
+        }
+    }
+}
+
+.menu-picture {
+    @include flex-content(column, center, center);
+    height: 56px;
+    width: 56px;
+    margin: 0;
+    margin-top: 30px;
+}
+
+.menu-ico {
+    @include flex-content(column, center, center);
+    height: 56px;
+    width: 56px;
+    margin: 0;
+    margin-top: 30px;
+    font-size: 54px;
+    color: $LightFontColor;
+    text-align: center;
+    opacity: $opacity;
+}
+
+.menu-title {
+    @include font($GreenFontColor, 18px, 300);
+    margin: 0;
+    padding-top: 12px;
+    opacity: $opacity;
+}
+
+.menu-description {
+    @include font($LightFontColor, 14px, 300);
+    margin: 0;
+    margin-bottom: 25px;
+    opacity: $opacity;
+}

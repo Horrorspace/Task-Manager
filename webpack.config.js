@@ -21,6 +21,13 @@ module.exports = {
         path: path.resolve(__dirname, './build/src/main/client'),
     },
     plugins: [
+        new HtmlWebpackPlugin({
+            title: 'Tasks',
+            template: './src/main/client/pages/template.html',
+            minify: {
+                collapseWhitespace: isProd
+            }
+        }),
         new CopyWebpackPlugin({
             patterns: [
                 {
@@ -73,7 +80,8 @@ module.exports = {
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.json', '.scss', '.sass', '.html'],
         alias: {
-            '@scss': path.resolve(__dirname, './src/main/client/static/scss'),
+            '@scss': path.resolve(__dirname, './src/main/client/public/scss'),
+            '@react': path.resolve(__dirname, './src/main/client/pages/react'),
         }
     },
     module: {

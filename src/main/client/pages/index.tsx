@@ -1,4 +1,6 @@
+import React from 'react'
+import {render} from 'react-dom'
 import '@scss/index.scss'
+import {App} from './react/App'
 
-export const test1: number = 0;
-console.log(test1);
+render(<App />, document.getElementById('root'))

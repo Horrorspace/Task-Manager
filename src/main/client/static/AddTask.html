@@ -9,28 +9,35 @@
         <title>Tasks</title>
     </head>
     <body class="app" id="root">
-        <div class="add-task-wrap">
-            <h2 class="add-task-main-title"></h2>
-            <input class="add-task-title" placeholder="Task title" type="text">
-            <input class="add-task-text" placeholder="Task description" type="text">
-            <div class="add-task-options">
-                <ul class="add-task-options-list">
-                    <li class="add-task-options-item" role="button" tabindex="0">
-                        <i class="add-task-options-ico far fa-flag"></i>
-                        <p class="add-task-options-text">Priority</p>
-                    </li>
-                    <li class="add-task-options-item" role="button" tabindex="0">
-                        <i class="add-task-options-ico far fa-calendar-alt"></i>
-                        <p class="add-task-options-text">Date & Time</p>
-                    </li>
-                    <li class="add-task-options-item" role="button" tabindex="0">
-                        <i class="add-task-options-ico far fa-bell"></i>
-                        <p class="add-task-options-text">Notification</p>
-                    </li>
-                </ul>
-            </div>
-            <div class="add-task-buttons">
-                
+        <div class="add-task-main-wrap">
+            <div class="add-task-wrap">
+                <h2 class="add-task-main-title"></h2>
+                <textarea class="add-task-title" placeholder="Task title"></textarea>
+                <textarea class="add-task-text" placeholder="Task description"></textarea>
+                <div class="add-task-options">
+                    <ul class="add-task-options-list">
+                        <li class="add-task-options-item" role="button" tabindex="0">
+                            <i class="add-task-options-ico far fa-flag"></i>
+                            <p class="add-task-options-text">Priority</p>
+                        </li>
+                        <li class="add-task-options-item" role="button" tabindex="0">
+                            <i class="add-task-options-ico far fa-calendar-alt"></i>
+                            <p class="add-task-options-text">Date & Time</p>
+                        </li>
+                        <li class="add-task-options-item" role="button" tabindex="0">
+                            <i class="add-task-options-ico far fa-bell"></i>
+                            <p class="add-task-options-text">Notification</p>
+                        </li>
+                    </ul>
+                </div>
+                <div class="add-task-buttons">
+                    <button class="add-task-btn">
+                        Add Task
+                    </button>
+                    <button class="add-task-btn">
+                        Cancel
+                    </button>
+                </div>
             </div>
         </div>
         <div class="overlay">

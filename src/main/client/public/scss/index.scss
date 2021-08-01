@@ -1,0 +1,17 @@
+@import "node_modules/bootstrap/scss/bootstrap";
+@import "node_modules/fontawesome/scss/fontawesome";
+@import "fonts";
+@import "var";
+@import "mixins";
+@import "animation";
+@import "global";
+@import "components/app.scss";
+@import "components/header.scss";
+@import "components/main.scss";
+@import "components/main-menu.scss";
+@import "components/menu-card.scss";
+@import "components/task-list.scss";
+@import "components/calendar.scss";
+@import "components/settings.scss";
+@import "components/add-task.scss";
+@import "components/footer.scss";

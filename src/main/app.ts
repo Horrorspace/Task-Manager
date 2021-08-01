@@ -11,7 +11,12 @@ const __dirname: string = path.dirname(__filename);
 
 app.get('/', (req, res) => {
     console.log(req);
-    res.sendFile(path.resolve(__dirname, 'client', 'static', 'index.html'));
+    res.sendFile(path.resolve(__dirname, 'client', 'index.html'));
+})
+
+app.get('/app.js', (req, res) => {
+    console.log(req);
+    res.sendFile(path.resolve(__dirname, 'client', 'app.js'));
 })
 
 app.listen(PORT, () => {

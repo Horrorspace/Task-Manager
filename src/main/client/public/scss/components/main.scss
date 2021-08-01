@@ -1,0 +1,33 @@
+.main {
+    @include flex-content(column, start, center);
+    flex-wrap: nowrap;
+    height: calc(100vh - #{$headerHeight} - #{$footerHeight});
+    width: 100%;
+    overflow: auto;
+    overflow-block: scroll;
+    -webkit-overflow-scrolling: touch;
+    background-color: $mainColorDark;
+
+    &::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: $scrolColorDark;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: $scrolColorLight;
+    }
+}
+
+.main-wrap {
+    @include flex-content(column, center, center);
+    width: $MaxWidth;
+}
+
+@media screen and (min-width: $mobile-breakpoint) {
+    .main-wrap {
+        width: $MaxWidthDesktop;
+    }
+}

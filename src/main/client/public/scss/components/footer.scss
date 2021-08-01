@@ -1,0 +1,68 @@
+.footer {
+    @include flex-content(column, center, center);
+    /*position: absolute;
+    bottom: 0;
+    left: 0;*/
+    min-height: $footerHeight;
+    width: 100%;
+    background-color: $mainColorLight;
+}
+
+.navigation {
+    @include flex-content(column, center, center);
+    min-height: $footerHeight;
+    width: $MaxWidth;
+}
+
+.nav-list {
+    @include flex-content(row, space-between, center);
+    width: calc(#{$MaxWidth} - 60px);
+    margin: 0;
+    padding: 0;
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+.nav-item {
+    @include flex-content();
+    min-width: 75px;
+}
+
+.nav-link {
+    @include flex-content(column, space-between, center);
+    text-decoration: none;
+    height: 55px;
+
+    &:hover {
+        .nav-ico, .nav-title {
+            opacity: 1;
+        }
+    }
+}
+
+.nav-ico {
+    @include flex-content(column, center, center);
+    height: 25px;
+    width: 25px;
+    margin: 0;
+    margin-top: 10px;
+    font-size: 24px;
+    color: $LightFontColor;
+    opacity: $opacity;
+}
+
+.nav-title {
+    @include font($LightFontColor, 12px, 300);
+    margin: 0;
+    opacity: $opacity;
+}
+
+@media screen and (min-width: $mobile-breakpoint) {
+    .navigation {
+        width: $MaxWidthDesktop;
+    }
+    
+    .nav-list {
+        width: calc(#{$MaxWidthDesktop} - 60px);
+    }
+}

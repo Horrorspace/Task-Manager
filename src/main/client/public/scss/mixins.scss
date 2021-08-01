@@ -1,0 +1,18 @@
+@mixin flex-content($flex-direction: column, $justify-content: space-between, $align-items: center) { 
+    display: flex;
+      flex-direction: $flex-direction;
+      flex-wrap: wrap;
+      align-items: $align-items;
+      justify-content: $justify-content;
+  }
+  
+  @mixin font($color: #FFFFFF, $font-size: 16px, $font-weight: 300) { 
+    font-family: $font-family;
+    font-size: $font-size;
+    font-weight: $font-weight;
+    line-height: 16px;
+    text-transform: none;
+    text-decoration: none;
+    color: $color;
+    line-height: 1.5;
+  }

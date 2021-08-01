@@ -1,0 +1,105 @@
+.header {
+    background-color: $mainColorLight;
+    min-height: 50px;
+}
+
+.header-wrap {
+    min-height: 50px;
+    max-width: 900px;
+}
+
+.title {
+    @include font($LightFontColor, 26, 300);
+    margin: 0;
+    opacity: $opacity;
+}
+
+.options-list {
+    margin: 0;
+    padding: 0;
+}
+
+.options-item {
+    margin: 0;
+    padding: 0;
+}
+
+
+.options-btn {
+    background-color: transparent !important;
+    border: 0;
+
+    &:hover, &:focus, &:active {
+        background-color: transparent !important;
+
+        .title-ico {
+            opacity: 1;
+        }
+    }
+    
+    &::after {
+        display: none
+    }
+}
+
+.options-ico {
+    font-size: 26px;
+    opacity: $opacity;
+    color: $LightFontColor;
+}
+
+
+.filters-wrap {
+    position: absolute;
+    top: calc(#{$headerHeight} - 6px);
+    right: 0;
+    z-index: 100;
+    width: 250px;
+    background-color: $mainColorLight;
+
+    box-shadow: 0px 0px 12px 12px rgba(41,41,59,0.59);
+    -webkit-box-shadow: 0px 0px 12px 12px rgba(41,41,59,0.59);
+    -moz-box-shadow: 0px 0px 12px 12px rgba(41,41,59,0.59);
+}
+
+.filters-list {
+    padding: 0;
+    margin: 0;
+    background-color: $mainColorLight;
+}
+
+.filter-item {
+    @include flex-content(row, space-between, center);
+    cursor: pointer;
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    &:hover {
+        background-color: $mainColorHover;
+
+        .filter-ico, .filter-setting, .filter-value {
+            opacity: 1;
+        }
+    }
+}
+
+.filter-ico {
+    font-size: 13px;
+    opacity: $opacity;
+    color: $GreenFontColor;
+}
+
+.filter-setting {
+    @include font($LightFontColor, 14px, 300);
+    margin: 0;
+    margin-right: auto;
+    opacity: $opacity;
+}
+
+.filter-value {
+    @include font($GreenFontColor, 14px, 300);
+    margin: 0;
+    margin-right: 15px;
+    opacity: $opacity;
+}

@@ -1,0 +1,17 @@
+.app {
+    @include flex-content(column, space-between, center);
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    position: relative;
+  }
+  
+  .wrap {
+    @include flex-content(column, space-between, center);
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+  }
