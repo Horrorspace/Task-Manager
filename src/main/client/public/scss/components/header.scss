@@ -1,10 +1,10 @@
 .header {
     background-color: $mainColorLight;
-    min-height: 50px;
+    min-height: $headerHeight;
 }
 
 .header-wrap {
-    min-height: 50px;
+    min-height: $headerHeight;
     max-width: 900px;
 }
 

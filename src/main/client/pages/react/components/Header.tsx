@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {Container, Row, Col, Button, ButtonGroup, Dropdown} from 'react-bootstrap'
+import {Container, Row, Col, Button, Dropdown} from 'react-bootstrap'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {IconDefinition} from '@fortawesome/fontawesome-common-types'
 import { faBars, faTh, faFilter, faCheckSquare, faFlag } from '@fortawesome/free-solid-svg-icons'
@@ -40,6 +40,7 @@ export const Header: React.FC = () => {
         }
     ];
     const [filterState, setFilter] = useState(FiltersDataDefault);
+    const [titleState, setTitle] = useState('My List');
 
     const Filters: React.ReactElement[] = filterState.map((filter: IFilter): React.ReactElement => {
         return (
@@ -59,7 +60,7 @@ export const Header: React.FC = () => {
             <Container as="header" className="header mx-auto" fluid>
                 <Row className="header-wrap mx-auto d-flex align-items-center">
                     <Col className="title-wrap" sm="9">
-                        <h1 className="title">My List</h1>
+                        <h1 className="title">{titleState}</h1>
                     </Col>
                     <Col className="options-wrap" sm="3">
                         <Row as="ul" className="options-list">
