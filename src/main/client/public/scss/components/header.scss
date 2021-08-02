@@ -63,19 +63,16 @@
 }
 
 .filters-list {
+    width: 310px;
     padding: 0;
     margin: 0;
     background-color: $mainColorLight;
 }
 
 .filter-item {
-    @include flex-content(row, space-between, center);
-    cursor: pointer;
-    width: 100%;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    min-height: 50px;
 
-    &:hover {
+    &:hover, &:active, &:focus {
         background-color: $mainColorHover;
 
         .filter-ico, .filter-setting, .filter-value {
@@ -93,13 +90,11 @@
 .filter-setting {
     @include font($LightFontColor, 14px, 300);
     margin: 0;
-    margin-right: auto;
     opacity: $opacity;
 }
 
 .filter-value {
     @include font($GreenFontColor, 14px, 300);
     margin: 0;
-    margin-right: 15px;
     opacity: $opacity;
 }

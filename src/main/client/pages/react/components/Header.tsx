@@ -43,10 +43,14 @@ export const Header: React.FC = () => {
 
     const Filters: React.ReactElement[] = filterState.map((filter: IFilter): React.ReactElement => {
         return (
-        <Dropdown.Item as="li">
-            <FontAwesomeIcon className="filter-ico" icon={filter.ico} />
-            <h3>{`${filter.filter}:`}</h3>
-            <p>{filter.values[filter.valueNum]}</p>
+        <Dropdown.Item as="button" className="filter-item">
+            <Row className="align-items-center" sm="12">
+                <Col xs="1">
+                    <FontAwesomeIcon className="filter-ico" icon={filter.ico} />
+                </Col>
+                <Col as="h3" className="filter-setting" xs="6">{`${filter.filter}:`}</Col>
+                <Col as="p" className="filter-value" xs="3">{filter.values[filter.valueNum]}</Col>
+            </Row>
         </Dropdown.Item>
         )
     })
@@ -70,7 +74,7 @@ export const Header: React.FC = () => {
                                         <FontAwesomeIcon className="options-ico" icon={faBars} />
                                         <FontAwesomeIcon className="options-ico hidden" icon={faTimesCircle} />
                                     </Dropdown.Toggle>
-                                    <Dropdown.Menu as="ul" className="filters-list">
+                                    <Dropdown.Menu as="div" className="filters-list">
                                         {Filters}
                                     </Dropdown.Menu>
                                 </Dropdown>
