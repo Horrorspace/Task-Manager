@@ -3,7 +3,7 @@ import {Container, Row, Col, Button, Dropdown} from 'react-bootstrap'
 import {NavLink} from 'react-router-dom'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {IconDefinition} from '@fortawesome/fontawesome-common-types'
-import { faSliders } from '@fortawesome/free-solid-svg-icons'
+import { faSlidersH } from '@fortawesome/free-solid-svg-icons'
 import { faCheckSquare, faCalendarCheck } from '@fortawesome/free-regular-svg-icons'
 
 interface ILink {
@@ -25,7 +25,7 @@ export const Footer: React.FC = () => {
             title: 'Calendar'
         },
         {
-            ico: faSliders,
+            ico: faSlidersH,
             link: '/settings',
             title: 'Settings'
         }
