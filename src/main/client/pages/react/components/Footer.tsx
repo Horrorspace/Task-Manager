@@ -35,8 +35,8 @@ export const Footer: React.FC = () => {
     
     const Links: React.ReactElement[] = linksState.map((link: ILink): React.ReactElement => {
     return (
-            <Col className="nav-item" sm="4">
-                <NavLink to={link.link} className="nav-link">
+            <Col className="nav-item d-flex justify-content-center" sm="4">
+                <NavLink to={link.link} className="nav-link d-flex flex-column align-items-center">
                     <FontAwesomeIcon className="nav-ico" icon={link.ico} />
                     <h2 className="nav-title">{link.title}</h2>
                 </NavLink>
@@ -47,7 +47,7 @@ export const Footer: React.FC = () => {
     return (
         <Container as="footer" className="footer mx-auto" fluid>
             <Container as="nav" className="navigation d-flex justify-content-center align-items-center" fluid="lg">
-                <Row as="ul" className="nav-list d-flex justify-content-center">
+                <Row as="ul" className="nav-list d-flex justify-content-between">
                     {Links}
                 </Row>
             </Container>
