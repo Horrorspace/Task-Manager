@@ -17,7 +17,7 @@ export const App: React.FC = () => {
                 <Route component={Calendar} path="/Calendar" />
                 <Route component={Settings} path="/Settings" />
             </Switch>
-            <Main />
+            <Settings />
             <Footer />
         </BrowserRouter>
     )

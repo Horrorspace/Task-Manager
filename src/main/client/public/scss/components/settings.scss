@@ -1,12 +1,12 @@
 .settings {
-    @include flex-content(column, center, center);
     width: 100%;
-    margin-top: 20px
+    margin-top: 20px;
 }
 
 .settings-group {
-    @include flex-content(column, center, center);
-    width: $MaxWidth;
+    // width: $MaxWidth;
+    width: 100%;
+    max-width: $MaxWidthDesktop;
     margin: 0;
     margin-bottom: 20px;
     padding: 0;
@@ -22,26 +22,29 @@
 }
 
 .settings-list {
-    @include flex-content(column, space-between, center);
     width: 100%;
     margin: 0;
     padding: 0;
 }
 
 .setting-item {
-    @include flex-content(row, space-between, center);
-    width: calc(#{$MaxWidth} - 60px);
-    min-height: 50px;
-    cursor: pointer;
-    background-color: $mainColorLight;
-    padding-left: 15px;
-    padding-right: 15px;
+    width: 100%;
+    // width: calc(#{$MaxWidth} - 60px);
+    // padding-left: 15px;
+    // padding-right: 15px;
     margin-bottom: 10px;
+}
 
-    &:hover {
-        background-color: $mainColorHover;
+.setting-btn {
+    background-color: $mainColorLight;
+    min-height: 50px;
+    width: 100%;
+    border: 0;
 
-        .setting-title, .setting-value {
+    &:hover, &:focus, &:active {
+        background-color: $mainColorLight;
+
+        .setting-title, .setting-value, .setting-ico {
             opacity: 1;
         }
     }
@@ -61,22 +64,9 @@
 }
 
 .setting-ico {
-    @include flex-content(column, center, center);
-    height: 18px;
-    width: 18px;
     margin: 0;
     margin-right: 10px;
     font-size: 17px;
     opacity: $opacity;
     color: $LightFontColor;
-}
-
-@media screen and (min-width: $mobile-breakpoint) {
-    .settings-group {
-        width: $MaxWidthDesktop;
-    }
-
-    .setting-item {
-        width: calc(#{$MaxWidthDesktop} - 60px);
-    }
 }
