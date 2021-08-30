@@ -42,7 +42,7 @@
     border: 0;
 
     &:hover, &:focus, &:active {
-        background-color: $mainColorLight;
+        background-color: $mainColorHover;
 
         .setting-title, .setting-value, .setting-ico {
             opacity: 1;

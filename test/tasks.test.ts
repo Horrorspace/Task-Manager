@@ -1,6 +1,6 @@
-import tasks from 'src/main/models/tasks'
-import {IUser, IUserResult} from 'src/main/interfaces/user'
-import {ITask, ITaskResult} from 'src/main/interfaces/task'
+import tasks from '../src/models/Tasks'
+import {IUser, IUserResult} from '../src/interfaces/user'
+import {ITask, ITaskResult} from '../src/interfaces/task'
 
 
 describe('Task API for PostgreSQL DB', () => {

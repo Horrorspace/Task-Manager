@@ -1,0 +1,11 @@
+{
+    "port": 3007,
+    "jwtSecret": "dogs and cats",
+    "PostgreSQL": {
+        "user": "admin",
+        "password": "KQoEgwBi",
+        "host": "127.0.0.1",
+        "port": 5432,
+        "database": "task_manager"
+    }
+}

@@ -6,8 +6,8 @@
   "scripts": {
     "test": "jest",
     "ts": "tsc --watch --resolveJsonModule",
-    "serve": "nodemon ./build/src/main/app.js",
-    "start": "node ./build/src/main/app.js",
+    "serve": "nodemon ./build/src/app.js",
+    "start": "node ./build/src/app.js",
     "build": "cross-env NODE_ENV=production webpack --mode production",
     "dev": "cross-env NODE_ENV=development webpack --mode development"
   },
