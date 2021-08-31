@@ -41,6 +41,55 @@ export default class Task extends PG {
         const result: ITaskResult[] = resultRows.map((val: ITaskResultRaw): ITaskResult => this.converteResult(val));
         return result;
     }
+    public async getUserNonPriorityTasks(id: number): Promise<ITaskResult[]> {
+        const dbData: QueryResult = await this.pool.query(`SELECT * FROM tasks WHERE user_id = ${id} AND is_priority = ${false};`);
+        const resultRows: QueryResultRow = dbData.rows;
+        resultRows as ITaskResultRaw[];
+        const result: ITaskResult[] = resultRows.map((val: ITaskResultRaw): ITaskResult => this.converteResult(val));
+        return result;
+    }
+    public async getUserCompleteTasks(id: number): Promise<ITaskResult[]> {
+        const dbData: QueryResult = await this.pool.query(`SELECT * FROM tasks WHERE user_id = ${id} AND is_complete = ${true};`);
+        const resultRows: QueryResultRow = dbData.rows;
+        resultRows as ITaskResultRaw[];
+        const result: ITaskResult[] = resultRows.map((val: ITaskResultRaw): ITaskResult => this.converteResult(val));
+        return result;
+    }
+    public async getUserNonCompleteTasks(id: number): Promise<ITaskResult[]> {
+        const dbData: QueryResult = await this.pool.query(`SELECT * FROM tasks WHERE user_id = ${id} AND is_complete = ${false};`);
+        const resultRows: QueryResultRow = dbData.rows;
+        resultRows as ITaskResultRaw[];
+        const result: ITaskResult[] = resultRows.map((val: ITaskResultRaw): ITaskResult => this.converteResult(val));
+        return result;
+    }
+    public async getUserCancelTasks(id: number): Promise<ITaskResult[]> {
+        const dbData: QueryResult = await this.pool.query(`SELECT * FROM tasks WHERE user_id = ${id} AND is_cancel = ${true};`);
+        const resultRows: QueryResultRow = dbData.rows;
+        resultRows as ITaskResultRaw[];
+        const result: ITaskResult[] = resultRows.map((val: ITaskResultRaw): ITaskResult => this.converteResult(val));
+        return result;
+    }
+    public async getUserNonCancelTasks(id: number): Promise<ITaskResult[]> {
+        const dbData: QueryResult = await this.pool.query(`SELECT * FROM tasks WHERE user_id = ${id} AND is_cancel = ${false};`);
+        const resultRows: QueryResultRow = dbData.rows;
+        resultRows as ITaskResultRaw[];
+        const result: ITaskResult[] = resultRows.map((val: ITaskResultRaw): ITaskResult => this.converteResult(val));
+        return result;
+    }
+    public async getUserDeleteTasks(id: number): Promise<ITaskResult[]> {
+        const dbData: QueryResult = await this.pool.query(`SELECT * FROM tasks WHERE user_id = ${id} AND is_delete = ${true};`);
+        const resultRows: QueryResultRow = dbData.rows;
+        resultRows as ITaskResultRaw[];
+        const result: ITaskResult[] = resultRows.map((val: ITaskResultRaw): ITaskResult => this.converteResult(val));
+        return result;
+    }
+    public async getUserNonDeleteTasks(id: number): Promise<ITaskResult[]> {
+        const dbData: QueryResult = await this.pool.query(`SELECT * FROM tasks WHERE user_id = ${id} AND is_delete = ${false};`);
+        const resultRows: QueryResultRow = dbData.rows;
+        resultRows as ITaskResultRaw[];
+        const result: ITaskResult[] = resultRows.map((val: ITaskResultRaw): ITaskResult => this.converteResult(val));
+        return result;
+    }
     public async insertTask({email, dateToDo, title, task}: ITask): Promise<QueryResult> {
         const insert: QueryResult = await this.pool.query(`SELECT task_insert('${email}', '${dateToDo}', '${title}', '${task}');`);
         return insert;
