@@ -1,17 +1,20 @@
-export interface ITaskDateToDo {
+export interface ITaskId {
     id: number;
+}
+
+
+export interface ITaskDateToDo extends ITaskId {
     dateToDo: string;
 }
 
-export interface ITaskTitle {
-    id: number;
+export interface ITaskTitle extends ITaskId {
     title: string;
 }
 
-export interface ITaskText {
-    id: number;
+export interface ITaskText extends ITaskId {
     task: string;
 }
+
 
 export interface ITask {
     email: string;
