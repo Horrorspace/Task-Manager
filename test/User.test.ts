@@ -1,21 +1,14 @@
-import tasks from '../src/models/Tasks'
-import {IUser, IUserResult} from '../src/interfaces/user'
+import User from '../src/models/User'
+import {IUser, IUserResult, IUserName, IUserEmail, IUserPass} from '../src/interfaces/user'
 import {ITask, ITaskResult} from '../src/interfaces/task'
 
 
-describe('Task API for PostgreSQL DB', () => {
+describe('User API for PostgreSQL DB', () => {
     const testUser: IUser = {
         name: 'admin',
         email: 'admin@testing.com',
         password: 'test'
     };
-
-    const testTask: ITask = {
-        email: testUser.email,
-        dateToDo: '2005-10-19 19:23:54+07',
-        title: 'Testing',
-        task: 'Test task'
-    }
 
     beforeAll(async () => {
         const res: IUserResult[] = await tasks.getUser(testUser.email);
