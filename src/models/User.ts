@@ -1,5 +1,4 @@
-import {Pool, QueryResult, QueryResultRow} from 'pg'
-import pg from 'pg'
+import {QueryResult, QueryResultRow} from 'pg'
 import {IUser, IUserResult, IUserName, IUserEmail, IUserPass} from 'interfaces/user'
 import PG from 'models/abstractPG'
 import {IPostgreSQLConf} from 'interfaces/config'
@@ -15,10 +14,15 @@ export default class Users extends PG {
         const resultRows: QueryResultRow = dbData.rows;
         return resultRows as IUserResult[];
     }
-    public async getUserByEmail(email: string): Promise<IUserResult[]> {
+    public async getUserByEmail(email: string): Promise<IUserResult> {
         const dbData: QueryResult = await this.pool.query(`SELECT * FROM users WHERE email = '${email}';`);
         const resultRows: QueryResultRow = dbData.rows;
-        return resultRows as IUserResult[];
+        return resultRows[0] as IUserResult;
+    }
+    public async getUserById(id: number): Promise<IUserResult> {
+        const dbData: QueryResult = await this.pool.query(`SELECT * FROM users WHERE id = ${id};`);
+        const resultRows: QueryResultRow = dbData.rows;
+        return resultRows[0] as IUserResult;
     }
     public async insertUser({name, email, password}: IUser): Promise<QueryResult> {
         const insert: QueryResult = await this.pool.query(`SELECT user_insert('${name}', '${email}', '${password}');`);
@@ -34,6 +38,10 @@ export default class Users extends PG {
     }
     public async userPassUp({id, pass}: IUserPass): Promise<QueryResult> {
         const insert: QueryResult = await this.pool.query(`SELECT pass_up(${id}, '${pass}');`);
+        return insert;
+    }
+    public async deleteUser(email: string): Promise<QueryResult> {
+        const insert: QueryResult = await this.pool.query(`SELECT user_del('${email}');`);
         return insert;
     }
 }
