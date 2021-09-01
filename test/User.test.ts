@@ -39,6 +39,12 @@ describe('User API for PostgreSQL DB', () => {
         expect(user.userPassUp).toBeDefined();
         expect(user.deleteUser).toBeDefined();
     });
+    
+    test('Method getAllUsers should return array at start', async () => {
+        const res: IUserResult[] = await user.getAllUsers();
+        expect(typeof(res)).toEqual('object');
+        expect(Array.isArray(res)).toEqual(true);
+    });
 
     test('Method getUserByEmail should return empty array on the testUser at start', async () => {
         const res: IUserResult[] = await user.getUserByEmail(testUser.email);
@@ -61,6 +67,13 @@ describe('User API for PostgreSQL DB', () => {
         expect(res[0].name).toEqual(testUser.name);
         expect(res[0].email).toEqual(testUser.email);
         expect(res[0].password).toEqual(testUser.password);
+    });
+    
+    test('Method getAllUsers should return non-empty array after user insert', async () => {
+        const res: IUserResult[] = await user.getAllUsers();
+        expect(typeof(res)).toEqual('object');
+        expect(Array.isArray(res)).toEqual(true);
+        expect(res.length).toBeGreaterThan(0);
     });
 
     test('Method getUserById should return array on the testUser', async () => {
