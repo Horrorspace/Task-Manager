@@ -24,6 +24,10 @@ describe('User API for PostgreSQL DB', () => {
             await user.deleteUser(testUser.email);
         }
     });
+    
+    test('Class User is defined', () => {
+        expect(User).toBeDefined();
+    });
 
     test('user instance is defined', () => {
         expect(user).toBeDefined();
