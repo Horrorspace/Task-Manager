@@ -1,7 +1,7 @@
 import Task from '../src/models/Task'
 import User from '../src/models/User'
 import {IUser, IUserResult, IUserName, IUserEmail, IUserPass, IUserInstance} from '../src/interfaces/user'
-import {ITask, ITaskResult} from '../src/interfaces/task'
+import {ITask, ITaskResult, ITaskInstance} from '../src/interfaces/task'
 import config from '../src/config/default.json'
 
 
@@ -23,38 +23,46 @@ describe('Task API for PostgreSQL DB', () => {
     const task: ITaskInstance = new Task(config.PostgreSQL);
 
     beforeAll(async () => {
-        const res: IUserResult[] = await tasks.getUser(testUser.email);
+        const res: IUserResult[] = await user.getUserByEmail(testUser.email);
         if(res.length !== 0) {
-            await tasks.deleteUser(testUser.email);
+            await user.deleteUser(testUser.email);
+        }
+    });
+    
+    afterAll(async () => {
+        const res: IUserResult[] = await user.getUserByEmail(testUser.email);
+        if(res.length !== 0) {
+            await user.deleteUser(testUser.email);
         }
     });
 
-    test('Class tasks is defined', () => {
-        expect(tasks).toBeDefined();
+    test('Class Tasks is defined', () => {
+        expect(Task).toBeDefined();
+    });
+    
+    test('tasks instance is defined', () => {
+        expect(task).toBeDefined();
     });
 
-    test('All methods of tasks is defined', () => {
-        expect(tasks.getUser).toBeDefined();
-        expect(tasks.getUserTasks).toBeDefined();
-        expect(tasks.insertTask).toBeDefined();
-        expect(tasks.insertUser).toBeDefined();
-        expect(tasks.taskDateToDoUp).toBeDefined();
-        expect(tasks.taskTextUp).toBeDefined();
-        expect(tasks.taskTitleUp).toBeDefined();
-        expect(tasks.toggleCancel).toBeDefined();
-        expect(tasks.toggleComplete).toBeDefined();
-        expect(tasks.toggleDelete).toBeDefined();
-        expect(tasks.togglePriority).toBeDefined();
-        expect(tasks.userEmailUp).toBeDefined();
-        expect(tasks.userNameUp).toBeDefined();
-        expect(tasks.userPassUp).toBeDefined();
-    });
-
-    test('Method getUser should return empty array on the testUser at start', async () => {
-        const res: IUserResult[] = await tasks.getUser(testUser.email);
-        expect(typeof(res)).toEqual('object');
-        expect(Array.isArray(res)).toEqual(true);
-        expect(res.length).toEqual(0);
+    test('All methods of task is defined', () => {
+        expect(task.getAllUserTasks).toBeDefined();
+        expect(task.getUserPriorityTasks).toBeDefined();
+        expect(task.getUserNonPriorityTasks).toBeDefined();
+        expect(task.getUserCompleteTasks).toBeDefined();
+        expect(task.getUserNonCompleteTasks).toBeDefined();
+        expect(task.getUserCancelTasks).toBeDefined();
+        expect(task.getUserNonCancelTasks).toBeDefined();
+        expect(task.getUserDeleteTasks).toBeDefined();
+        expect(task.getUserNonDeleteTasks).toBeDefined();
+        expect(task.insertTask).toBeDefined();
+        expect(task.togglePriority).toBeDefined();
+        expect(task.toggleComplete).toBeDefined();
+        expect(task.toggleCancel).toBeDefined();
+        expect(task.toggleDelete).toBeDefined();
+        expect(task.taskDateToDoUp).toBeDefined();
+        expect(task.taskTitleUp).toBeDefined();
+        expect(task.taskTextUp).toBeDefined();
+        expect(task.deleteTask).toBeDefined();
     });
 
     test('Method getUser should return array with testUser after he had been added by insertUser method', async () => {
