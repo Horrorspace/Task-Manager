@@ -1,10 +1,10 @@
 import {QueryResult, QueryResultRow} from 'pg'
-import {ITask, ITaskResult, ITaskDateToDo, ITaskTitle, ITaskText, ITaskResultRaw} from 'interfaces/task'
+import {ITask, ITaskResult, ITaskDateToDo, ITaskTitle, ITaskText, ITaskResultRaw, ITaskInstance} from 'interfaces/task'
 import PG from '../models/abstractPG'
 import {IPostgreSQLConf} from 'interfaces/config'
 
 
-export default class Task extends PG {
+export default class Task extends PG implements ITaskInstance {
     constructor(config: IPostgreSQLConf) {
         super(config)
     }
