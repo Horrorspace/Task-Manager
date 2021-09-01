@@ -1,10 +1,10 @@
 import {QueryResult, QueryResultRow} from 'pg'
-import {IUser, IUserResult, IUserName, IUserEmail, IUserPass} from 'interfaces/user'
-import PG from 'models/abstractPG'
+import {IUser, IUserResult, IUserName, IUserEmail, IUserPass, IUserInstance} from 'interfaces/user'
+import PG from '../models/abstractPG'
 import {IPostgreSQLConf} from 'interfaces/config'
 
 
-export default class Users extends PG {
+export default class Users extends PG implements IUserInstance {
     constructor(config: IPostgreSQLConf) {
         super(config)
     }
@@ -14,15 +14,15 @@ export default class Users extends PG {
         const resultRows: QueryResultRow = dbData.rows;
         return resultRows as IUserResult[];
     }
-    public async getUserByEmail(email: string): Promise<IUserResult> {
+    public async getUserByEmail(email: string): Promise<IUserResult[]> {
         const dbData: QueryResult = await this.pool.query(`SELECT * FROM users WHERE email = '${email}';`);
         const resultRows: QueryResultRow = dbData.rows;
-        return resultRows[0] as IUserResult;
+        return resultRows as IUserResult[];
     }
-    public async getUserById(id: number): Promise<IUserResult> {
+    public async getUserById(id: number): Promise<IUserResult[]> {
         const dbData: QueryResult = await this.pool.query(`SELECT * FROM users WHERE id = ${id};`);
         const resultRows: QueryResultRow = dbData.rows;
-        return resultRows[0] as IUserResult;
+        return resultRows as IUserResult[];
     }
     public async insertUser({name, email, password}: IUser): Promise<QueryResult> {
         const insert: QueryResult = await this.pool.query(`SELECT user_insert('${name}', '${email}', '${password}');`);

@@ -1,6 +1,6 @@
 import User from '../src/models/User'
-import {IUser, IUserResult, IUserName, IUserEmail, IUserPass} from '../src/interfaces/user'
-import {ITask, ITaskResult} from '../src/interfaces/task'
+import {IUser, IUserResult, IUserName, IUserEmail, IUserPass, IUserInstance} from '../src/interfaces/user'
+import config from '../src/config/default.json'
 
 
 describe('User API for PostgreSQL DB', () => {
@@ -10,44 +10,46 @@ describe('User API for PostgreSQL DB', () => {
         password: 'test'
     };
 
+    const testUser2: IUser = {
+        name: 'user',
+        email: 'user@testing.com',
+        password: '1111'
+    };
+
+    const user: IUserInstance = new User(config.PostgreSQL);
+
     beforeAll(async () => {
-        const res: IUserResult[] = await tasks.getUser(testUser.email);
+        const res: IUserResult[] = await user.getUserByEmail(testUser.email);
         if(res.length !== 0) {
-            await tasks.deleteUser(testUser.email);
+            await user.deleteUser(testUser.email);
         }
     });
 
-    test('Class tasks is defined', () => {
-        expect(tasks).toBeDefined();
+    test('user instance is defined', () => {
+        expect(user).toBeDefined();
     });
 
-    test('All methods of tasks is defined', () => {
-        expect(tasks.getUser).toBeDefined();
-        expect(tasks.getUserTasks).toBeDefined();
-        expect(tasks.insertTask).toBeDefined();
-        expect(tasks.insertUser).toBeDefined();
-        expect(tasks.taskDateToDoUp).toBeDefined();
-        expect(tasks.taskTextUp).toBeDefined();
-        expect(tasks.taskTitleUp).toBeDefined();
-        expect(tasks.toggleCancel).toBeDefined();
-        expect(tasks.toggleComplete).toBeDefined();
-        expect(tasks.toggleDelete).toBeDefined();
-        expect(tasks.togglePriority).toBeDefined();
-        expect(tasks.userEmailUp).toBeDefined();
-        expect(tasks.userNameUp).toBeDefined();
-        expect(tasks.userPassUp).toBeDefined();
+    test('All methods of user is defined', () => {
+        expect(user.getAllUsers).toBeDefined();
+        expect(user.getUserByEmail).toBeDefined();
+        expect(user.getUserById).toBeDefined();
+        expect(user.insertUser).toBeDefined();
+        expect(user.userNameUp).toBeDefined();
+        expect(user.userEmailUp).toBeDefined();
+        expect(user.userPassUp).toBeDefined();
+        expect(user.deleteUser).toBeDefined();
     });
 
-    test('Method getUser should return empty array on the testUser at start', async () => {
-        const res: IUserResult[] = await tasks.getUser(testUser.email);
+    test('Method getUserByEmail should return empty array on the testUser at start', async () => {
+        const res: IUserResult[] = await user.getUserByEmail(testUser.email);
         expect(typeof(res)).toEqual('object');
         expect(Array.isArray(res)).toEqual(true);
         expect(res.length).toEqual(0);
     });
 
-    test('Method getUser should return array with testUser after he had been added by insertUser method', async () => {
-        await tasks.insertUser(testUser);
-        const res: IUserResult[] = await tasks.getUser(testUser.email);
+    test('Method getUserByEmail should return array on testUser after he had been added by insertUser method', async () => {
+        await user.insertUser(testUser);
+        const res: IUserResult[] = await user.getUserByEmail(testUser.email);
         expect(typeof(res)).toEqual('object');
         expect(Array.isArray(res)).toEqual(true);
         expect(res.length).toEqual(1);
@@ -61,270 +63,92 @@ describe('User API for PostgreSQL DB', () => {
         expect(res[0].password).toEqual(testUser.password);
     });
 
-    test('Method getUserTasks should return empty array on the id of testUser at start', async () => {
-        const user: IUserResult[] = await tasks.getUser(testUser.email);
-        const res: ITaskResult[] = await tasks.getUserTasks(user[0].id);
-        expect(typeof(res)).toEqual('object');
-        expect(Array.isArray(res)).toEqual(true);
-        expect(res.length).toEqual(0);
-    });
-
-    test('Method getUserTasks should return array with testTask after it had been added by insertTask method', async () => {
-        await tasks.insertTask(testTask);
-        const user: IUserResult[] = await tasks.getUser(testUser.email);
-        const res: ITaskResult[] = await tasks.getUserTasks(user[0].id);
-        console.log(res[0].dateToDo);
+    test('Method getUserById should return array on the testUser', async () => {
+        const targetUser: IUserResult[] = await user.getUserByEmail(testUser.email);
+        const id: number = targetUser[0].id;
+        const res: IUserResult[] = await user.getUserById(id);
         expect(typeof(res)).toEqual('object');
         expect(Array.isArray(res)).toEqual(true);
         expect(res.length).toEqual(1);
         expect(typeof(res[0])).toEqual('object');
         expect(res[0].hasOwnProperty('id')).toEqual(true);
-        expect(res[0].hasOwnProperty('userId')).toEqual(true);
-        expect(res[0].hasOwnProperty('created')).toEqual(true);
-        expect(res[0].hasOwnProperty('dateOfComplete')).toEqual(true);
-        expect(res[0].hasOwnProperty('dateOfDelete')).toEqual(true);
-        expect(res[0].hasOwnProperty('isPriority')).toEqual(true);
-        expect(res[0].hasOwnProperty('isComplete')).toEqual(true);
-        expect(res[0].hasOwnProperty('isCancel')).toEqual(true);
-        expect(res[0].hasOwnProperty('isDelete')).toEqual(true);
-        expect(res[0].dateToDo).toEqual(testTask.dateToDo);
-        expect(res[0].title).toEqual(testTask.title);
-        expect(res[0].task).toEqual(testTask.task);
-        expect(res[0].isPriority).toEqual(false);
-        expect(res[0].isComplete).toEqual(false);
-        expect(res[0].isCancel).toEqual(false);
-        expect(res[0].isDelete).toEqual(false);
+        expect(res[0].hasOwnProperty('name')).toEqual(true);
+        expect(res[0].hasOwnProperty('email')).toEqual(true);
+        expect(res[0].hasOwnProperty('password')).toEqual(true);
+        expect(res[0].name).toEqual(testUser.name);
+        expect(res[0].email).toEqual(testUser.email);
+        expect(res[0].password).toEqual(testUser.password);
     });
 
-    test('Method getUserTasks should return array with testTask containing property isPriority with value TRUE after togglePriority method had been called', async () => {
-        const user: IUserResult[] = await tasks.getUser(testUser.email);
-        const userTasks: ITaskResult[] = await tasks.getUserTasks(user[0].id);
-        await tasks.togglePriority(userTasks[0].id);
-        const res: ITaskResult[] = await tasks.getUserTasks(user[0].id);
+    test('Method userNameUp should change name', async () => {
+        const targetUser: IUserResult[] = await user.getUserByEmail(testUser.email);
+        const id: number = targetUser[0].id;
+        const changeObj: IUserName = {
+            id,
+            name: testUser2.name
+        };
+        await user.userNameUp(changeObj);
+        const res: IUserResult[] = await user.getUserById(id);
         expect(typeof(res)).toEqual('object');
         expect(Array.isArray(res)).toEqual(true);
         expect(res.length).toEqual(1);
         expect(typeof(res[0])).toEqual('object');
         expect(res[0].hasOwnProperty('id')).toEqual(true);
-        expect(res[0].hasOwnProperty('userId')).toEqual(true);
-        expect(res[0].hasOwnProperty('created')).toEqual(true);
-        expect(res[0].hasOwnProperty('dateOfComplete')).toEqual(true);
-        expect(res[0].hasOwnProperty('dateOfDelete')).toEqual(true);
-        expect(res[0].hasOwnProperty('isPriority')).toEqual(true);
-        expect(res[0].hasOwnProperty('isComplete')).toEqual(true);
-        expect(res[0].hasOwnProperty('isCancel')).toEqual(true);
-        expect(res[0].hasOwnProperty('isDelete')).toEqual(true);
-        expect(res[0].dateToDo).toEqual(testTask.dateToDo);
-        expect(res[0].title).toEqual(testTask.title);
-        expect(res[0].task).toEqual(testTask.task);
-        expect(res[0].isPriority).toEqual(true);
-        expect(res[0].isComplete).toEqual(false);
-        expect(res[0].isCancel).toEqual(false);
-        expect(res[0].isDelete).toEqual(false);
+        expect(res[0].hasOwnProperty('name')).toEqual(true);
+        expect(res[0].hasOwnProperty('email')).toEqual(true);
+        expect(res[0].hasOwnProperty('password')).toEqual(true);
+        expect(res[0].name).toEqual(testUser2.name);
+        expect(res[0].email).toEqual(testUser.email);
+        expect(res[0].password).toEqual(testUser.password);
     });
 
-    test('Method getUserTasks should return array with testTask containing property isPriority with value FALSE after togglePriority method had been called again', async () => {
-        const user: IUserResult[] = await tasks.getUser(testUser.email);
-        const userTasks: ITaskResult[] = await tasks.getUserTasks(user[0].id);
-        await tasks.togglePriority(userTasks[0].id);
-        const res: ITaskResult[] = await tasks.getUserTasks(user[0].id);
+    test('Method userEmailUp should change email', async () => {
+        const targetUser: IUserResult[] = await user.getUserByEmail(testUser.email);
+        const id: number = targetUser[0].id;
+        const changeObj: IUserEmail = {
+            id,
+            email: testUser2.email
+        };
+        await user.userEmailUp(changeObj);
+        const res: IUserResult[] = await user.getUserById(id);
         expect(typeof(res)).toEqual('object');
         expect(Array.isArray(res)).toEqual(true);
         expect(res.length).toEqual(1);
         expect(typeof(res[0])).toEqual('object');
         expect(res[0].hasOwnProperty('id')).toEqual(true);
-        expect(res[0].hasOwnProperty('userId')).toEqual(true);
-        expect(res[0].hasOwnProperty('created')).toEqual(true);
-        expect(res[0].hasOwnProperty('dateOfComplete')).toEqual(true);
-        expect(res[0].hasOwnProperty('dateOfDelete')).toEqual(true);
-        expect(res[0].hasOwnProperty('isPriority')).toEqual(true);
-        expect(res[0].hasOwnProperty('isComplete')).toEqual(true);
-        expect(res[0].hasOwnProperty('isCancel')).toEqual(true);
-        expect(res[0].hasOwnProperty('isDelete')).toEqual(true);
-        expect(res[0].dateToDo).toEqual(testTask.dateToDo);
-        expect(res[0].title).toEqual(testTask.title);
-        expect(res[0].task).toEqual(testTask.task);
-        expect(res[0].isPriority).toEqual(false);
-        expect(res[0].isComplete).toEqual(false);
-        expect(res[0].isCancel).toEqual(false);
-        expect(res[0].isDelete).toEqual(false);
+        expect(res[0].hasOwnProperty('name')).toEqual(true);
+        expect(res[0].hasOwnProperty('email')).toEqual(true);
+        expect(res[0].hasOwnProperty('password')).toEqual(true);
+        expect(res[0].name).toEqual(testUser2.name);
+        expect(res[0].email).toEqual(testUser2.email);
+        expect(res[0].password).toEqual(testUser.password);
     });
 
-    test('Method getUserTasks should return array with testTask containing property isComplete with value TRUE after toggleComplete method had been called', async () => {
-        const user: IUserResult[] = await tasks.getUser(testUser.email);
-        const userTasks: ITaskResult[] = await tasks.getUserTasks(user[0].id);
-        await tasks.toggleComplete(userTasks[0].id);
-        const res: ITaskResult[] = await tasks.getUserTasks(user[0].id);
+    test('Method userPassUp should change password', async () => {
+        const targetUser: IUserResult[] = await user.getUserByEmail(testUser2.email);
+        const id: number = targetUser[0].id;
+        const changeObj: IUserPass = {
+            id,
+            pass: testUser2.password
+        };
+        await user.userPassUp(changeObj);
+        const res: IUserResult[] = await user.getUserById(id);
         expect(typeof(res)).toEqual('object');
         expect(Array.isArray(res)).toEqual(true);
         expect(res.length).toEqual(1);
         expect(typeof(res[0])).toEqual('object');
         expect(res[0].hasOwnProperty('id')).toEqual(true);
-        expect(res[0].hasOwnProperty('userId')).toEqual(true);
-        expect(res[0].hasOwnProperty('created')).toEqual(true);
-        expect(res[0].hasOwnProperty('dateOfComplete')).toEqual(true);
-        expect(res[0].hasOwnProperty('dateOfDelete')).toEqual(true);
-        expect(res[0].hasOwnProperty('isPriority')).toEqual(true);
-        expect(res[0].hasOwnProperty('isComplete')).toEqual(true);
-        expect(res[0].hasOwnProperty('isCancel')).toEqual(true);
-        expect(res[0].hasOwnProperty('isDelete')).toEqual(true);
-        expect(res[0].dateToDo).toEqual(testTask.dateToDo);
-        expect(res[0].title).toEqual(testTask.title);
-        expect(res[0].task).toEqual(testTask.task);
-        expect(res[0].isPriority).toEqual(false);
-        expect(res[0].isComplete).toEqual(true);
-        expect(res[0].isCancel).toEqual(false);
-        expect(res[0].isDelete).toEqual(false);
+        expect(res[0].hasOwnProperty('name')).toEqual(true);
+        expect(res[0].hasOwnProperty('email')).toEqual(true);
+        expect(res[0].hasOwnProperty('password')).toEqual(true);
+        expect(res[0].name).toEqual(testUser2.name);
+        expect(res[0].email).toEqual(testUser2.email);
+        expect(res[0].password).toEqual(testUser2.password);
     });
 
-    test('Method getUserTasks should return array with testTask containing property isComplete with value FALSE after toggleComplete method had been called again', async () => {
-        const user: IUserResult[] = await tasks.getUser(testUser.email);
-        const userTasks: ITaskResult[] = await tasks.getUserTasks(user[0].id);
-        await tasks.toggleComplete(userTasks[0].id);
-        const res: ITaskResult[] = await tasks.getUserTasks(user[0].id);
-        expect(typeof(res)).toEqual('object');
-        expect(Array.isArray(res)).toEqual(true);
-        expect(res.length).toEqual(1);
-        expect(typeof(res[0])).toEqual('object');
-        expect(res[0].hasOwnProperty('id')).toEqual(true);
-        expect(res[0].hasOwnProperty('userId')).toEqual(true);
-        expect(res[0].hasOwnProperty('created')).toEqual(true);
-        expect(res[0].hasOwnProperty('dateOfComplete')).toEqual(true);
-        expect(res[0].hasOwnProperty('dateOfDelete')).toEqual(true);
-        expect(res[0].hasOwnProperty('isPriority')).toEqual(true);
-        expect(res[0].hasOwnProperty('isComplete')).toEqual(true);
-        expect(res[0].hasOwnProperty('isCancel')).toEqual(true);
-        expect(res[0].hasOwnProperty('isDelete')).toEqual(true);
-        expect(res[0].dateToDo).toEqual(testTask.dateToDo);
-        expect(res[0].title).toEqual(testTask.title);
-        expect(res[0].task).toEqual(testTask.task);
-        expect(res[0].isPriority).toEqual(false);
-        expect(res[0].isComplete).toEqual(false);
-        expect(res[0].isCancel).toEqual(false);
-        expect(res[0].isDelete).toEqual(false);
-    });
-
-    test('Method getUserTasks should return array with testTask containing property isCancel with value TRUE after toggleCancel method had been called', async () => {
-        const user: IUserResult[] = await tasks.getUser(testUser.email);
-        const userTasks: ITaskResult[] = await tasks.getUserTasks(user[0].id);
-        await tasks.toggleCancel(userTasks[0].id);
-        const res: ITaskResult[] = await tasks.getUserTasks(user[0].id);
-        expect(typeof(res)).toEqual('object');
-        expect(Array.isArray(res)).toEqual(true);
-        expect(res.length).toEqual(1);
-        expect(typeof(res[0])).toEqual('object');
-        expect(res[0].hasOwnProperty('id')).toEqual(true);
-        expect(res[0].hasOwnProperty('userId')).toEqual(true);
-        expect(res[0].hasOwnProperty('created')).toEqual(true);
-        expect(res[0].hasOwnProperty('dateOfComplete')).toEqual(true);
-        expect(res[0].hasOwnProperty('dateOfDelete')).toEqual(true);
-        expect(res[0].hasOwnProperty('isPriority')).toEqual(true);
-        expect(res[0].hasOwnProperty('isComplete')).toEqual(true);
-        expect(res[0].hasOwnProperty('isCancel')).toEqual(true);
-        expect(res[0].hasOwnProperty('isDelete')).toEqual(true);
-        expect(res[0].dateToDo).toEqual(testTask.dateToDo);
-        expect(res[0].title).toEqual(testTask.title);
-        expect(res[0].task).toEqual(testTask.task);
-        expect(res[0].isPriority).toEqual(false);
-        expect(res[0].isComplete).toEqual(false);
-        expect(res[0].isCancel).toEqual(true);
-        expect(res[0].isDelete).toEqual(false);
-    });
-
-    test('Method getUserTasks should return array with testTask containing property isCancel with value FALSE after toggleCancel method had been called again', async () => {
-        const user: IUserResult[] = await tasks.getUser(testUser.email);
-        const userTasks: ITaskResult[] = await tasks.getUserTasks(user[0].id);
-        await tasks.toggleCancel(userTasks[0].id);
-        const res: ITaskResult[] = await tasks.getUserTasks(user[0].id);
-        expect(typeof(res)).toEqual('object');
-        expect(Array.isArray(res)).toEqual(true);
-        expect(res.length).toEqual(1);
-        expect(typeof(res[0])).toEqual('object');
-        expect(res[0].hasOwnProperty('id')).toEqual(true);
-        expect(res[0].hasOwnProperty('userId')).toEqual(true);
-        expect(res[0].hasOwnProperty('created')).toEqual(true);
-        expect(res[0].hasOwnProperty('dateOfComplete')).toEqual(true);
-        expect(res[0].hasOwnProperty('dateOfDelete')).toEqual(true);
-        expect(res[0].hasOwnProperty('isPriority')).toEqual(true);
-        expect(res[0].hasOwnProperty('isComplete')).toEqual(true);
-        expect(res[0].hasOwnProperty('isCancel')).toEqual(true);
-        expect(res[0].hasOwnProperty('isDelete')).toEqual(true);
-        expect(res[0].dateToDo).toEqual(testTask.dateToDo);
-        expect(res[0].title).toEqual(testTask.title);
-        expect(res[0].task).toEqual(testTask.task);
-        expect(res[0].isPriority).toEqual(false);
-        expect(res[0].isComplete).toEqual(false);
-        expect(res[0].isCancel).toEqual(false);
-        expect(res[0].isDelete).toEqual(false);
-    });
-
-    test('Method getUserTasks should return array with testTask containing property isDelete with value TRUE after toggleDelete method had been called', async () => {
-        const user: IUserResult[] = await tasks.getUser(testUser.email);
-        const userTasks: ITaskResult[] = await tasks.getUserTasks(user[0].id);
-        await tasks.toggleDelete(userTasks[0].id);
-        const res: ITaskResult[] = await tasks.getUserTasks(user[0].id);
-        expect(typeof(res)).toEqual('object');
-        expect(Array.isArray(res)).toEqual(true);
-        expect(res.length).toEqual(1);
-        expect(typeof(res[0])).toEqual('object');
-        expect(res[0].hasOwnProperty('id')).toEqual(true);
-        expect(res[0].hasOwnProperty('userId')).toEqual(true);
-        expect(res[0].hasOwnProperty('created')).toEqual(true);
-        expect(res[0].hasOwnProperty('dateOfComplete')).toEqual(true);
-        expect(res[0].hasOwnProperty('dateOfDelete')).toEqual(true);
-        expect(res[0].hasOwnProperty('isPriority')).toEqual(true);
-        expect(res[0].hasOwnProperty('isComplete')).toEqual(true);
-        expect(res[0].hasOwnProperty('isCancel')).toEqual(true);
-        expect(res[0].hasOwnProperty('isDelete')).toEqual(true);
-        expect(res[0].dateToDo).toEqual(testTask.dateToDo);
-        expect(res[0].title).toEqual(testTask.title);
-        expect(res[0].task).toEqual(testTask.task);
-        expect(res[0].isPriority).toEqual(false);
-        expect(res[0].isComplete).toEqual(false);
-        expect(res[0].isCancel).toEqual(false);
-        expect(res[0].isDelete).toEqual(true);
-    });
-
-    test('Method getUserTasks should return array with testTask containing property isDelete with value FALSE after toggleDelete method had been called again', async () => {
-        const user: IUserResult[] = await tasks.getUser(testUser.email);
-        const userTasks: ITaskResult[] = await tasks.getUserTasks(user[0].id);
-        await tasks.toggleDelete(userTasks[0].id);
-        const res: ITaskResult[] = await tasks.getUserTasks(user[0].id);
-        expect(typeof(res)).toEqual('object');
-        expect(Array.isArray(res)).toEqual(true);
-        expect(res.length).toEqual(1);
-        expect(typeof(res[0])).toEqual('object');
-        expect(res[0].hasOwnProperty('id')).toEqual(true);
-        expect(res[0].hasOwnProperty('userId')).toEqual(true);
-        expect(res[0].hasOwnProperty('created')).toEqual(true);
-        expect(res[0].hasOwnProperty('dateOfComplete')).toEqual(true);
-        expect(res[0].hasOwnProperty('dateOfDelete')).toEqual(true);
-        expect(res[0].hasOwnProperty('isPriority')).toEqual(true);
-        expect(res[0].hasOwnProperty('isComplete')).toEqual(true);
-        expect(res[0].hasOwnProperty('isCancel')).toEqual(true);
-        expect(res[0].hasOwnProperty('isDelete')).toEqual(true);
-        expect(res[0].dateToDo).toEqual(testTask.dateToDo);
-        expect(res[0].title).toEqual(testTask.title);
-        expect(res[0].task).toEqual(testTask.task);
-        expect(res[0].isPriority).toEqual(false);
-        expect(res[0].isComplete).toEqual(false);
-        expect(res[0].isCancel).toEqual(false);
-        expect(res[0].isDelete).toEqual(false);
-    });
-
-    test('Method getUserTasks should return empty array on the id of testUser after he had been deleted by deleteTask method', async () => {
-        const user: IUserResult[] = await tasks.getUser(testUser.email);
-        const userTasks: ITaskResult[] = await tasks.getUserTasks(user[0].id);
-        await tasks.deleteTask(userTasks[0].id);
-        const res: ITaskResult[] = await tasks.getUserTasks(user[0].id);
-        expect(typeof(res)).toEqual('object');
-        expect(Array.isArray(res)).toEqual(true);
-        expect(res.length).toEqual(0);
-    });
-
-    test('Method getUser should return empty array on the testUser after he had been deleted by deleteUser method', async () => {
-        await tasks.deleteUser(testUser.email);
-        const res: IUserResult[] = await tasks.getUser(testUser.email);
+    test('Method getUserByEmail should return empty array on the testUser after he had been deleted by deleteUser method', async () => {
+        await user.deleteUser(testUser.email);
+        const res: IUserResult[] = await user.getUserByEmail(testUser.email);
         expect(typeof(res)).toEqual('object');
         expect(Array.isArray(res)).toEqual(true);
         expect(res.length).toEqual(0);
