@@ -1,6 +1,6 @@
 import {QueryResult, QueryResultRow} from 'pg'
 import {ITask, ITaskResult, ITaskDateToDo, ITaskTitle, ITaskText, ITaskResultRaw} from 'interfaces/task'
-import PG from 'models/abstractPG'
+import PG from '../models/abstractPG'
 import {IPostgreSQLConf} from 'interfaces/config'
 
 
