@@ -54,3 +54,24 @@ export interface ITaskResultRaw {
     is_cancel: boolean;
     is_delete: boolean;
 }
+
+export interface ITaskInstance {
+    getAllUserTasks(id: number): Promise<ITaskResult[]>;
+    getUserPriorityTasks(id: number): Promise<ITaskResult[]>;
+    getUserNonPriorityTasks(id: number): Promise<ITaskResult[]>;
+    getUserCompleteTasks(id: number): Promise<ITaskResult[]>;
+    getUserNonCompleteTasks(id: number): Promise<ITaskResult[]>;
+    getUserCancelTasks(id: number): Promise<ITaskResult[]>;
+    getUserNonCancelTasks(id: number): Promise<ITaskResult[]>;
+    getUserDeleteTasks(id: number): Promise<ITaskResult[]>;
+    getUserNonDeleteTasks(id: number): Promise<ITaskResult[]>;
+    insertTask({email, dateToDo, title, task}: ITask): Promise<QueryResult>;
+    togglePriority(id: number): Promise<QueryResult>;
+    toggleComplete(id: number): Promise<QueryResult>;
+    toggleCancel(id: number): Promise<QueryResult>;
+    toggleDelete(id: number): Promise<QueryResult>;
+    taskDateToDoUp({id, dateToDo}: ITaskDateToDo): Promise<QueryResult>;
+    taskTitleUp({id, title}: ITaskTitle): Promise<QueryResult>;
+    taskTextUp({id, task}: ITaskText): Promise<QueryResult>;
+    deleteTask(id: number): Promise<QueryResult>;
+}
