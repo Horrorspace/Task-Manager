@@ -33,12 +33,10 @@ describe('Task API for PostgreSQL DB', () => {
         const userToTest: IUserResult[] = await user.getUserByEmail(testUser.email);
         if(userToTest.length !== 0) {
             const userId = userToTest[0].id;
-            const taskTotest: ITaskResult[] = await task.getUserPriorityTasks(userId);
+            const taskTotest: ITaskResult[] = await task.getAllUserTasks(userId);
             if(taskTotest.length !== 0) {
                 const id = taskTotest[0].id;
-                const res: ITaskResult[] = await task.getUserPriorityTasks(userId);
-                if(res.length !== 0) {
-                    await task.deleteTask(id);
+                await task.deleteTask(id);
                 }
             }
             await user.deleteUser(testUser.email);
@@ -49,12 +47,10 @@ describe('Task API for PostgreSQL DB', () => {
         const userToTest: IUserResult[] = await user.getUserByEmail(testUser.email);
         if(userToTest.length !== 0) {
             const userId = userToTest[0].id;
-            const taskTotest: ITaskResult[] = await task.getUserPriorityTasks(userId);
+            const taskTotest: ITaskResult[] = await task.getAllUserTasks(userId);
             if(taskTotest.length !== 0) {
                 const id = taskTotest[0].id;
-                const res: ITaskResult[] = await task.getUserPriorityTasks(userId);
-                if(res.length !== 0) {
-                    await task.deleteTask(id);
+                await task.deleteTask(id);
                 }
             }
             await user.deleteUser(testUser.email);
