@@ -1,3 +1,6 @@
+import {QueryResult, QueryResultRow} from 'pg'
+
+
 export interface ITaskId {
     id: number;
 }

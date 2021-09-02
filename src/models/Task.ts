@@ -1,8 +1,11 @@
 import {QueryResult, QueryResultRow} from 'pg'
+import pg from 'pg'
 import {ITask, ITaskResult, ITaskDateToDo, ITaskTitle, ITaskText, ITaskResultRaw, ITaskInstance} from 'interfaces/task'
 import PG from '../models/abstractPG'
 import {IPostgreSQLConf} from 'interfaces/config'
 
+
+pg.types.setTypeParser(pg.types.builtins.TIMESTAMPTZ, val => String(val));
 
 export default class Task extends PG implements ITaskInstance {
     constructor(config: IPostgreSQLConf) {

@@ -23,6 +23,10 @@ describe('User API for PostgreSQL DB', () => {
         if(res.length !== 0) {
             await user.deleteUser(testUser.email);
         }
+        const res2: IUserResult[] = await user.getUserByEmail(testUser2.email);
+        if(res2.length !== 0) {
+            await user.deleteUser(testUser2.email);
+        }
     });
     
     test('Class User is defined', () => {
@@ -169,5 +173,6 @@ describe('User API for PostgreSQL DB', () => {
         expect(typeof(res)).toEqual('object');
         expect(Array.isArray(res)).toEqual(true);
         expect(res.length).toEqual(0);
+        await user.deleteUser(testUser2.email);
     });
 })
