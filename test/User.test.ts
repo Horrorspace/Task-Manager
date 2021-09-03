@@ -28,6 +28,17 @@ describe('User API for PostgreSQL DB', () => {
             await user.deleteUser(testUser2.email);
         }
     });
+
+    afterAll(async () => {
+        const res: IUserResult[] = await user.getUserByEmail(testUser.email);
+        if(res.length !== 0) {
+            await user.deleteUser(testUser.email);
+        }
+        const res2: IUserResult[] = await user.getUserByEmail(testUser2.email);
+        if(res2.length !== 0) {
+            await user.deleteUser(testUser2.email);
+        }
+    });
     
     test('Class User is defined', () => {
         expect(User).toBeDefined();

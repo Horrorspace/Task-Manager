@@ -3,6 +3,7 @@ import User from '../src/models/User'
 import {IUser, IUserResult, IUserName, IUserEmail, IUserPass, IUserInstance} from '../src/interfaces/user'
 import {ITask, ITaskResult, ITaskInstance, ITaskDateToDo, ITaskTitle, ITaskText} from '../src/interfaces/task'
 import config from '../src/config/default.json'
+import {dateParser, dateStringify} from '../src/models/dateParser'
 
 
 describe('Task API for PostgreSQL DB', () => {
@@ -14,14 +15,16 @@ describe('Task API for PostgreSQL DB', () => {
 
     const testTask: ITask = {
         email: testUser.email,
-        dateToDo: '2005-10-19 19:23:54+07',
+        dateToDo: dateStringify(dateParser('2005-10-19 19:23:54+07')),
         title: 'Testing',
         task: 'Test task'
     }
 
+    console.log(testTask.dateToDo);
+
     const testTask2: ITask = {
         email: testUser.email,
-        dateToDo: '2006-12-11 20:27:48+07',
+        dateToDo: dateStringify(dateParser('2006-12-11 20:27:48+07')),
         title: 'Complite',
         task: 'Test task complite'
     }
@@ -35,13 +38,12 @@ describe('Task API for PostgreSQL DB', () => {
             const userId = userToTest[0].id;
             const taskTotest: ITaskResult[] = await task.getAllUserTasks(userId);
             if(taskTotest.length !== 0) {
-                const id = taskTotest[0].id;
-                await task.deleteTask(id);
+                    await taskTotest.map(async (val) => await task.deleteTask(val.id));
                 }
             }
             await user.deleteUser(testUser.email);
         }
-    });
+    );
     
     afterAll(async () => {
         const userToTest: IUserResult[] = await user.getUserByEmail(testUser.email);
@@ -49,13 +51,12 @@ describe('Task API for PostgreSQL DB', () => {
             const userId = userToTest[0].id;
             const taskTotest: ITaskResult[] = await task.getAllUserTasks(userId);
             if(taskTotest.length !== 0) {
-                const id = taskTotest[0].id;
-                await task.deleteTask(id);
+                    await taskTotest.map(async (val) => await task.deleteTask(val.id));
                 }
             }
             await user.deleteUser(testUser.email);
         }
-    });
+    );
 
     test('Class Tasks is defined', () => {
         expect(Task).toBeDefined();
@@ -102,7 +103,6 @@ describe('Task API for PostgreSQL DB', () => {
         const userToTest: IUserResult[] = await user.getUserByEmail(testUser.email);
         const userId = userToTest[0].id;
         const res: ITaskResult[] = await task.getAllUserTasks(userId);
-        console.log(res[0].dateToDo);
         expect(typeof(res)).toEqual('object');
         expect(Array.isArray(res)).toEqual(true);
         expect(res.length).toEqual(1);
@@ -116,7 +116,7 @@ describe('Task API for PostgreSQL DB', () => {
         expect(res[0].hasOwnProperty('isComplete')).toEqual(true);
         expect(res[0].hasOwnProperty('isCancel')).toEqual(true);
         expect(res[0].hasOwnProperty('isDelete')).toEqual(true);
-        expect(res[0].dateToDo).toEqual(testTask.dateToDo);
+        expect(dateStringify(res[0].dateToDo)).toEqual(testTask.dateToDo);
         expect(res[0].title).toEqual(testTask.title);
         expect(res[0].task).toEqual(testTask.task);
         expect(res[0].isPriority).toEqual(false);
@@ -178,7 +178,7 @@ describe('Task API for PostgreSQL DB', () => {
         expect(res[0].hasOwnProperty('isComplete')).toEqual(true);
         expect(res[0].hasOwnProperty('isCancel')).toEqual(true);
         expect(res[0].hasOwnProperty('isDelete')).toEqual(true);
-        expect(res[0].dateToDo).toEqual(testTask.dateToDo);
+        expect(dateStringify(res[0].dateToDo)).toEqual(testTask.dateToDo);
         expect(res[0].title).toEqual(testTask.title);
         expect(res[0].task).toEqual(testTask.task);
         expect(res[0].isPriority).toEqual(false);
@@ -204,7 +204,7 @@ describe('Task API for PostgreSQL DB', () => {
         expect(res[0].hasOwnProperty('isComplete')).toEqual(true);
         expect(res[0].hasOwnProperty('isCancel')).toEqual(true);
         expect(res[0].hasOwnProperty('isDelete')).toEqual(true);
-        expect(res[0].dateToDo).toEqual(testTask.dateToDo);
+        expect(dateStringify(res[0].dateToDo)).toEqual(testTask.dateToDo);
         expect(res[0].title).toEqual(testTask.title);
         expect(res[0].task).toEqual(testTask.task);
         expect(res[0].isPriority).toEqual(false);
@@ -230,7 +230,7 @@ describe('Task API for PostgreSQL DB', () => {
         expect(res[0].hasOwnProperty('isComplete')).toEqual(true);
         expect(res[0].hasOwnProperty('isCancel')).toEqual(true);
         expect(res[0].hasOwnProperty('isDelete')).toEqual(true);
-        expect(res[0].dateToDo).toEqual(testTask.dateToDo);
+        expect(dateStringify(res[0].dateToDo)).toEqual(testTask.dateToDo);
         expect(res[0].title).toEqual(testTask.title);
         expect(res[0].task).toEqual(testTask.task);
         expect(res[0].isPriority).toEqual(false);
@@ -256,7 +256,7 @@ describe('Task API for PostgreSQL DB', () => {
         expect(res[0].hasOwnProperty('isComplete')).toEqual(true);
         expect(res[0].hasOwnProperty('isCancel')).toEqual(true);
         expect(res[0].hasOwnProperty('isDelete')).toEqual(true);
-        expect(res[0].dateToDo).toEqual(testTask.dateToDo);
+        expect(dateStringify(res[0].dateToDo)).toEqual(testTask.dateToDo);
         expect(res[0].title).toEqual(testTask.title);
         expect(res[0].task).toEqual(testTask.task);
         expect(res[0].isPriority).toEqual(false);
@@ -268,8 +268,7 @@ describe('Task API for PostgreSQL DB', () => {
     test('Method getUserPriorityTasks should return array with testTask after togglePriority method had been called', async () => {
         const userToTest: IUserResult[] = await user.getUserByEmail(testUser.email);
         const userId = userToTest[0].id;
-        const taskTotest: ITaskResult[] = await task.getUserPriorityTasks(userId);
-        console.log(userToTest, userId, taskTotest)
+        const taskTotest: ITaskResult[] = await task.getAllUserTasks(userId);
         const id = taskTotest[0].id;
         await task.togglePriority(id);
         const res: ITaskResult[] = await task.getUserPriorityTasks(userId);
@@ -286,7 +285,7 @@ describe('Task API for PostgreSQL DB', () => {
         expect(res[0].hasOwnProperty('isComplete')).toEqual(true);
         expect(res[0].hasOwnProperty('isCancel')).toEqual(true);
         expect(res[0].hasOwnProperty('isDelete')).toEqual(true);
-        expect(res[0].dateToDo).toEqual(testTask.dateToDo);
+        expect(dateStringify(res[0].dateToDo)).toEqual(testTask.dateToDo);
         expect(res[0].title).toEqual(testTask.title);
         expect(res[0].task).toEqual(testTask.task);
         expect(res[0].isPriority).toEqual(true);
@@ -298,7 +297,7 @@ describe('Task API for PostgreSQL DB', () => {
     test('Method getUserCompleteTasks should return array with testTask after toggleComplete method had been called', async () => {
         const userToTest: IUserResult[] = await user.getUserByEmail(testUser.email);
         const userId = userToTest[0].id;
-        const taskTotest: ITaskResult[] = await task.getUserPriorityTasks(userId);
+        const taskTotest: ITaskResult[] = await task.getAllUserTasks(userId);
         const id = taskTotest[0].id;
         await task.toggleComplete(id);
         const res: ITaskResult[] = await task.getUserCompleteTasks(userId);
@@ -315,7 +314,7 @@ describe('Task API for PostgreSQL DB', () => {
         expect(res[0].hasOwnProperty('isComplete')).toEqual(true);
         expect(res[0].hasOwnProperty('isCancel')).toEqual(true);
         expect(res[0].hasOwnProperty('isDelete')).toEqual(true);
-        expect(res[0].dateToDo).toEqual(testTask.dateToDo);
+        expect(dateStringify(res[0].dateToDo)).toEqual(testTask.dateToDo);
         expect(res[0].title).toEqual(testTask.title);
         expect(res[0].task).toEqual(testTask.task);
         expect(res[0].isPriority).toEqual(true);
@@ -327,7 +326,7 @@ describe('Task API for PostgreSQL DB', () => {
     test('Method getUserCancelTasks should return array with testTask after toggleCancel method had been called', async () => {
         const userToTest: IUserResult[] = await user.getUserByEmail(testUser.email);
         const userId = userToTest[0].id;
-        const taskTotest: ITaskResult[] = await task.getUserPriorityTasks(userId);
+        const taskTotest: ITaskResult[] = await task.getAllUserTasks(userId);
         const id = taskTotest[0].id;
         await task.toggleCancel(id);
         const res: ITaskResult[] = await task.getUserCancelTasks(userId);
@@ -344,7 +343,7 @@ describe('Task API for PostgreSQL DB', () => {
         expect(res[0].hasOwnProperty('isComplete')).toEqual(true);
         expect(res[0].hasOwnProperty('isCancel')).toEqual(true);
         expect(res[0].hasOwnProperty('isDelete')).toEqual(true);
-        expect(res[0].dateToDo).toEqual(testTask.dateToDo);
+        expect(dateStringify(res[0].dateToDo)).toEqual(testTask.dateToDo);
         expect(res[0].title).toEqual(testTask.title);
         expect(res[0].task).toEqual(testTask.task);
         expect(res[0].isPriority).toEqual(true);
@@ -356,7 +355,7 @@ describe('Task API for PostgreSQL DB', () => {
     test('Method getUserDeleteTasks should return array with testTask after toggleDelete method had been called', async () => {
         const userToTest: IUserResult[] = await user.getUserByEmail(testUser.email);
         const userId = userToTest[0].id;
-        const taskTotest: ITaskResult[] = await task.getUserPriorityTasks(userId);
+        const taskTotest: ITaskResult[] = await task.getAllUserTasks(userId);
         const id = taskTotest[0].id;
         await task.toggleDelete(id);
         const res: ITaskResult[] = await task.getUserDeleteTasks(userId);
@@ -373,7 +372,7 @@ describe('Task API for PostgreSQL DB', () => {
         expect(res[0].hasOwnProperty('isComplete')).toEqual(true);
         expect(res[0].hasOwnProperty('isCancel')).toEqual(true);
         expect(res[0].hasOwnProperty('isDelete')).toEqual(true);
-        expect(res[0].dateToDo).toEqual(testTask.dateToDo);
+        expect(dateStringify(res[0].dateToDo)).toEqual(testTask.dateToDo);
         expect(res[0].title).toEqual(testTask.title);
         expect(res[0].task).toEqual(testTask.task);
         expect(res[0].isPriority).toEqual(true);
@@ -433,7 +432,7 @@ describe('Task API for PostgreSQL DB', () => {
     test('Method getUserCompleteTasks should return empty array after toggleComplete method had been called again', async () => {
         const userToTest: IUserResult[] = await user.getUserByEmail(testUser.email);
         const userId = userToTest[0].id;
-        const taskTotest: ITaskResult[] = await task.getUserPriorityTasks(userId);
+        const taskTotest: ITaskResult[] = await task.getAllUserTasks(userId);
         const id = taskTotest[0].id;
         await task.toggleComplete(id);
         const res: ITaskResult[] = await task.getUserCompleteTasks(userId);
@@ -445,7 +444,7 @@ describe('Task API for PostgreSQL DB', () => {
     test('Method getUserCancelTasks should return empty array after toggleCancel method had been called again', async () => {
         const userToTest: IUserResult[] = await user.getUserByEmail(testUser.email);
         const userId = userToTest[0].id;
-        const taskTotest: ITaskResult[] = await task.getUserPriorityTasks(userId);
+        const taskTotest: ITaskResult[] = await task.getAllUserTasks(userId);
         const id = taskTotest[0].id;
         await task.toggleCancel(id);
         const res: ITaskResult[] = await task.getUserCancelTasks(userId);
@@ -457,7 +456,7 @@ describe('Task API for PostgreSQL DB', () => {
     test('Method getUserDeleteTasks should return empty array after toggleDelete method had been called again', async () => {
         const userToTest: IUserResult[] = await user.getUserByEmail(testUser.email);
         const userId = userToTest[0].id;
-        const taskTotest: ITaskResult[] = await task.getUserPriorityTasks(userId);
+        const taskTotest: ITaskResult[] = await task.getAllUserTasks(userId);
         const id = taskTotest[0].id;
         await task.toggleDelete(id);
         const res: ITaskResult[] = await task.getUserDeleteTasks(userId);
@@ -483,7 +482,7 @@ describe('Task API for PostgreSQL DB', () => {
         expect(res[0].hasOwnProperty('isComplete')).toEqual(true);
         expect(res[0].hasOwnProperty('isCancel')).toEqual(true);
         expect(res[0].hasOwnProperty('isDelete')).toEqual(true);
-        expect(res[0].dateToDo).toEqual(testTask.dateToDo);
+        expect(dateStringify(res[0].dateToDo)).toEqual(testTask.dateToDo);
         expect(res[0].title).toEqual(testTask.title);
         expect(res[0].task).toEqual(testTask.task);
         expect(res[0].isPriority).toEqual(false);
@@ -509,7 +508,7 @@ describe('Task API for PostgreSQL DB', () => {
         expect(res[0].hasOwnProperty('isComplete')).toEqual(true);
         expect(res[0].hasOwnProperty('isCancel')).toEqual(true);
         expect(res[0].hasOwnProperty('isDelete')).toEqual(true);
-        expect(res[0].dateToDo).toEqual(testTask.dateToDo);
+        expect(dateStringify(res[0].dateToDo)).toEqual(testTask.dateToDo);
         expect(res[0].title).toEqual(testTask.title);
         expect(res[0].task).toEqual(testTask.task);
         expect(res[0].isPriority).toEqual(false);
@@ -535,7 +534,7 @@ describe('Task API for PostgreSQL DB', () => {
         expect(res[0].hasOwnProperty('isComplete')).toEqual(true);
         expect(res[0].hasOwnProperty('isCancel')).toEqual(true);
         expect(res[0].hasOwnProperty('isDelete')).toEqual(true);
-        expect(res[0].dateToDo).toEqual(testTask.dateToDo);
+        expect(dateStringify(res[0].dateToDo)).toEqual(testTask.dateToDo);
         expect(res[0].title).toEqual(testTask.title);
         expect(res[0].task).toEqual(testTask.task);
         expect(res[0].isPriority).toEqual(false);
@@ -561,7 +560,7 @@ describe('Task API for PostgreSQL DB', () => {
         expect(res[0].hasOwnProperty('isComplete')).toEqual(true);
         expect(res[0].hasOwnProperty('isCancel')).toEqual(true);
         expect(res[0].hasOwnProperty('isDelete')).toEqual(true);
-        expect(res[0].dateToDo).toEqual(testTask.dateToDo);
+        expect(dateStringify(res[0].dateToDo)).toEqual(testTask.dateToDo);
         expect(res[0].title).toEqual(testTask.title);
         expect(res[0].task).toEqual(testTask.task);
         expect(res[0].isPriority).toEqual(false);
@@ -573,14 +572,14 @@ describe('Task API for PostgreSQL DB', () => {
     test('Method taskDateToDoUp should change date value', async () => {
         const userToTest: IUserResult[] = await user.getUserByEmail(testUser.email);
         const userId = userToTest[0].id;
-        const taskTotest: ITaskResult[] = await task.getUserPriorityTasks(userId);
+        const taskTotest: ITaskResult[] = await task.getAllUserTasks(userId);
         const id = taskTotest[0].id;
         const taskObj: ITaskDateToDo = {
             id,
             dateToDo: testTask2.dateToDo
         }
         await task.taskDateToDoUp(taskObj);
-        const res: ITaskResult[] = await task.getUserNonDeleteTasks(userId);
+        const res: ITaskResult[] = await task.getAllUserTasks(userId);
         expect(typeof(res)).toEqual('object');
         expect(Array.isArray(res)).toEqual(true);
         expect(res.length).toEqual(1);
@@ -594,7 +593,7 @@ describe('Task API for PostgreSQL DB', () => {
         expect(res[0].hasOwnProperty('isComplete')).toEqual(true);
         expect(res[0].hasOwnProperty('isCancel')).toEqual(true);
         expect(res[0].hasOwnProperty('isDelete')).toEqual(true);
-        expect(res[0].dateToDo).toEqual(testTask2.dateToDo);
+        expect(dateStringify(res[0].dateToDo)).toEqual(testTask2.dateToDo);
         expect(res[0].title).toEqual(testTask.title);
         expect(res[0].task).toEqual(testTask.task);
         expect(res[0].isPriority).toEqual(false);
@@ -606,14 +605,14 @@ describe('Task API for PostgreSQL DB', () => {
     test('Method taskTitleUp should change title value', async () => {
         const userToTest: IUserResult[] = await user.getUserByEmail(testUser.email);
         const userId = userToTest[0].id;
-        const taskTotest: ITaskResult[] = await task.getUserPriorityTasks(userId);
+        const taskTotest: ITaskResult[] = await task.getAllUserTasks(userId);
         const id = taskTotest[0].id;
         const taskObj: ITaskTitle = {
             id,
             title: testTask2.title
         }
         await task.taskTitleUp(taskObj);
-        const res: ITaskResult[] = await task.getUserNonDeleteTasks(userId);
+        const res: ITaskResult[] = await task.getAllUserTasks(userId);
         expect(typeof(res)).toEqual('object');
         expect(Array.isArray(res)).toEqual(true);
         expect(res.length).toEqual(1);
@@ -627,7 +626,7 @@ describe('Task API for PostgreSQL DB', () => {
         expect(res[0].hasOwnProperty('isComplete')).toEqual(true);
         expect(res[0].hasOwnProperty('isCancel')).toEqual(true);
         expect(res[0].hasOwnProperty('isDelete')).toEqual(true);
-        expect(res[0].dateToDo).toEqual(testTask2.dateToDo);
+        expect(dateStringify(res[0].dateToDo)).toEqual(testTask2.dateToDo);
         expect(res[0].title).toEqual(testTask2.title);
         expect(res[0].task).toEqual(testTask.task);
         expect(res[0].isPriority).toEqual(false);
@@ -639,14 +638,14 @@ describe('Task API for PostgreSQL DB', () => {
     test('Method taskTextUp should change task value', async () => {
         const userToTest: IUserResult[] = await user.getUserByEmail(testUser.email);
         const userId = userToTest[0].id;
-        const taskTotest: ITaskResult[] = await task.getUserPriorityTasks(userId);
+        const taskTotest: ITaskResult[] = await task.getAllUserTasks(userId);
         const id = taskTotest[0].id;
         const taskObj: ITaskText = {
             id,
             task: testTask2.task
         }
         await task.taskTextUp(taskObj);
-        const res: ITaskResult[] = await task.getUserNonDeleteTasks(userId);
+        const res: ITaskResult[] = await task.getAllUserTasks(userId);
         expect(typeof(res)).toEqual('object');
         expect(Array.isArray(res)).toEqual(true);
         expect(res.length).toEqual(1);
@@ -660,7 +659,7 @@ describe('Task API for PostgreSQL DB', () => {
         expect(res[0].hasOwnProperty('isComplete')).toEqual(true);
         expect(res[0].hasOwnProperty('isCancel')).toEqual(true);
         expect(res[0].hasOwnProperty('isDelete')).toEqual(true);
-        expect(res[0].dateToDo).toEqual(testTask2.dateToDo);
+        expect(dateStringify(res[0].dateToDo)).toEqual(testTask2.dateToDo);
         expect(res[0].title).toEqual(testTask2.title);
         expect(res[0].task).toEqual(testTask2.task);
         expect(res[0].isPriority).toEqual(false);
@@ -672,10 +671,14 @@ describe('Task API for PostgreSQL DB', () => {
     test('Method getUserTasks should return empty array on the id of testUser after he had been deleted by deleteTask method', async () => {
         const userToTest: IUserResult[] = await user.getUserByEmail(testUser.email);
         const userId = userToTest[0].id;
-        await task.deleteTask(userId);
+        const taskTotest: ITaskResult[] = await task.getAllUserTasks(userId);
+        const id = taskTotest[0].id;
+        const email = userToTest[0].email;
+        await task.deleteTask(id);
         const res: ITaskResult[] = await task.getAllUserTasks(userId);
         expect(typeof(res)).toEqual('object');
         expect(Array.isArray(res)).toEqual(true);
         expect(res.length).toEqual(0);
+        await user.deleteUser(email);
     });
 })

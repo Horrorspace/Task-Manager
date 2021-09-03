@@ -30,7 +30,7 @@ export interface ITaskResult {
     id: number;
     userId: number;
     created: string;
-    dateToDo: string;
+    dateToDo: Date;
     dateOfComplete: string;
     dateOfCancel: string;
     dateOfDelete: string;

@@ -3,6 +3,7 @@ import pg from 'pg'
 import {ITask, ITaskResult, ITaskDateToDo, ITaskTitle, ITaskText, ITaskResultRaw, ITaskInstance} from 'interfaces/task'
 import PG from '../models/abstractPG'
 import {IPostgreSQLConf} from 'interfaces/config'
+import {dateParser} from '../models/dateParser'
 
 
 pg.types.setTypeParser(pg.types.builtins.TIMESTAMPTZ, val => String(val));
@@ -17,7 +18,7 @@ export default class Task extends PG implements ITaskInstance {
             id: val.id,
             userId: val.user_id,
             created: val.created,
-            dateToDo: val.date_to_do,
+            dateToDo: dateParser(val.date_to_do),
             dateOfComplete: val.date_complete,
             dateOfCancel: val.date_cancel,
             dateOfDelete: val.date_delete,

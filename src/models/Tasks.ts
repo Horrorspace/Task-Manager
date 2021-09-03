@@ -2,6 +2,7 @@ import {Pool, QueryResult, QueryResultRow} from 'pg'
 import pg from 'pg'
 import {IUser, IUserResult, IUserName, IUserEmail, IUserPass} from 'interfaces/user'
 import {ITask, ITaskResult, ITaskDateToDo, ITaskTitle, ITaskText, ITaskResultRaw} from 'interfaces/task'
+import {dateParser} from 'models/dateParser'
 
 pg.types.setTypeParser(pg.types.builtins.TIMESTAMPTZ, val => String(val));
 
@@ -32,7 +33,7 @@ export default class tasks {
                 id: val.id,
                 userId: val.user_id,
                 created: val.created,
-                dateToDo: val.date_to_do,
+                dateToDo: dateParser(val.date_to_do),
                 dateOfComplete: val.date_complete,
                 dateOfCancel: val.date_cancel,
                 dateOfDelete: val.date_delete,
