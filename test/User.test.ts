@@ -1,9 +1,11 @@
 import User from '../src/models/User'
 import {IUser, IUserResult, IUserName, IUserEmail, IUserPass, IUserInstance} from '../src/interfaces/user'
 import config from '../src/config/default.json'
+import bcrypt from 'bcryptjs'
 
 
 describe('User API for PostgreSQL DB', () => {
+    jest.setTimeout(20000);
     const testUser: IUser = {
         name: 'admin',
         email: 'admin@testing.com',
@@ -73,8 +75,12 @@ describe('User API for PostgreSQL DB', () => {
     });
 
     test('Method getUserByEmail should return array on testUser after he had been added by insertUser method', async () => {
+        const testRes = await user.getUserByEmail(testUser.email);
+        console.log(testRes);
+
         await user.insertUser(testUser);
         const res: IUserResult[] = await user.getUserByEmail(testUser.email);
+        const isMatchPass: boolean = await bcrypt.compare(testUser.password, res[0].password);
         expect(typeof(res)).toEqual('object');
         expect(Array.isArray(res)).toEqual(true);
         expect(res.length).toEqual(1);
@@ -85,7 +91,7 @@ describe('User API for PostgreSQL DB', () => {
         expect(res[0].hasOwnProperty('password')).toEqual(true);
         expect(res[0].name).toEqual(testUser.name);
         expect(res[0].email).toEqual(testUser.email);
-        expect(res[0].password).toEqual(testUser.password);
+        expect(isMatchPass).toEqual(true);
     });
     
     test('Method getAllUsers should return non-empty array after user insert', async () => {
@@ -99,6 +105,7 @@ describe('User API for PostgreSQL DB', () => {
         const targetUser: IUserResult[] = await user.getUserByEmail(testUser.email);
         const id: number = targetUser[0].id;
         const res: IUserResult[] = await user.getUserById(id);
+        const isMatchPass: boolean = await bcrypt.compare(testUser.password, res[0].password);
         expect(typeof(res)).toEqual('object');
         expect(Array.isArray(res)).toEqual(true);
         expect(res.length).toEqual(1);
@@ -109,7 +116,7 @@ describe('User API for PostgreSQL DB', () => {
         expect(res[0].hasOwnProperty('password')).toEqual(true);
         expect(res[0].name).toEqual(testUser.name);
         expect(res[0].email).toEqual(testUser.email);
-        expect(res[0].password).toEqual(testUser.password);
+        expect(isMatchPass).toEqual(true);
     });
 
     test('Method userNameUp should change name', async () => {
@@ -121,6 +128,7 @@ describe('User API for PostgreSQL DB', () => {
         };
         await user.userNameUp(changeObj);
         const res: IUserResult[] = await user.getUserById(id);
+        const isMatchPass: boolean = await bcrypt.compare(testUser.password, res[0].password);
         expect(typeof(res)).toEqual('object');
         expect(Array.isArray(res)).toEqual(true);
         expect(res.length).toEqual(1);
@@ -131,7 +139,7 @@ describe('User API for PostgreSQL DB', () => {
         expect(res[0].hasOwnProperty('password')).toEqual(true);
         expect(res[0].name).toEqual(testUser2.name);
         expect(res[0].email).toEqual(testUser.email);
-        expect(res[0].password).toEqual(testUser.password);
+        expect(isMatchPass).toEqual(true);
     });
 
     test('Method userEmailUp should change email', async () => {
@@ -143,6 +151,7 @@ describe('User API for PostgreSQL DB', () => {
         };
         await user.userEmailUp(changeObj);
         const res: IUserResult[] = await user.getUserById(id);
+        const isMatchPass: boolean = await bcrypt.compare(testUser.password, res[0].password);
         expect(typeof(res)).toEqual('object');
         expect(Array.isArray(res)).toEqual(true);
         expect(res.length).toEqual(1);
@@ -153,7 +162,7 @@ describe('User API for PostgreSQL DB', () => {
         expect(res[0].hasOwnProperty('password')).toEqual(true);
         expect(res[0].name).toEqual(testUser2.name);
         expect(res[0].email).toEqual(testUser2.email);
-        expect(res[0].password).toEqual(testUser.password);
+        expect(isMatchPass).toEqual(true);
     });
 
     test('Method userPassUp should change password', async () => {
@@ -163,8 +172,12 @@ describe('User API for PostgreSQL DB', () => {
             id,
             pass: testUser2.password
         };
-        await user.userPassUp(changeObj);
+        console.log(targetUser[0].password);
+        const testRes = await user.userPassUp(changeObj);
+        console.log(testRes);
         const res: IUserResult[] = await user.getUserById(id);
+        console.log(testUser2.password, res[0].password)
+        const isMatchPass: boolean = await bcrypt.compare(testUser2.password, res[0].password);
         expect(typeof(res)).toEqual('object');
         expect(Array.isArray(res)).toEqual(true);
         expect(res.length).toEqual(1);
@@ -175,7 +188,7 @@ describe('User API for PostgreSQL DB', () => {
         expect(res[0].hasOwnProperty('password')).toEqual(true);
         expect(res[0].name).toEqual(testUser2.name);
         expect(res[0].email).toEqual(testUser2.email);
-        expect(res[0].password).toEqual(testUser2.password);
+        expect(isMatchPass).toEqual(true);
     });
 
     test('Method getUserByEmail should return empty array on the testUser after he had been deleted by deleteUser method', async () => {
