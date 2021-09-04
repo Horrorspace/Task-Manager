@@ -1,6 +1,7 @@
 import {QueryResult, QueryResultRow} from 'pg'
 import {IUser, IUserResult, IUserName, IUserEmail, IUserPass, IUserInstance} from 'interfaces/user'
 import PG from '../models/abstractPG'
+import bcrypt from 'bcryptjs'
 import {IPostgreSQLConf} from 'interfaces/config'
 
 
@@ -25,7 +26,8 @@ export default class Users extends PG implements IUserInstance {
         return resultRows as IUserResult[];
     }
     public async insertUser({name, email, password}: IUser): Promise<QueryResult> {
-        const insert: QueryResult = await this.pool.query(`SELECT user_insert('${name}', '${email}', '${password}');`);
+        const hashedPass: string = await bcrypt.hash(password, 15);
+        const insert: QueryResult = await this.pool.query(`SELECT user_insert('${name}', '${email}', '${hashedPass}');`);
         return insert;
     }
     public async userNameUp({id, name}: IUserName): Promise<QueryResult> {
@@ -37,7 +39,8 @@ export default class Users extends PG implements IUserInstance {
         return insert;
     }
     public async userPassUp({id, pass}: IUserPass): Promise<QueryResult> {
-        const insert: QueryResult = await this.pool.query(`SELECT pass_up(${id}, '${pass}');`);
+        const hashedPass: string = await bcrypt.hash(pass, 15);
+        const insert: QueryResult = await this.pool.query(`SELECT pass_up(${id}, '${hashedPass}');`);
         return insert;
     }
     public async deleteUser(email: string): Promise<QueryResult> {
