@@ -1,4 +1,4 @@
-import {QueryResult, QueryResultRow} from 'pg'
+import {QueryResult} from 'pg'
 
 
 export interface IUserName {
