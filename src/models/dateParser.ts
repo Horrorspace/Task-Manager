@@ -19,30 +19,25 @@ export function dateParser(str: string): Date {
     const [date, timeWithTZ] = str.split(' ');
     const [year, month, day] = date.split('-').map(val => parseInt(val, 10));
     const [hour, minutes, seconds] = parseTimeWithTZ(timeWithTZ);
-    console.log(year, month, day, hour, minutes, seconds);
-    const dateTest = new Date(year, month, day, hour, minutes, seconds)
-    console.log(dateTest);
-    const dateArr = [
-        dateTest.getFullYear(),
-        dateTest.getMonth(),
-        dateTest.toLocaleDateString().split('.')[0],
-        dateTest.getHours(),
-        dateTest.getMinutes(),
-        dateTest.getSeconds(),
-        
-    ];
-    console.log(dateArr);
-    return new Date(year, month, day, hour, minutes, seconds)
+    const dateTest = new Date(`${year}-${month}-${day}T${hour}:${minutes}:${seconds}`)
+    const dateResult = new Date();
+    dateResult.setUTCFullYear(year);
+    dateResult.setUTCMonth(month-1);
+    dateResult.setUTCDate(day);
+    dateResult.setUTCHours(hour);
+    dateResult.setUTCMinutes(minutes);
+    dateResult.setUTCSeconds(seconds);
+    return dateResult
 }
 
 export function dateStringify(date: Date): string {
     const dateArr = [
-        date.getFullYear(),
-        date.getMonth(),
-        date.toLocaleDateString().split('.')[0],
-        date.getHours(),
-        date.getMinutes(),
-        date.getSeconds()
+        date.getUTCFullYear(),
+        date.getUTCMonth()+1,
+        date.getUTCDate(),
+        date.getUTCHours(),
+        date.getUTCMinutes(),
+        date.getUTCSeconds()
     ];
     const [Y, M, D, h, m, s] = dateArr;
     return `${Y}-${M}-${D} ${h}:${m}:${s}+00`
