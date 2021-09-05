@@ -19,6 +19,7 @@ router.post(
     ],
     passport.authenticate(
         'local', {
+            successRedirect: '/',
             successMessage: 'You have been logined',
             failureFlash: true
         }
@@ -63,7 +64,7 @@ router.post(
                 })
             }
             const userData: IUser = req.body;
-            const {email, password} = userData;
+            const {name, email, password} = userData;
 
             const users: IUserInstance = new User(config.PostgreSQL);
             const userArr: IUserResult[] = await users.getUserByEmail(email);
@@ -72,8 +73,13 @@ router.post(
                     message: 'This email already has been used'
                 })
             }
-
-            await users.insertUser(userData);
+            
+            const newUser: IUser = {
+                name,
+                email,
+                password
+            }
+            await users.insertUser(newUser);
 
             res.status(201).json({
                 message: `User with email: ${email} has been added`
