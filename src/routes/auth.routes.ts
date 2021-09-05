@@ -28,10 +28,19 @@ router.post(
 router.post(
     '/logout',
     (req, res) => {
-        req.logout();
-        res.status(200).json({
-            message: 'You have been logouted'
-        })
+        try {
+            req.logout();
+            res.status(200).json({
+                message: 'You have been logouted'
+            })
+        }
+        catch(e) {
+            console.error(e);
+            res.status(500).json({
+                message: 'Something wrong, try again'
+            })
+        }
+
     }
 )
 
@@ -71,6 +80,7 @@ router.post(
             })
         }
         catch(e) {
+            console.error(e);
             res.status(500).json({
                 message: 'Something wrong, try again'
             })
