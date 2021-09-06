@@ -12,6 +12,8 @@ import {router as authRouter} from '../src/routes/auth.routes'
 import {IUser, IUserResult, IUserName, IUserEmail, IUserPass, IUserInstance} from 'interfaces/user'
 import User from './models/User'
 import { cookie } from 'express-validator'
+import {authMiddleware} from './middleware/auth.middleware'
+
 
 
 config as IConf;
@@ -103,6 +105,7 @@ app.get(
         console.log(req.session.id, req.session.cookie, req.sessionID);
         next()
     },
+    authMiddleware,
     (req, res) => {
     try {
       const test = {
