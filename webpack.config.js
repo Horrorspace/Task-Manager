@@ -18,12 +18,12 @@ module.exports = {
     },
     output: {
         filename: '[name].js',
-        path: path.resolve(__dirname, './build/src/main/client'),
+        path: path.resolve(__dirname, './build/src/client'),
     },
     plugins: [
         new HtmlWebpackPlugin({
             title: 'Tasks',
-            template: './src/main/client/pages/template.html',
+            template: './src/client/pages/template.html',
             minify: {
                 collapseWhitespace: isProd
             }
@@ -31,44 +31,44 @@ module.exports = {
         new CopyWebpackPlugin({
             patterns: [
                 {
-                    from: path.resolve(__dirname, 'src/main/client/static/favicon.ico'),
-                    to: path.resolve(__dirname, 'build/src/main/client')
+                    from: path.resolve(__dirname, 'src/client/static/favicon.ico'),
+                    to: path.resolve(__dirname, 'build/src/client')
                 },
                 {
-                    from: path.resolve(__dirname, 'src/main/client/static/main.html'),
-                    to: path.resolve(__dirname, 'build/src/main/client')
+                    from: path.resolve(__dirname, 'src/client/static/main.html'),
+                    to: path.resolve(__dirname, 'build/src/client')
                 },
                 {
-                    from: path.resolve(__dirname, 'src/main/client/static/list.html'),
-                    to: path.resolve(__dirname, 'build/src/main/client')
+                    from: path.resolve(__dirname, 'src/client/static/list.html'),
+                    to: path.resolve(__dirname, 'build/src/client')
                 },
                 {
-                    from: path.resolve(__dirname, 'src/main/client/static/calendar.html'),
-                    to: path.resolve(__dirname, 'build/src/main/client')
+                    from: path.resolve(__dirname, 'src/client/static/calendar.html'),
+                    to: path.resolve(__dirname, 'build/src/client')
                 },
                 {
-                    from: path.resolve(__dirname, 'src/main/client/static/settings.html'),
-                    to: path.resolve(__dirname, 'build/src/main/client')
+                    from: path.resolve(__dirname, 'src/client/static/settings.html'),
+                    to: path.resolve(__dirname, 'build/src/client')
                 },
                 {
-                    from: path.resolve(__dirname, 'src/main/client/static/AddTask.html'),
-                    to: path.resolve(__dirname, 'build/src/main/client')
+                    from: path.resolve(__dirname, 'src/client/static/AddTask.html'),
+                    to: path.resolve(__dirname, 'build/src/client')
                 },
                 {
-                    from: path.resolve(__dirname, 'src/main/client/static/img/Path 14.svg'),
-                    to: path.resolve(__dirname, 'build/src/main/client/img')
+                    from: path.resolve(__dirname, 'src/client/static/img/Path 14.svg'),
+                    to: path.resolve(__dirname, 'build/src/client/img')
                 },
                 {
-                    from: path.resolve(__dirname, 'src/main/client/static/img/CompositeLayer.svg'),
-                    to: path.resolve(__dirname, 'build/src/main/client/img')
+                    from: path.resolve(__dirname, 'src/client/static/img/CompositeLayer.svg'),
+                    to: path.resolve(__dirname, 'build/src/client/img')
                 },
                 {
-                    from: path.resolve(__dirname, 'src/main/client/static/img/Path 19.svg'),
-                    to: path.resolve(__dirname, 'build/src/main/client/img')
+                    from: path.resolve(__dirname, 'src/client/static/img/Path 19.svg'),
+                    to: path.resolve(__dirname, 'build/src/client/img')
                 },
                 {
-                    from: path.resolve(__dirname, 'src/main/client/static/img/Union 1.svg'),
-                    to: path.resolve(__dirname, 'build/src/main/client/img')
+                    from: path.resolve(__dirname, 'src/client/static/img/Union 1.svg'),
+                    to: path.resolve(__dirname, 'build/src/client/img')
                 }
             ],
         }),
@@ -80,8 +80,8 @@ module.exports = {
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.json', '.scss', '.sass', '.html'],
         alias: {
-            '@scss': path.resolve(__dirname, './src/main/client/public/scss'),
-            '@react': path.resolve(__dirname, './src/main/client/pages/react'),
+            '@scss': path.resolve(__dirname, './src/client/public/scss'),
+            '@react': path.resolve(__dirname, './src/client/pages/react'),
         }
     },
     module: {
