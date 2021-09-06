@@ -21,7 +21,8 @@ router.post(
         'local', {
             successRedirect: '/',
             successMessage: 'You have been logined',
-            failureFlash: true
+            failureFlash: true,
+            session: true
         }
     )
 )
