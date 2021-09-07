@@ -8,7 +8,7 @@ import cookieParser from 'cookie-parser'
 import session from 'express-session'
 import passport from 'passport'
 import {localStrategy} from './auth/local'
-import {router as authRouter} from '../src/routes/auth.routes'
+import {router as authRouter} from './routes/auth.routes'
 import {IUser, IUserResult, IUserName, IUserEmail, IUserPass, IUserInstance} from 'interfaces/user'
 import User from './models/User'
 import { cookie } from 'express-validator'
@@ -108,9 +108,11 @@ app.get(
     authMiddleware,
     (req, res) => {
     try {
-      const test = {
-        message: 'test'
-      };
+        const user = req.user as IUserResult;
+        console.log(user.id);
+        const test = {
+            message: 'test'
+        };
       res.json(test);
     } catch (e) {
       res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' })
