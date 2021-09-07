@@ -1,4 +1,4 @@
-function authMiddleware(req, res, next) {
+export function authMiddleware(req, res, next) {
   if (!req.isAuthenticated()) {
     return res.status(401).json({
       message: 'You have not been auth'
