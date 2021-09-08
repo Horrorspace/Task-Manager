@@ -13,6 +13,17 @@ import {IUser, IUserResult, IUserName, IUserEmail, IUserPass, IUserInstance} fro
 import User from './models/User'
 import { cookie } from 'express-validator'
 import {authMiddleware} from './middleware/auth.middleware'
+import connectSequelize from 'connect-session-sequelize'
+import {Sequelize} from 'sequelize'
+
+const SequelizeStore = connectSequelize(session.Store);
+const sequelize = new Sequelize('database', 'username', 'password', {
+    dialect: 'postgres',
+});
+
+
+
+
 
 
 
