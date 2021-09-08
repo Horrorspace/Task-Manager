@@ -19,6 +19,7 @@ import {Sequelize} from 'sequelize'
 const SequelizeStore = connectSequelize(session.Store);
 const sequelize = new Sequelize('database', 'username', 'password', {
     dialect: 'postgres',
+    host: 'localhost'
 });
 
 
