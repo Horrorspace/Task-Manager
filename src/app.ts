@@ -23,11 +23,6 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 });
 
 
-
-
-
-
-
 config as IConf;
 
 const PORT: number = config.port || 3007;
@@ -69,7 +64,14 @@ app.use(cors(corsOptions));
 
 app.use(session({
     secret: "cats and dogs",
+    store: new SequelizeStore({
+      db: sequelize,
+    }),
+    resave: false,
+    proxy: false
   }));
+
+
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(localStrategy);
