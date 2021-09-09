@@ -1,6 +1,6 @@
 import Task from '../src/models/Task'
 import User from '../src/models/User'
-import {IUser, IUserResult, IUserName, IUserEmail, IUserPass, IUserInstance} from '../src/interfaces/user'
+import {IUser, IUserResult, IUserInstance} from '../src/interfaces/user'
 import {ITask, ITaskResult, ITaskInstance, ITaskDateToDo, ITaskTitle, ITaskText} from '../src/interfaces/task'
 import config from '../src/config/default.json'
 import {dateParser, dateStringify} from '../src/models/dateParser'

@@ -5,15 +5,20 @@ import {IUser, IUserResult, IUserName, IUserEmail, IUserPass, IUserInstance} fro
 import {ITask, ITaskResult, ITaskInstance, ITaskDateToDo, ITaskTitle, ITaskText} from 'interfaces/task'
 import {dateParser, dateStringify} from '../models/dateParser'
 import config from '../config/default.json'
+import {authMiddleware} from '../middleware/auth.middleware'
 
 
 export const router: Router = Router();
 
 router.get(
     '/',
+    authMiddleware,
     async (req, res) => {
         try {
-            
+            const userData = req.user as IUserResult;
+            const tasks: ITaskInstance = new Task(config.PostgreSQL);
+            const result: ITaskResult[] = await tasks.getAllUserTasks(userData.id);
+            res.status(200).json(result);
         }
         catch(e) {
             console.error(e);

@@ -17,10 +17,16 @@ import connectSequelize from 'connect-session-sequelize'
 import {Sequelize} from 'sequelize'
 
 const SequelizeStore = connectSequelize(session.Store);
-const sequelize = new Sequelize('database', 'username', 'password', {
+const sequelize = new Sequelize({
     dialect: 'postgres',
-    host: 'localhost'
+    host: 'localhost',
+    database: 'sessions',
+    username: 'admin',
+    password: 'KQoEgwBi'
 });
+const sessionStore = new SequelizeStore({
+    db: sequelize,
+})
 
 
 config as IConf;
@@ -64,12 +70,11 @@ app.use(cors(corsOptions));
 
 app.use(session({
     secret: "cats and dogs",
-    store: new SequelizeStore({
-      db: sequelize,
-    }),
+    store: sessionStore,
     resave: false,
     proxy: false
-  }));
+}));
+sessionStore.sync();
 
 
 app.use(passport.initialize());

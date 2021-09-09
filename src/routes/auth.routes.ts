@@ -4,6 +4,7 @@ import config from '../config/default.json'
 import User from '../models/User'
 import {IUser, IUserResult, IUserName, IUserEmail, IUserPass, IUserInstance} from 'interfaces/user'
 import passport from 'passport'
+import {authMiddleware} from '../middleware/auth.middleware'
 
 
 
@@ -94,3 +95,20 @@ router.post(
         }
     }
 )
+
+router.get(
+    '/user',
+    authMiddleware,
+    (req, res) => {
+    try {
+        const user = req.user as IUserResult;
+        const response = {
+            auth: true,
+            user
+        }
+        res.status(200).json(response);
+    } 
+    catch (e) {
+        res.status(500).json({ message: 'Something wrong, try again' })
+    }
+})
