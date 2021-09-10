@@ -60,6 +60,7 @@ export interface ITaskResultRaw {
 
 export interface ITaskInstance {
     getAllUserTasks(id: number): Promise<ITaskResult[]>;
+    getTaskById(id: number): Promise<ITaskResult[]>;
     getUserPriorityTasks(id: number): Promise<ITaskResult[]>;
     getUserNonPriorityTasks(id: number): Promise<ITaskResult[]>;
     getUserCompleteTasks(id: number): Promise<ITaskResult[]>;
