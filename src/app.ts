@@ -26,6 +26,8 @@ const sequelize = new Sequelize({
 });
 const sessionStore = new SequelizeStore({
     db: sequelize,
+    checkExpirationInterval: 60*60*1000,
+    expiration: 24*60*60*1000
 })
 
 
@@ -72,7 +74,9 @@ app.use(session({
     secret: "cats and dogs",
     store: sessionStore,
     resave: false,
-    proxy: false
+    proxy: false,
+    saveUninitialized: false,
+    
 }));
 sessionStore.sync();
 
