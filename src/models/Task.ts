@@ -38,6 +38,13 @@ export default class Task extends PG implements ITaskInstance {
         const result: ITaskResult[] = resultRows.map((val: ITaskResultRaw): ITaskResult => this.converteResult(val));
         return result;
     }
+    public async getTaskById(id: number): Promise<ITaskResult[]> {
+        const dbData: QueryResult = await this.pool.query(`SELECT * FROM tasks WHERE id = ${id};`);
+        const resultRows: QueryResultRow = dbData.rows;
+        resultRows as ITaskResultRaw[];
+        const result: ITaskResult[] = resultRows.map((val: ITaskResultRaw): ITaskResult => this.converteResult(val));
+        return result;
+    }
     public async getUserPriorityTasks(id: number): Promise<ITaskResult[]> {
         const dbData: QueryResult = await this.pool.query(`SELECT * FROM tasks WHERE user_id = ${id} AND is_priority = ${true};`);
         const resultRows: QueryResultRow = dbData.rows;
