@@ -66,6 +66,7 @@ describe('Task API for PostgreSQL DB', () => {
 
     test('All methods of task is defined', () => {
         expect(task.getAllUserTasks).toBeDefined();
+        expect(task.getTaskById).toBeDefined();
         expect(task.getUserPriorityTasks).toBeDefined();
         expect(task.getUserNonPriorityTasks).toBeDefined();
         expect(task.getUserCompleteTasks).toBeDefined();
@@ -101,6 +102,34 @@ describe('Task API for PostgreSQL DB', () => {
         const userToTest: IUserResult[] = await user.getUserByEmail(testUser.email);
         const userId = userToTest[0].id;
         const res: ITaskResult[] = await task.getAllUserTasks(userId);
+        expect(typeof(res)).toEqual('object');
+        expect(Array.isArray(res)).toEqual(true);
+        expect(res.length).toEqual(1);
+        expect(typeof(res[0])).toEqual('object');
+        expect(res[0].hasOwnProperty('id')).toEqual(true);
+        expect(res[0].hasOwnProperty('userId')).toEqual(true);
+        expect(res[0].hasOwnProperty('created')).toEqual(true);
+        expect(res[0].hasOwnProperty('dateOfComplete')).toEqual(true);
+        expect(res[0].hasOwnProperty('dateOfDelete')).toEqual(true);
+        expect(res[0].hasOwnProperty('isPriority')).toEqual(true);
+        expect(res[0].hasOwnProperty('isComplete')).toEqual(true);
+        expect(res[0].hasOwnProperty('isCancel')).toEqual(true);
+        expect(res[0].hasOwnProperty('isDelete')).toEqual(true);
+        expect(dateStringify(res[0].dateToDo)).toEqual(testTask.dateToDo);
+        expect(res[0].title).toEqual(testTask.title);
+        expect(res[0].task).toEqual(testTask.task);
+        expect(res[0].isPriority).toEqual(false);
+        expect(res[0].isComplete).toEqual(false);
+        expect(res[0].isCancel).toEqual(false);
+        expect(res[0].isDelete).toEqual(false);
+    });
+
+    test('Method getTaskById should return array with testTask after it had been added by insertTask method', async () => {
+        const userToTest: IUserResult[] = await user.getUserByEmail(testUser.email);
+        const userId = userToTest[0].id;
+        const taskTotest: ITaskResult[] = await task.getAllUserTasks(userId);
+        const id = taskTotest[0].id;
+        const res: ITaskResult[] = await task.getTaskById(id);
         expect(typeof(res)).toEqual('object');
         expect(Array.isArray(res)).toEqual(true);
         expect(res.length).toEqual(1);
