@@ -48,6 +48,63 @@ router.get(
     }
 )
 
+router.get(
+    '/non_priority_tasks',
+    authMiddleware,
+    async (req, res) => {
+        try {
+            const userData = req.user as IUserResult;
+            const tasks: ITaskInstance = new Task(config.PostgreSQL);
+            const result: ITaskResult[] = await tasks.getUserNonPriorityTasks(userData.id);
+            res.status(200).json(result);
+        }
+        catch(e) {
+            console.error(e);
+            res.status(500).json({
+                message: 'Something wrong, try again'
+            })
+        }
+    }
+)
+
+router.get(
+    '/priority_tasks',
+    authMiddleware,
+    async (req, res) => {
+        try {
+            const userData = req.user as IUserResult;
+            const tasks: ITaskInstance = new Task(config.PostgreSQL);
+            const result: ITaskResult[] = await tasks.getUserPriorityTasks(userData.id);
+            res.status(200).json(result);
+        }
+        catch(e) {
+            console.error(e);
+            res.status(500).json({
+                message: 'Something wrong, try again'
+            })
+        }
+    }
+)
+
+router.get(
+    '/non_priority_tasks',
+    authMiddleware,
+    async (req, res) => {
+        try {
+            const userData = req.user as IUserResult;
+            const tasks: ITaskInstance = new Task(config.PostgreSQL);
+            const result: ITaskResult[] = await tasks.getUserNonPriorityTasks(userData.id);
+            res.status(200).json(result);
+        }
+        catch(e) {
+            console.error(e);
+            res.status(500).json({
+                message: 'Something wrong, try again'
+            })
+        }
+    }
+)
+
 router.post(
     '/add_task',
     authMiddleware,
@@ -93,6 +150,102 @@ router.put(
             }
             await tasks.togglePriority(id);
             const message = `Priority of task "${taskToToggle.task}" have been changed`;
+            res.status(200).json({
+                message
+            });
+        }
+        catch(e) {
+            console.error(e);
+            res.status(500).json({
+                message: 'Something wrong, try again'
+            })
+        }
+    }
+)
+
+router.put(
+    '/toggle_complete',
+    authMiddleware,
+    async (req, res) => {
+        try {
+            const userData = req.user as IUserResult;
+            const taskData: ITaskId = req.body
+            const {id} = taskData;
+            const tasks: ITaskInstance = new Task(config.PostgreSQL);
+            const taskArr: ITaskResult[] = await tasks.getTaskById(id);
+            if(taskArr.length === 0) {
+                throw `Task doesn't exist`
+            }
+            const taskToToggle: ITaskResult = taskArr[0];
+            if(userData.id !== taskToToggle.userId) {
+                throw 'wrong data'
+            }
+            await tasks.toggleComplete(id);
+            const message = `Complite status of task "${taskToToggle.task}" have been changed`;
+            res.status(200).json({
+                message
+            });
+        }
+        catch(e) {
+            console.error(e);
+            res.status(500).json({
+                message: 'Something wrong, try again'
+            })
+        }
+    }
+)
+
+router.put(
+    '/toggle_cancel',
+    authMiddleware,
+    async (req, res) => {
+        try {
+            const userData = req.user as IUserResult;
+            const taskData: ITaskId = req.body
+            const {id} = taskData;
+            const tasks: ITaskInstance = new Task(config.PostgreSQL);
+            const taskArr: ITaskResult[] = await tasks.getTaskById(id);
+            if(taskArr.length === 0) {
+                throw `Task doesn't exist`
+            }
+            const taskToToggle: ITaskResult = taskArr[0];
+            if(userData.id !== taskToToggle.userId) {
+                throw 'wrong data'
+            }
+            await tasks.toggleCancel(id);
+            const message = `Cancel status of task "${taskToToggle.task}" have been changed`;
+            res.status(200).json({
+                message
+            });
+        }
+        catch(e) {
+            console.error(e);
+            res.status(500).json({
+                message: 'Something wrong, try again'
+            })
+        }
+    }
+)
+
+router.delete(
+    '/delete_task',
+    authMiddleware,
+    async (req, res) => {
+        try {
+            const userData = req.user as IUserResult;
+            const taskData: ITaskId = req.body
+            const {id} = taskData;
+            const tasks: ITaskInstance = new Task(config.PostgreSQL);
+            const taskArr: ITaskResult[] = await tasks.getTaskById(id);
+            if(taskArr.length === 0) {
+                throw `Task doesn't exist`
+            }
+            const taskToToggle: ITaskResult = taskArr[0];
+            if(userData.id !== taskToToggle.userId) {
+                throw 'wrong data'
+            }
+            await tasks.toggleDelete(id);
+            const message = `Task "${taskToToggle.task}" have been deleted`;
             res.status(200).json({
                 message
             });
