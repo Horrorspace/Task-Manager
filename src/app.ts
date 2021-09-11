@@ -9,6 +9,7 @@ import session from 'express-session'
 import passport from 'passport'
 import {localStrategy} from './auth/local'
 import {router as authRouter} from './routes/auth.routes'
+import {router as taskRouter} from './routes/task.routes'
 import {IUser, IUserResult, IUserName, IUserEmail, IUserPass, IUserInstance} from 'interfaces/user'
 import User from './models/User'
 import { cookie } from 'express-validator'
@@ -147,6 +148,7 @@ app.options('*', (req, res) => {
 })
 
 app.use('/api/auth', authRouter);
+app.use('/api/tasks', taskRouter);
 
 
 // app.get('*', (req, res) => {

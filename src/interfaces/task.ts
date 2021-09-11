@@ -26,6 +26,8 @@ export interface ITask {
     task: string;
 }
 
+export interface ITaskEdit extends ITaskId, ITask {}
+
 export interface ITaskResult {
     id: number;
     userId: number;
