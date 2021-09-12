@@ -109,6 +109,9 @@ router.get(
         res.status(200).json(response);
     } 
     catch (e) {
-        res.status(500).json({ message: 'Something wrong, try again' })
+        res.status(500).json({ 
+            auth: false,
+            message: 'Something wrong, try again' 
+        })
     }
 })
