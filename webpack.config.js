@@ -82,6 +82,9 @@ module.exports = {
         alias: {
             '@scss': path.resolve(__dirname, './src/client/public/scss'),
             '@react': path.resolve(__dirname, './src/client/pages/react'),
+            '@redux': path.resolve(__dirname, './src/client/pages/redux'),
+            '@core': path.resolve(__dirname, './src/client/pages/core'),
+            '@interfaces': path.resolve(__dirname, './src/client/pages/interfaces'),
         }
     },
     module: {
