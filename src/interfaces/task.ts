@@ -26,13 +26,29 @@ export interface ITask {
     task: string;
 }
 
-export interface ITaskEdit extends ITaskId, ITask {}
+export interface ITaskEdit extends ITaskDateToDo, ITaskTitle, ITaskText {}
 
 export interface ITaskResult {
     id: number;
     userId: number;
     created: string;
     dateToDo: Date;
+    dateOfComplete: string;
+    dateOfCancel: string;
+    dateOfDelete: string;
+    title: string;
+    task: string;
+    isPriority: boolean;
+    isComplete: boolean;
+    isCancel: boolean;
+    isDelete: boolean;
+}
+
+export interface ITaskResultToSend {
+    id: number;
+    userId: number;
+    created: string;
+    dateToDo: string;
     dateOfComplete: string;
     dateOfCancel: string;
     dateOfDelete: string;
