@@ -1,7 +1,7 @@
 import {Router} from 'express'
 import Task from '../models/Task'
 import {IUserResult} from 'interfaces/user'
-import {ITask, ITaskResult, ITaskInstance, ITaskId, ITaskEdit, ITaskTitle, ITaskText, ITaskDateToDo} from 'interfaces/task'
+import {ITask, ITaskResult, ITaskInstance, ITaskId, ITaskEdit, ITaskTitle, ITaskText, ITaskDateToDo, ITaskResultToSend} from 'interfaces/task'
 import {dateParser, dateStringify} from '../models/dateParser'
 import config from '../config/default.json'
 import {authMiddleware} from '../middleware/auth.middleware'
@@ -16,8 +16,15 @@ router.get(
         try {
             const userData = req.user as IUserResult;
             const tasks: ITaskInstance = new Task(config.PostgreSQL);
-            const result: ITaskResult[] = await tasks.getAllUserTasks(userData.id);
-            res.status(200).json(result);
+            const resultRaw: ITaskResult[] = await tasks.getAllUserTasks(userData.id);
+            const result: ITaskResult[] = resultRaw.filter((val: ITaskResult): boolean => !val.isDelete);
+            const resultToSend: ITaskResultToSend[] = result.map((val: ITaskResult): ITaskResultToSend => {
+                return {
+                    ...val,
+                    dateToDo: dateStringify(val.dateToDo)
+                }
+            })
+            res.status(200).json(resultToSend);
         }
         catch(e) {
             console.error(e);
@@ -35,8 +42,15 @@ router.get(
         try {
             const userData = req.user as IUserResult;
             const tasks: ITaskInstance = new Task(config.PostgreSQL);
-            const result: ITaskResult[] = await tasks.getUserPriorityTasks(userData.id);
-            res.status(200).json(result);
+            const resultRaw: ITaskResult[] = await tasks.getUserPriorityTasks(userData.id);
+            const result: ITaskResult[] = resultRaw.filter((val: ITaskResult): boolean => !val.isDelete);
+            const resultToSend: ITaskResultToSend[] = result.map((val: ITaskResult): ITaskResultToSend => {
+                return {
+                    ...val,
+                    dateToDo: dateStringify(val.dateToDo)
+                }
+            })
+            res.status(200).json(resultToSend);
         }
         catch(e) {
             console.error(e);
@@ -54,8 +68,15 @@ router.get(
         try {
             const userData = req.user as IUserResult;
             const tasks: ITaskInstance = new Task(config.PostgreSQL);
-            const result: ITaskResult[] = await tasks.getUserNonPriorityTasks(userData.id);
-            res.status(200).json(result);
+            const resultRaw: ITaskResult[] = await tasks.getUserNonPriorityTasks(userData.id);
+            const result: ITaskResult[] = resultRaw.filter((val: ITaskResult): boolean => !val.isDelete);
+            const resultToSend: ITaskResultToSend[] = result.map((val: ITaskResult): ITaskResultToSend => {
+                return {
+                    ...val,
+                    dateToDo: dateStringify(val.dateToDo)
+                }
+            })
+            res.status(200).json(resultToSend);
         }
         catch(e) {
             console.error(e);
@@ -73,8 +94,15 @@ router.get(
         try {
             const userData = req.user as IUserResult;
             const tasks: ITaskInstance = new Task(config.PostgreSQL);
-            const result: ITaskResult[] = await tasks.getUserCompleteTasks(userData.id);
-            res.status(200).json(result);
+            const resultRaw: ITaskResult[] = await tasks.getUserCompleteTasks(userData.id);
+            const result: ITaskResult[] = resultRaw.filter((val: ITaskResult): boolean => !val.isDelete);
+            const resultToSend: ITaskResultToSend[] = result.map((val: ITaskResult): ITaskResultToSend => {
+                return {
+                    ...val,
+                    dateToDo: dateStringify(val.dateToDo)
+                }
+            })
+            res.status(200).json(resultToSend);
         }
         catch(e) {
             console.error(e);
@@ -92,8 +120,15 @@ router.get(
         try {
             const userData = req.user as IUserResult;
             const tasks: ITaskInstance = new Task(config.PostgreSQL);
-            const result: ITaskResult[] = await tasks.getUserNonCompleteTasks(userData.id);
-            res.status(200).json(result);
+            const resultRaw: ITaskResult[] = await tasks.getUserNonCompleteTasks(userData.id);
+            const result: ITaskResult[] = resultRaw.filter((val: ITaskResult): boolean => !val.isDelete);
+            const resultToSend: ITaskResultToSend[] = result.map((val: ITaskResult): ITaskResultToSend => {
+                return {
+                    ...val,
+                    dateToDo: dateStringify(val.dateToDo)
+                }
+            })
+            res.status(200).json(resultToSend);
         }
         catch(e) {
             console.error(e);
@@ -111,8 +146,15 @@ router.get(
         try {
             const userData = req.user as IUserResult;
             const tasks: ITaskInstance = new Task(config.PostgreSQL);
-            const result: ITaskResult[] = await tasks.getUserCancelTasks(userData.id);
-            res.status(200).json(result);
+            const resultRaw: ITaskResult[] = await tasks.getUserCancelTasks(userData.id);
+            const result: ITaskResult[] = resultRaw.filter((val: ITaskResult): boolean => !val.isDelete);
+            const resultToSend: ITaskResultToSend[] = result.map((val: ITaskResult): ITaskResultToSend => {
+                return {
+                    ...val,
+                    dateToDo: dateStringify(val.dateToDo)
+                }
+            })
+            res.status(200).json(resultToSend);
         }
         catch(e) {
             console.error(e);
@@ -130,8 +172,15 @@ router.get(
         try {
             const userData = req.user as IUserResult;
             const tasks: ITaskInstance = new Task(config.PostgreSQL);
-            const result: ITaskResult[] = await tasks.getUserNonCancelTasks(userData.id);
-            res.status(200).json(result);
+            const resultRaw: ITaskResult[] = await tasks.getUserNonCancelTasks(userData.id);
+            const result: ITaskResult[] = resultRaw.filter((val: ITaskResult): boolean => !val.isDelete);
+            const resultToSend: ITaskResultToSend[] = result.map((val: ITaskResult): ITaskResultToSend => {
+                return {
+                    ...val,
+                    dateToDo: dateStringify(val.dateToDo)
+                }
+            })
+            res.status(200).json(resultToSend);
         }
         catch(e) {
             console.error(e);
@@ -150,26 +199,13 @@ router.get(
             const userData = req.user as IUserResult;
             const tasks: ITaskInstance = new Task(config.PostgreSQL);
             const result: ITaskResult[] = await tasks.getUserDeleteTasks(userData.id);
-            res.status(200).json(result);
-        }
-        catch(e) {
-            console.error(e);
-            res.status(500).json({
-                message: 'Something wrong, try again'
+            const resultToSend: ITaskResultToSend[] = result.map((val: ITaskResult): ITaskResultToSend => {
+                return {
+                    ...val,
+                    dateToDo: dateStringify(val.dateToDo)
+                }
             })
-        }
-    }
-)
-
-router.get(
-    '/non_delete_tasks',
-    authMiddleware,
-    async (req, res) => {
-        try {
-            const userData = req.user as IUserResult;
-            const tasks: ITaskInstance = new Task(config.PostgreSQL);
-            const result: ITaskResult[] = await tasks.getUserNonDeleteTasks(userData.id);
-            res.status(200).json(result);
+            res.status(200).json(resultToSend);
         }
         catch(e) {
             console.error(e);
@@ -349,9 +385,6 @@ router.put(
             const taskArr: ITaskResult[] = await tasks.getTaskById(editTask.id);
             if(taskArr.length === 0) {
                 throw `Task doesn't exist`
-            }
-            if(userData.email !== editTask.email) {
-                throw 'wrong email'
             }
             const taskToEdit: ITaskResult = taskArr[0];
             if(userData.id !== taskToEdit.userId) {
