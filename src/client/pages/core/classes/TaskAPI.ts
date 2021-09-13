@@ -17,6 +17,7 @@ export default class TaskAPI {
     'dateOfCancel', 'dateOfDelete', 'isPriority', 'isComplete', 'isCancel', 'isDelete'];
     private static taskTypes: string[] = [...TaskAPI.taskMainTypes, 'number', 'number', 'string', 'string',
     'string', 'string', 'boolean', 'boolean', 'boolean', 'boolean'];
+    private static tasksUrl: string = `${apiUrl}/tasks`
 
     private static headers: Headers = new Headers({
         'Content-Type': 'application/json'
@@ -42,10 +43,10 @@ export default class TaskAPI {
         }
     }
 
-    public static async downloadAllTasks(): Promise<ITasksInstance> {
+    private static async downloadTasks(urlPart: string): Promise<ITasksInstance> {
         return new Promise((resolve, reject) => {
             const tasks: ITasksInstance = new Tasks();
-            const url: string = `${apiUrl}/tasks/all_tasks`;
+            const url: string = `${TaskAPI.tasksUrl}/${urlPart}`;
             const data$ = fromFetch(url, {
                 method: 'GET',
                 headers: TaskAPI.headers
@@ -77,5 +78,13 @@ export default class TaskAPI {
                 }
             })
         })
+    }
+
+    public static async downloadAllTasks(): Promise<ITasksInstance> {
+        return await TaskAPI.downloadTasks('all_tasks')
+    }
+
+    public static async downloadPriorityTasks(): Promise<ITasksInstance> {
+        return await TaskAPI.downloadTasks('priority_tasks')
     }
 }
