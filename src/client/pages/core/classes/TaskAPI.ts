@@ -87,4 +87,28 @@ export default class TaskAPI {
     public static async downloadPriorityTasks(): Promise<ITasksInstance> {
         return await TaskAPI.downloadTasks('priority_tasks')
     }
+    
+    public static async downloadNonPriorityTasks(): Promise<ITasksInstance> {
+        return await TaskAPI.downloadTasks('non_priority_tasks')
+    }
+    
+    public static async downloadCompleteTasks(): Promise<ITasksInstance> {
+        return await TaskAPI.downloadTasks('complete_tasks')
+    }
+    
+    public static async downloadNonCompleteTasks(): Promise<ITasksInstance> {
+        return await TaskAPI.downloadTasks('non_complete_tasks')
+    }
+    
+    public static async downloadCancelTasks(): Promise<ITasksInstance> {
+        return await TaskAPI.downloadTasks('cancel_tasks')
+    }
+    
+    public static async downloadNonCancelTasks(): Promise<ITasksInstance> {
+        return await TaskAPI.downloadTasks('non_cancel_tasks')
+    }
+    
+    public static async downloadDeleteTasks(): Promise<ITasksInstance> {
+        return await TaskAPI.downloadTasks('delete_tasks')
+    }
 }
