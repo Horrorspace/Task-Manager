@@ -5,7 +5,7 @@ import {apiUrl} from '@core/const/urlConst'
 import NewTask from '@core/classes/NewTask'
 import Task from '@core/classes/Task'
 import Tasks from '@core/classes/Tasks'
-import {ITaskInstance, ITasksInstance, ITask} from '@interfaces/ITask'
+import {ITaskInstance, ITasksInstance, ITask, INewTask} from '@interfaces/ITask'
 
 
 export default class TaskAPI {
@@ -110,5 +110,197 @@ export default class TaskAPI {
     
     public static async downloadDeleteTasks(): Promise<ITasksInstance> {
         return await TaskAPI.downloadTasks('delete_tasks')
+    }
+    
+    public static async addTask(task: INewTask): Promise<void> {
+        return new Promise((resolve, reject) => {
+            const url: string = `${TaskAPI.tasksUrl}/add_task`;
+            const data$ = fromFetch(url, {
+                method: 'POST',
+                headers: TaskAPI.headers,
+                body: JSON.stringify(task)
+            }).pipe(
+                map(res => {
+                    console.log(res);
+                    if(res.status === 200 ) {
+                        return res.json()
+                    }
+                    else {
+                        throw {
+                            status: res.status,
+                            message: 'API error'
+                        }
+                    }
+                })
+            );
+            const sub: Subscription = data$.subscribe({
+                complete: () => {
+                    resolve()
+                },
+                error: (e) => {
+                    reject(e)
+                }
+            })
+        })
+    }
+    
+    public static async togglePriority(id: number): Promise<void> {
+        return new Promise((resolve, reject) => {
+            const url: string = `${TaskAPI.tasksUrl}/toggle_priority`;
+            const data$ = fromFetch(url, {
+                method: 'PUT',
+                headers: TaskAPI.headers,
+                body: JSON.stringify({id})
+            }).pipe(
+                map(res => {
+                    console.log(res);
+                    if(res.status === 200 ) {
+                        return res.json()
+                    }
+                    else {
+                        throw {
+                            status: res.status,
+                            message: 'API error'
+                        }
+                    }
+                })
+            );
+            const sub: Subscription = data$.subscribe({
+                complete: () => {
+                    resolve()
+                },
+                error: (e) => {
+                    reject(e)
+                }
+            })
+        })
+    }
+    
+    public static async toggleComplete(id: number): Promise<void> {
+        return new Promise((resolve, reject) => {
+            const url: string = `${TaskAPI.tasksUrl}/toggle_complete`;
+            const data$ = fromFetch(url, {
+                method: 'PUT',
+                headers: TaskAPI.headers,
+                body: JSON.stringify({id})
+            }).pipe(
+                map(res => {
+                    console.log(res);
+                    if(res.status === 200 ) {
+                        return res.json()
+                    }
+                    else {
+                        throw {
+                            status: res.status,
+                            message: 'API error'
+                        }
+                    }
+                })
+            );
+            const sub: Subscription = data$.subscribe({
+                complete: () => {
+                    resolve()
+                },
+                error: (e) => {
+                    reject(e)
+                }
+            })
+        })
+    }
+    
+    public static async toggleCancel(id: number): Promise<void> {
+        return new Promise((resolve, reject) => {
+            const url: string = `${TaskAPI.tasksUrl}/toggle_cancel`;
+            const data$ = fromFetch(url, {
+                method: 'PUT',
+                headers: TaskAPI.headers,
+                body: JSON.stringify({id})
+            }).pipe(
+                map(res => {
+                    console.log(res);
+                    if(res.status === 200 ) {
+                        return res.json()
+                    }
+                    else {
+                        throw {
+                            status: res.status,
+                            message: 'API error'
+                        }
+                    }
+                })
+            );
+            const sub: Subscription = data$.subscribe({
+                complete: () => {
+                    resolve()
+                },
+                error: (e) => {
+                    reject(e)
+                }
+            })
+        })
+    }
+    
+    public static async editTask(task: ITask): Promise<void> {
+        return new Promise((resolve, reject) => {
+            const url: string = `${TaskAPI.tasksUrl}/edit_task`;
+            const data$ = fromFetch(url, {
+                method: 'PUT',
+                headers: TaskAPI.headers,
+                body: JSON.stringify(task)
+            }).pipe(
+                map(res => {
+                    console.log(res);
+                    if(res.status === 200 ) {
+                        return res.json()
+                    }
+                    else {
+                        throw {
+                            status: res.status,
+                            message: 'API error'
+                        }
+                    }
+                })
+            );
+            const sub: Subscription = data$.subscribe({
+                complete: () => {
+                    resolve()
+                },
+                error: (e) => {
+                    reject(e)
+                }
+            })
+        })
+    }
+    
+    public static async deleteTask(id: number): Promise<void> {
+        return new Promise((resolve, reject) => {
+            const url: string = `${TaskAPI.tasksUrl}/delete_task`;
+            const data$ = fromFetch(url, {
+                method: 'DELETE',
+                headers: TaskAPI.headers,
+                body: JSON.stringify({id})
+            }).pipe(
+                map(res => {
+                    console.log(res);
+                    if(res.status === 200 ) {
+                        return res.json()
+                    }
+                    else {
+                        throw {
+                            status: res.status,
+                            message: 'API error'
+                        }
+                    }
+                })
+            );
+            const sub: Subscription = data$.subscribe({
+                complete: () => {
+                    resolve()
+                },
+                error: (e) => {
+                    reject(e)
+                }
+            })
+        })
     }
 }
