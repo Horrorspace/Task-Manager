@@ -1,12 +1,19 @@
 import {ITasksInstance} from '@interfaces/ITask'
+import {IUserInstance} from '@interfaces/IUser'
+
 
 export interface ITaskState {
     tasks: ITasksInstance;
     isDataUpdating: boolean;
-    error: string;
+}
+
+export interface IUserState {
+    user: IUserInstance;
+    isDataUpdating: boolean;
 }
 
 export interface IAppState {
     isDataUpdating: boolean;
-    error: string;
+    messages: string[];
+    errors: string[];
 }
