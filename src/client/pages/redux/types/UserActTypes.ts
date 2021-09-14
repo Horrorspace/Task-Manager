@@ -1,5 +1,5 @@
-export enum TaskActTypes {
-    setTasks = 'setTasks',
+export enum UserActTypes {
+    setUser = 'setUser',
     setDefault = 'setDefault',
     setUpdatingStatus = 'setUpdatingStatus'
 }
