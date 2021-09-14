@@ -1,6 +1,6 @@
-import {Subscription} from 'rxjs'
+import {Subscription, from} from 'rxjs'
 import {fromFetch} from 'rxjs/fetch'
-import {map, filter} from 'rxjs/operators'
+import {map, filter, switchMap} from 'rxjs/operators'
 import {apiUrl} from '@core/const/urlConst'
 import NewTask from '@core/classes/NewTask'
 import Task from '@core/classes/Task'
@@ -51,7 +51,7 @@ export default class TaskAPI {
                 method: 'GET',
                 headers: TaskAPI.headers
             }).pipe(
-                map(val => {
+                switchMap(val => {
                     if(val.status === 200 ) {
                         return val.json()
                     }
@@ -62,6 +62,7 @@ export default class TaskAPI {
                         }
                     }
                 }),
+                switchMap(val => from(val)),
                 filter((val: any) => typeof(val) === 'object'),
                 filter((val: any) => TaskAPI.taskCheck(val)),
                 map((task: ITask<string>): ITaskInstance => new Task(task))
@@ -112,7 +113,7 @@ export default class TaskAPI {
         return await TaskAPI.downloadTasks('delete_tasks')
     }
     
-    public static async addTask(task: INewTask): Promise<void> {
+    public static async addTask(task: INewTask<string>): Promise<void> {
         return new Promise((resolve, reject) => {
             const url: string = `${TaskAPI.tasksUrl}/add_task`;
             const data$ = fromFetch(url, {
@@ -120,7 +121,7 @@ export default class TaskAPI {
                 headers: TaskAPI.headers,
                 body: JSON.stringify(task)
             }).pipe(
-                map(res => {
+                switchMap(res => {
                     console.log(res);
                     if(res.status === 200 ) {
                         return res.json()
@@ -152,8 +153,7 @@ export default class TaskAPI {
                 headers: TaskAPI.headers,
                 body: JSON.stringify({id})
             }).pipe(
-                map(res => {
-                    console.log(res);
+                switchMap(res => {
                     if(res.status === 200 ) {
                         return res.json()
                     }
@@ -184,7 +184,7 @@ export default class TaskAPI {
                 headers: TaskAPI.headers,
                 body: JSON.stringify({id})
             }).pipe(
-                map(res => {
+                switchMap(res => {
                     console.log(res);
                     if(res.status === 200 ) {
                         return res.json()
@@ -216,7 +216,7 @@ export default class TaskAPI {
                 headers: TaskAPI.headers,
                 body: JSON.stringify({id})
             }).pipe(
-                map(res => {
+                switchMap(res => {
                     console.log(res);
                     if(res.status === 200 ) {
                         return res.json()
@@ -240,7 +240,7 @@ export default class TaskAPI {
         })
     }
     
-    public static async editTask(task: ITask): Promise<void> {
+    public static async editTask(task: ITask<string>): Promise<void> {
         return new Promise((resolve, reject) => {
             const url: string = `${TaskAPI.tasksUrl}/edit_task`;
             const data$ = fromFetch(url, {
@@ -248,7 +248,7 @@ export default class TaskAPI {
                 headers: TaskAPI.headers,
                 body: JSON.stringify(task)
             }).pipe(
-                map(res => {
+                switchMap(res => {
                     console.log(res);
                     if(res.status === 200 ) {
                         return res.json()
@@ -280,7 +280,7 @@ export default class TaskAPI {
                 headers: TaskAPI.headers,
                 body: JSON.stringify({id})
             }).pipe(
-                map(res => {
+                switchMap(res => {
                     console.log(res);
                     if(res.status === 200 ) {
                         return res.json()
