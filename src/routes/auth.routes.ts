@@ -20,12 +20,24 @@ router.post(
     ],
     passport.authenticate(
         'local', {
-            successRedirect: '/',
+            successFlash: true,
             successMessage: 'You have been logined',
             failureFlash: true,
             session: true
         }
-    )
+    ),
+    (req, res) => {
+        try {
+            const user = req.user as IUserResult;
+            res.status(200).json(user);
+        } 
+        catch (e) {
+            res.status(500).json({ 
+                auth: false,
+                message: 'Something wrong, try again' 
+            })
+        }
+    }
 )
 
 router.post(
@@ -43,7 +55,6 @@ router.post(
                 message: 'Something wrong, try again'
             })
         }
-
     }
 )
 
