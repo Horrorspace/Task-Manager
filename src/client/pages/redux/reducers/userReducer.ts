@@ -1,35 +1,39 @@
 import {Reducer} from 'redux'
-import {TaskActTypes} from '@redux/types/TaskActTypes'
-import {ITaskState, ITaskAction} from '@interfaces/IStore'
-import Task from '@core/classes/Task'
-import Tasks from '@core/classes/Tasks'
+import {UserActTypes} from '@redux/types/UserActTypes'
+import {IUserState, IUserAction} from '@interfaces/IStore'
+import User from '@core/classes/User'
 
 
-const defaultState: ITaskState = {
-    tasks: new Tasks(),
+const defaultState: IUserState = {
+    user: null,
     isDataUpdating: false,
 };
 
-export const taskReducer: Reducer = (state: ITaskState = defaultState, action: ITaskAction): ITaskState => {
+export const userReducer: Reducer = (state: IUserState = defaultState, action: IUserAction): IUserState => {
     switch (action.type) {
-        case TaskActTypes.setTasks:
-            if(action.tasks) {
+        case UserActTypes.setUser:
+            if(action.user) {
                 return {
                     ...state,
-                    tasks: action.tasks,
+                    user: action.user,
                     isDataUpdating: false
                 }
             }
             else {
                 return state
             }
-        case TaskActTypes.setDefault:
+        case UserActTypes.setDefault:
             return defaultState
-        case TaskActTypes.setUpdatingStatus:
+        case UserActTypes.setUpdatingStatus:
+            if(action.hasOwnProperty('isDataUpdating')) {
                 return {
-                    ...state,
-                    isDataUpdating: action.isDataUpdating
-                }
+                        ...state,
+                        isDataUpdating: action.isDataUpdating
+                    }
+            }
+            else {
+                return state
+            }
         default:
             return state
     }
