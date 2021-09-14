@@ -8,7 +8,7 @@ export interface ITaskState {
 }
 
 export interface IUserState {
-    user: IUserInstance;
+    user: IUserInstance | null;
     isDataUpdating: boolean;
 }
 
