@@ -14,16 +14,17 @@ module.exports = {
     mode: 'development',
     context: path.resolve(__dirname),
     entry: {
-        app: './src/main/client/pages/index.tsx',
+        app: './src/client/pages/index.tsx',
     },
     output: {
-        filename: '[name].js',
+        filename: 'public/js/[name].js',
         path: path.resolve(__dirname, './build/src/client'),
     },
     plugins: [
         new HtmlWebpackPlugin({
             title: 'Tasks',
             template: './src/client/pages/template.html',
+            scriptLoading: 'defer',
             minify: {
                 collapseWhitespace: isProd
             }
@@ -56,25 +57,25 @@ module.exports = {
                 },
                 {
                     from: path.resolve(__dirname, 'src/client/static/img/Path 14.svg'),
-                    to: path.resolve(__dirname, 'build/src/client/img')
+                    to: path.resolve(__dirname, 'build/src/client/public/img')
                 },
                 {
                     from: path.resolve(__dirname, 'src/client/static/img/CompositeLayer.svg'),
-                    to: path.resolve(__dirname, 'build/src/client/img')
+                    to: path.resolve(__dirname, 'build/src/client/public/img')
                 },
                 {
                     from: path.resolve(__dirname, 'src/client/static/img/Path 19.svg'),
-                    to: path.resolve(__dirname, 'build/src/client/img')
+                    to: path.resolve(__dirname, 'build/src/client/public/img')
                 },
                 {
                     from: path.resolve(__dirname, 'src/client/static/img/Union 1.svg'),
-                    to: path.resolve(__dirname, 'build/src/client/img')
+                    to: path.resolve(__dirname, 'build/src/client/public/img')
                 }
             ],
         }),
         new CleanWebpackPlugin(),
         new MiniCssExtractPlugin({
-            filename: '[name].css'
+            filename: 'public/css/[name].css'
         }),
     ],
     resolve: {
