@@ -17,3 +17,23 @@ export interface IAppState {
     messages: string[];
     errors: string[];
 }
+
+export interface IAction {
+    type: string;
+}
+
+export interface ITaskAction extends IAction {
+    tasks?: ITasksInstance;
+    isDataUpdating?: boolean;
+}
+
+export interface IUserAction extends IAction {
+    user?: IUserInstance;
+    isDataUpdating?: boolean;
+}
+
+export interface IAppAction extends IAction {
+    isDataUpdating?: boolean;
+    message?: string;
+    error?: string;
+}
