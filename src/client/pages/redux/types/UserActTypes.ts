@@ -1,4 +1,5 @@
 export enum UserActTypes {
     setUser = 'setUser',
-    setDefault = 'setDefault'
+    setDefault = 'setDefault',
+    setUpdatingStatus = 'setUpdatingStatus'
 }
