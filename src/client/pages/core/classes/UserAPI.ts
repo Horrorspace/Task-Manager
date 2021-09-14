@@ -1,6 +1,6 @@
 import {Subscription} from 'rxjs'
 import {fromFetch} from 'rxjs/fetch'
-import {map, filter} from 'rxjs/operators'
+import {map, filter, switchMap} from 'rxjs/operators'
 import {apiUrl} from '@core/const/urlConst'
 import User from '@core/classes/User'
 import NewUser from '@core/classes/NewUser'
@@ -46,8 +46,7 @@ export default class UserAPI {
                 method: 'GET',
                 headers: UserAPI.headers
             }).pipe(
-                map(res => {
-                    console.log(res);
+                switchMap(res => {
                     if(res.status === 200 ) {
                         return res.json()
                     }
@@ -73,7 +72,7 @@ export default class UserAPI {
         })
     }
 
-    public static async toLogin(login: ILogin): Promise<void> {
+    public static async toLogin(login: ILogin): Promise<IUserInstance> {
         return new Promise((resolve, reject) => {
             const url: string = `${UserAPI.authUrl}/login`;
             const data$ = fromFetch(url, {
@@ -81,8 +80,7 @@ export default class UserAPI {
                 headers: UserAPI.headers,
                 body: JSON.stringify(login)
             }).pipe(
-                map(res => {
-                    console.log(res);
+                switchMap(res => {
                     if(res.status === 200 ) {
                         return res.json()
                     }
@@ -92,11 +90,14 @@ export default class UserAPI {
                             message: 'API error'
                         }
                     }
-                })
+                }),
+                filter((val: any) => typeof(val) === 'object'),
+                filter((val: any) => UserAPI.userCheck(val)),
+                map((user: IUser): IUserInstance => new User(user))
             );
             const sub: Subscription = data$.subscribe({
-                complete: () => {
-                    resolve()
+                next: (user) => {
+                    resolve(user)
                 },
                 error: (e) => {
                     reject(e)
@@ -113,7 +114,6 @@ export default class UserAPI {
                 headers: UserAPI.headers
             }).pipe(
                 map(res => {
-                    console.log(res);
                     if(res.status === 200 ) {
                         return res.json()
                     }
@@ -145,7 +145,6 @@ export default class UserAPI {
                 body: JSON.stringify(user)
             }).pipe(
                 map(res => {
-                    console.log(res);
                     if(res.status === 200 ) {
                         return res.json()
                     }
