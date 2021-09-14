@@ -61,10 +61,10 @@ const corsOptions: CorsOptions = {
     preflightContinue: true
 }
 
-app.use((req, res, next) => {
-    console.log(req.method);
-    next()
-})
+// app.use((req, res, next) => {
+//     console.log(req.method);
+//     next()
+// })
 
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -103,7 +103,6 @@ passport.deserializeUser(async (id: number, done) => {
             throw 'Incorrect user id'
         }
         else {
-            console.log(userArr[0]);
             done(null, userArr[0])
         }
     }
@@ -111,17 +110,6 @@ passport.deserializeUser(async (id: number, done) => {
         done(e)
     }
 });
-
-app.get('/', (req, res) => {
-    try {
-      const test = {
-        message: 'OK'
-      };
-      res.json(test);
-    } catch (e) {
-      res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' })
-    }
-})
 
 app.get(
     '/test',
@@ -151,10 +139,11 @@ app.use('/api/auth', authRouter);
 app.use('/api/tasks', taskRouter);
 
 
-// app.get('*', (req, res) => {
-//     console.log(req.url);
-//     res.sendFile(path.resolve(__dirname, 'client', 'index.html'))
-// })
+app.use('/public/', express.static(path.join(__dirname, 'client', 'public')))
+
+app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'index.html'))
+})
   
 
 async function start(): Promise<void> {
