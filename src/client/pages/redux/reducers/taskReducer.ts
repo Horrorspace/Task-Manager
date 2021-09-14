@@ -26,10 +26,15 @@ export const taskReducer: Reducer = (state: ITaskState = defaultState, action: I
         case TaskActTypes.setDefault:
             return defaultState
         case TaskActTypes.setUpdatingStatus:
+            if(action.hasOwnProperty('isDataUpdating')) {
                 return {
-                    ...state,
-                    isDataUpdating: action.isDataUpdating
-                }
+                        ...state,
+                        isDataUpdating: action.isDataUpdating
+                    }
+            }
+            else {
+                return state
+            }
         default:
             return state
     }
