@@ -1,12 +1,14 @@
 import {Reducer} from 'redux'
 import {UserActTypes} from '@redux/types/UserActTypes'
 import {IUserState, IUserAction} from '@interfaces/IStore'
-import User from '@core/classes/User'
 
 
 const defaultState: IUserState = {
     user: null,
     isDataUpdating: false,
+    isLogined: false,
+    error: null,
+    message: null
 };
 
 export const userReducer: Reducer = (state: IUserState = defaultState, action: IUserAction): IUserState => {
@@ -16,7 +18,8 @@ export const userReducer: Reducer = (state: IUserState = defaultState, action: I
                 return {
                     ...state,
                     user: action.user,
-                    isDataUpdating: false
+                    isDataUpdating: false,
+                    isLogined: true
                 }
             }
             else {
@@ -25,7 +28,7 @@ export const userReducer: Reducer = (state: IUserState = defaultState, action: I
         case UserActTypes.setDefault:
             return defaultState
         case UserActTypes.setUpdatingStatus:
-            if(action.hasOwnProperty('isDataUpdating')) {
+            if(action.hasOwnProperty('isDataUpdating') && typeof(action.isDataUpdating) === 'boolean') {
                 return {
                         ...state,
                         isDataUpdating: action.isDataUpdating
@@ -33,6 +36,36 @@ export const userReducer: Reducer = (state: IUserState = defaultState, action: I
             }
             else {
                 return state
+            }
+        case UserActTypes.setError:
+            if(action.error) {
+                return {
+                    ...state,
+                    error: action.error
+                }
+            }
+            else {
+                return state
+            }
+        case UserActTypes.setMessage:
+            if(action.message) {
+                return {
+                    ...state,
+                    message: action.message
+                }
+            }
+            else {
+                return state
+            }
+        case UserActTypes.clearError:
+            return {
+                ...state,
+                error: null
+            }
+        case UserActTypes.clearMessage:
+            return {
+                ...state,
+                message: null
             }
         default:
             return state
