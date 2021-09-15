@@ -50,3 +50,42 @@ export const clearMessage = (): ITaskAction => {
         type: TaskActTypes.clearMessage
     }
 };
+
+export const downloadAllTasks = (): IThunkAction<ITaskState> => {
+    return async (dispatch: Dispatch<ITaskAction>): Promise<void> => {
+        try {
+            dispatch(setUpdatingStatus(true));
+            const tasks = await TaskAPI.downloadAllTasks();
+            dispatch(setTasks(tasks));
+        }
+        catch(e) {
+            dispatch(setUpdatingStatus(false));
+            if(typeof(e) === 'string') {
+                dispatch(setError(e));
+            }
+            else {
+                dispatch(setError('Connection error'));
+            }
+        }
+    }
+}
+
+export const addTask = (task: INewTask): IThunkAction<ITaskState> | IThunkAction<IThunkAction<ITaskState>> => {
+    return async (dispatch: Dispatch<ITaskAction>): Promise<void> => {
+        try {
+            await TaskAPI.addTask(task);
+            dispatch(setUpdatingStatus(true));
+            dispatch(setMessage(`Task "${task.name}" have been added`));
+            dispatch(downloadAllTasks());
+        }
+        catch(e) {
+            dispatch(setUpdatingStatus(false));
+            if(typeof(e) === 'string') {
+                dispatch(setError(e));
+            }
+            else {
+                dispatch(setError('Connection error'));
+            }
+        }
+    }
+}
