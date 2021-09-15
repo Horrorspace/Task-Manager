@@ -1,5 +1,9 @@
 export enum TaskActTypes {
     setTasks = 'setTasks',
     setDefault = 'setDefault',
-    setUpdatingStatus = 'setUpdatingStatus'
+    setUpdatingStatus = 'setUpdatingStatus',
+    setError = 'setError',
+    setMessage = 'setMessage',
+    clearError = 'clearError',
+    clearMessage = 'clearMessage',
 }

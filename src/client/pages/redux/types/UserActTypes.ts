@@ -1,5 +1,9 @@
 export enum UserActTypes {
     setUser = 'setUser',
     setDefault = 'setDefault',
-    setUpdatingStatus = 'setUpdatingStatus'
+    setUpdatingStatus = 'setUpdatingStatus',
+    setError = 'setError',
+    setMessage = 'setMessage',
+    clearError = 'clearError',
+    clearMessage = 'clearMessage',
 }
