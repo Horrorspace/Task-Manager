@@ -7,14 +7,14 @@ export const Auth: React.FC = () => {
     return (
         <Container as="main" className="main" fluid>
             <Container as="section" className="auth d-flex flex-column justify-content-center align-items-center" fluid="xl">
-                <Container>  
-                  <h2>Email:</h2>
-                  <textarea></textarea>
+                <Container className="auth-field-wrap">  
+                  <h2 className="auth-title">Email:</h2>
+                  <textarea className="auth-text"></textarea>
                 </Container>  
-                <Container>  
-                  <h2>Password:</h2>
-                  <textarea></textarea>
-                </Container> 
+                <Container className="auth-field-wrap">  
+                  <h2 className="auth-title">Password:</h2>
+                  <textarea className="auth-text"></textarea>
+                </Container>
             </Container>
         </Container>
     )
