@@ -1,6 +1,6 @@
 import {TaskActTypes} from '@redux/types/TaskActTypes'
-import {ITaskAction, ITaskState, IThunkAction} from '@interfaces/IStore'
-import {INewTask, ITaskInstance, ITasksInstance} from '@interfaces/ITask'
+import {ITaskAction, ITaskState, IThunkAction, IDoubleThunk, IThunkDispatch} from '@interfaces/IStore'
+import {INewTask, ITask, ITaskInstance, ITasksInstance} from '@interfaces/ITask'
 import TaskAPI from '@core/classes/TaskAPI'
 import {Dispatch} from 'redux'
 
@@ -70,13 +70,114 @@ export const downloadAllTasks = (): IThunkAction<ITaskState> => {
     }
 }
 
-export const addTask = (task: INewTask): IThunkAction<ITaskState> | IThunkAction<IThunkAction<ITaskState>> => {
+export const addTask = (task: INewTask<string>): IThunkAction<ITaskState> | IDoubleThunk<IThunkAction<ITaskState>> => {
     return async (dispatch: Dispatch<ITaskAction>): Promise<void> => {
         try {
+            const thunkDispatch = dispatch as IThunkDispatch<IThunkAction<ITaskState>>;
             await TaskAPI.addTask(task);
             dispatch(setUpdatingStatus(true));
-            dispatch(setMessage(`Task "${task.name}" have been added`));
-            dispatch(downloadAllTasks());
+            dispatch(setMessage(`Task "${task.title}" have been added`));
+            thunkDispatch(downloadAllTasks());
+        }
+        catch(e) {
+            dispatch(setUpdatingStatus(false));
+            if(typeof(e) === 'string') {
+                dispatch(setError(e));
+            }
+            else {
+                dispatch(setError('Connection error'));
+            }
+        }
+    }
+}
+
+export const togglePriority = (id: number): IThunkAction<ITaskState> | IDoubleThunk<IThunkAction<ITaskState>> => {
+    return async (dispatch: Dispatch<ITaskAction>): Promise<void> => {
+        try {
+            const thunkDispatch = dispatch as IThunkDispatch<IThunkAction<ITaskState>>;
+            await TaskAPI.togglePriority(id);
+            dispatch(setUpdatingStatus(true));
+            thunkDispatch(downloadAllTasks());
+        }
+        catch(e) {
+            dispatch(setUpdatingStatus(false));
+            if(typeof(e) === 'string') {
+                dispatch(setError(e));
+            }
+            else {
+                dispatch(setError('Connection error'));
+            }
+        }
+    }
+}
+
+export const toggleComplete = (id: number): IThunkAction<ITaskState> | IDoubleThunk<IThunkAction<ITaskState>> => {
+    return async (dispatch: Dispatch<ITaskAction>): Promise<void> => {
+        try {
+            const thunkDispatch = dispatch as IThunkDispatch<IThunkAction<ITaskState>>;
+            await TaskAPI.toggleComplete(id);
+            dispatch(setUpdatingStatus(true));
+            thunkDispatch(downloadAllTasks());
+        }
+        catch(e) {
+            dispatch(setUpdatingStatus(false));
+            if(typeof(e) === 'string') {
+                dispatch(setError(e));
+            }
+            else {
+                dispatch(setError('Connection error'));
+            }
+        }
+    }
+}
+
+export const toggleCancel = (id: number): IThunkAction<ITaskState> | IDoubleThunk<IThunkAction<ITaskState>> => {
+    return async (dispatch: Dispatch<ITaskAction>): Promise<void> => {
+        try {
+            const thunkDispatch = dispatch as IThunkDispatch<IThunkAction<ITaskState>>;
+            await TaskAPI.toggleCancel(id);
+            dispatch(setUpdatingStatus(true));
+            thunkDispatch(downloadAllTasks());
+        }
+        catch(e) {
+            dispatch(setUpdatingStatus(false));
+            if(typeof(e) === 'string') {
+                dispatch(setError(e));
+            }
+            else {
+                dispatch(setError('Connection error'));
+            }
+        }
+    }
+}
+
+export const editTask = (task: ITask<string>): IThunkAction<ITaskState> | IDoubleThunk<IThunkAction<ITaskState>> => {
+    return async (dispatch: Dispatch<ITaskAction>): Promise<void> => {
+        try {
+            const thunkDispatch = dispatch as IThunkDispatch<IThunkAction<ITaskState>>;
+            await TaskAPI.editTask(task);
+            dispatch(setUpdatingStatus(true));
+            thunkDispatch(downloadAllTasks());
+        }
+        catch(e) {
+            dispatch(setUpdatingStatus(false));
+            if(typeof(e) === 'string') {
+                dispatch(setError(e));
+            }
+            else {
+                dispatch(setError('Connection error'));
+            }
+        }
+    }
+}
+
+export const deleteTask = (id: number): IThunkAction<ITaskState> | IDoubleThunk<IThunkAction<ITaskState>> => {
+    return async (dispatch: Dispatch<ITaskAction>): Promise<void> => {
+        try {
+            const thunkDispatch = dispatch as IThunkDispatch<IThunkAction<ITaskState>>;
+            await TaskAPI.deleteTask(id);
+            dispatch(setUpdatingStatus(true));
+            thunkDispatch(downloadAllTasks());
         }
         catch(e) {
             dispatch(setUpdatingStatus(false));
