@@ -1,7 +1,7 @@
 import {ITasksInstance} from '@interfaces/ITask'
 import {IUserInstance} from '@interfaces/IUser'
 import {ThunkAction} from 'redux-thunk'
-import {AnyAction} from 'redux'
+import {AnyAction, Reducer} from 'redux'
 
 
 export interface ITaskState {
@@ -24,6 +24,12 @@ export interface IAppState {
     messages: string[];
     errors: string[];
     notifications: boolean;
+}
+
+export interface IRootState {
+    app: IAppState,
+    task: ITaskState,
+    user: IUserState
 }
 
 export interface IAction {
@@ -59,4 +65,6 @@ export type IThunkState<T> = () => T;
 
 export interface IThunkDispatch<A extends IAnyThunkAction> {
     <T extends A>(action: T): T
-  }
+}
+
+export type IAnyAction = IAnyThunkAction | ITaskAction | IUserAction | IAppAction
