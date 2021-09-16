@@ -11,7 +11,7 @@ const defaultState: IUserState = {
     message: null
 };
 
-export const userReducer: Reducer = (state: IUserState = defaultState, action: IUserAction): IUserState => {
+export const userReducer: Reducer<IUserState, IUserAction> = (state: IUserState = defaultState, action: IUserAction): IUserState => {
     switch (action.type) {
         case UserActTypes.setUser:
             if(action.user) {

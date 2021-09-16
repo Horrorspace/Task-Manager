@@ -11,7 +11,7 @@ const defaultState: IAppState = {
 }
 
 
-export const appReducer: Reducer = (state: IAppState = defaultState, action: IAppAction): IAppState => {
+export const appReducer: Reducer<IAppState, IAppAction> = (state: IAppState = defaultState, action: IAppAction): IAppState => {
     switch (action.type) {
         case AppActTypes.addError:
             if(action.error) {

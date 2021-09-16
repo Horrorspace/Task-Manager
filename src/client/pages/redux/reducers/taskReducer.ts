@@ -11,7 +11,7 @@ const defaultState: ITaskState = {
     message: null
 };
 
-export const taskReducer: Reducer = (state: ITaskState = defaultState, action: ITaskAction): ITaskState => {
+export const taskReducer: Reducer<ITaskState, ITaskAction> = (state: ITaskState = defaultState, action: ITaskAction): ITaskState => {
     switch (action.type) {
         case TaskActTypes.setTasks:
             if(action.tasks) {
