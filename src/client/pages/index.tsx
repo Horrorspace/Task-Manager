@@ -6,6 +6,12 @@ import UserAPI from '@core/classes/UserAPI'
 import TaskAPI from '@core/classes/TaskAPI'
 import { ILogin } from '@interfaces/IUser'
 import { INewTask } from '@interfaces/ITask'
+import {saga} from '@redux/saga/saga'
+import rootSaga from '@redux/saga/rootSaga'
+
+
+
+
 
 const testUser: ILogin = {
   email: "tester@test.com",
@@ -30,8 +36,11 @@ async function testAPI() {
   // console.log(await UserAPI.getCurrentUser());
 }
 
-testAPI().then(
-  d => console.log('ok', d)
-)
+// testAPI().then(
+//   d => console.log('ok', d)
+// )
+
+
+saga.run(rootSaga);
 
 render(<App />, document.getElementById('root'))
