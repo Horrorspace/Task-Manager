@@ -1,7 +1,7 @@
 import {ITasksInstance} from '@interfaces/ITask'
 import {IUserInstance} from '@interfaces/IUser'
 import {ThunkAction} from 'redux-thunk'
-import { AnyAction } from 'redux'
+import {AnyAction} from 'redux'
 
 
 export interface ITaskState {
@@ -53,4 +53,10 @@ export interface IAppAction extends IAction {
 
 
 export type IThunkAction<T extends IAppState | ITaskState | IUserState> = ThunkAction<void, T, unknown, AnyAction>;
+export type IAnyThunkAction = IThunkAction<IAppState> | IThunkAction<ITaskState> | IThunkAction<IUserState>;
+export type IDoubleThunk<T extends IAnyThunkAction> = ThunkAction<void, T, unknown, AnyAction>;
 export type IThunkState<T> = () => T;
+
+export interface IThunkDispatch<A extends IAnyThunkAction> {
+    <T extends A>(action: T): T
+  }
