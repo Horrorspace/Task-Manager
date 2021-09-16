@@ -67,4 +67,4 @@ export interface IThunkDispatch<A extends IAnyThunkAction> {
     <T extends A>(action: T): T
 }
 
-export type IAnyAction = IAnyThunkAction | ITaskAction | IUserAction | IAppAction
+export type IAnyAction = ITaskAction | IUserAction | IAppAction
