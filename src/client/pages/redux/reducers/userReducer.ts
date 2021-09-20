@@ -8,7 +8,7 @@ const defaultState: IUserState = {
     isDataUpdating: false,
     isLogined: false,
     error: null,
-    message: null
+    message: null,
 };
 
 export const userReducer: Reducer<IUserState, IUserAction> = (state: IUserState = defaultState, action: IUserAction): IUserState => {
@@ -19,7 +19,7 @@ export const userReducer: Reducer<IUserState, IUserAction> = (state: IUserState 
                     ...state,
                     user: action.user,
                     isDataUpdating: false,
-                    isLogined: true
+                    isLogined: true,
                 }
             }
             else {
