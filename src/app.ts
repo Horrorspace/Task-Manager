@@ -23,7 +23,8 @@ const sequelize = new Sequelize({
     host: 'localhost',
     database: 'sessions',
     username: 'admin',
-    password: 'KQoEgwBi'
+    password: 'KQoEgwBi',
+    logging: false
 });
 const sessionStore = new SequelizeStore({
     db: sequelize,
@@ -53,6 +54,8 @@ const corsOptions: CorsOptions = {
      'Proxy-Authorization',
      'Proxy-Connection',
      'Referer',
+     'Cookie',
+     'Set-Cookie',
      'Sec-Fetch-Mode',
      'User-Agent',
      'Connection'],
@@ -62,11 +65,19 @@ const corsOptions: CorsOptions = {
 }
 
 // app.use((req, res, next) => {
-//     console.log(req.method);
+//     console.log(req.headers.cookie);
+//     console.log(typeof(req.headers.cookie))
 //     next()
 // })
 
 app.use(cookieParser());
+
+
+// app.use((req, res, next) => {
+//     console.log(req.cookies);
+//     next()
+// })
+
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
 app.use(cors(corsOptions));
@@ -77,6 +88,12 @@ app.use(session({
     resave: false,
     proxy: false,
     saveUninitialized: false,
+    cookie: {
+        maxAge: 24*60*60*1000,
+        secure: false,
+        httpOnly: false,
+        sameSite: true,
+    }
     
 }));
 sessionStore.sync();
@@ -111,10 +128,15 @@ passport.deserializeUser(async (id: number, done) => {
     }
 });
 
+app.use((req, res, next) => {
+    //console.log(req.session.id, req.session.cookie, req.sessionID);
+    next()
+})
+
 app.get(
     '/test',
     (req, res, next) => {
-        console.log(req.session.id, req.session.cookie, req.sessionID);
+        //console.log(req.session.id, req.session.cookie, req.sessionID);
         next()
     },
     authMiddleware,
