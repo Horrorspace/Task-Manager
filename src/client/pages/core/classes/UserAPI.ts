@@ -13,7 +13,7 @@ export default class UserAPI {
     private static newUserTypes: string[] = ['string', 'string', 'string'];
     private static userKeys: string[] = [...UserAPI.newUserKeys, 'id'];
     private static userTypes: string[] = [...UserAPI.newUserTypes, 'number'];
-    private static authUrl: string = `${apiUrl}/auth`
+    private static authUrl: string = `${apiUrl}/auth`;
 
     private static headers: Headers = new Headers({
         'Content-Type': 'application/json'
@@ -44,7 +44,9 @@ export default class UserAPI {
             const url: string = `${UserAPI.authUrl}/user`;
             const data$ = fromFetch(url, {
                 method: 'GET',
-                headers: UserAPI.headers
+                headers: UserAPI.headers,
+                credentials: 'same-origin',
+                mode: 'same-origin'
             }).pipe(
                 switchMap(res => {
                     if(res.status === 200 ) {
@@ -57,9 +59,16 @@ export default class UserAPI {
                         }
                     }
                 }),
+                map(val => {
+                    console.log(val);
+                    return val
+                }),
                 filter((val: any) => typeof(val) === 'object'),
                 filter((val: any) => UserAPI.userCheck(val)),
-                map((user: IUser): IUserInstance => new User(user))
+                map((user: IUser): IUserInstance => {
+                    console.log(user);
+                    return new User(user)
+                })
             );
             const sub: Subscription = data$.subscribe({
                 next: (user: IUserInstance) => {
@@ -78,7 +87,9 @@ export default class UserAPI {
             const data$ = fromFetch(url, {
                 method: 'POST',
                 headers: UserAPI.headers,
-                body: JSON.stringify(login)
+                body: JSON.stringify(login),
+                credentials: 'same-origin',
+                mode: 'same-origin'
             }).pipe(
                 switchMap(res => {
                     if(res.status === 200 ) {
