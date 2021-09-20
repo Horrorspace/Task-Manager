@@ -113,11 +113,8 @@ router.get(
     (req, res) => {
     try {
         const user = req.user as IUserResult;
-        const response = {
-            auth: true,
-            user
-        }
-        res.status(200).json(response);
+        console.log(user.id);
+        res.status(200).json(user);
     } 
     catch (e) {
         res.status(500).json({ 
