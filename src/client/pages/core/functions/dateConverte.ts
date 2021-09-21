@@ -42,3 +42,25 @@ export function dateStringify(date: Date): string {
     const [Y, M, D, h, m, s] = dateArr;
     return `${Y}-${M}-${D} ${h}:${m}:${s}+00`
 }
+
+export function getLocalDataString(date: Date): string {
+    const dateArr = [
+        date.getFullYear(),
+        date.getMonth()+1,
+        date.getDate(),
+    ];
+    const [Y, M, D] = dateArr;
+    return `${D}.${M}.${Y}`
+}
+
+export function getLocalFullDataString(date: Date): string {
+    const dateArr = [
+        date.getFullYear(),
+        date.getMonth()+1,
+        date.getDate(),
+        date.getHours(),
+        date.getMinutes()
+    ];
+    const [Y, M, D, h, m] = dateArr;
+    return `${D}.${M}.${Y} ${h}:${m}`
+}
