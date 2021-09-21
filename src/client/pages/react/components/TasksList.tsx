@@ -3,33 +3,48 @@ import {Container, Row, Col, Button, Form} from 'react-bootstrap'
 import {useSelector, useDispatch} from 'react-redux'
 import {IRootState} from '@interfaces/IStore'
 import {ITaskInstance, ITasksInstance} from '@interfaces/ITask'
-import {downloadAllTasks} from '@redux/actions/taskActions'
+import {getLocalDataString, getLocalFullDataString} from '@core/functions/dateConverte'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {IconDefinition} from '@fortawesome/fontawesome-common-types'
 import {faPlusSquare} from '@fortawesome/free-solid-svg-icons'
 import {faSquare} from '@fortawesome/free-regular-svg-icons'
-import { StringifyOptions } from 'querystring'
 
+
+type localDate = [number, number, number]
 
 
 export const TasksList: React.FC = () => {
+
+    
     const dispatch = useDispatch();
     const tasksData = useSelector((state: IRootState): ITasksInstance => state.task.tasks);
     const tasksList = tasksData.getAllTasks();
-    const dateArr = tasksList.map(task => task.getDateToDo())
-    const dateRawList: Date[] = []
+    const dateArr: string[] = tasksList
+        .map((task: ITaskInstance): localDate => [
+            task.getDateToDo().getFullYear(),
+            task.getDateToDo().getMonth()+1,
+            task.getDateToDo().getDate()
+        ])
+        .sort((a, b) => {
+            if(a[0] !== b[0]) {
+                return a[0] - b[0]
+            }
+            else if(a[1] !== b[1]) {
+                return a[1] - b[1]
+            }
+            else {
+                return a[2] - b[2]
+            }
+        })
+        .map(a => `${a[2]}.${a[1]}.${a[0]}`);
+    const dateList: string[] = []; 
 
     dateArr.forEach(date => {
-        if(dateRawList.indexOf(date) === -1) {
-            dateRawList.push(date)
+        if(dateList.indexOf(date) === -1) {
+            dateList.push(date)
         }
-    })
+    });
 
-    const dateList = dateRawList
-        .sort((a, b) => a.getTime() - b.getTime())
-        .map(date => date.toDateString());
-
-    console.log(dateArr, dateRawList, dateList);
 
 
     const tasks: ReactElement[] = dateList.map((date: string): ReactElement => {
@@ -43,7 +58,12 @@ export const TasksList: React.FC = () => {
                         </Button>
                         <Container as="ul" className="tasks-list">
                         {tasksList
-                            .filter(task => task.getDateToDo().toDateString() === date)
+                            .map(task => {
+                                console.log(getLocalDataString(task.getDateToDo()));
+                                console.log(date);
+                                return task
+                            })
+                            .filter(task => getLocalDataString(task.getDateToDo()) === date)
                             .map(task => {
                                 return (
                                         <Row as="li" className="task-item d-flex align-items-center" role="button" tabIndex={0}>
@@ -54,7 +74,7 @@ export const TasksList: React.FC = () => {
                                             </Col>
                                             <Col className="task-title">{task.getTitle()}</Col>
                                             <Col className="task-time-wrap">
-                                                <p className="task-time">{task.getDateToDo().toLocaleTimeString()}</p>
+                                                <p className="task-time">{getLocalFullDataString(task.getDateToDo())}</p>
                                             </Col>
                                         </Row>
                                 )
