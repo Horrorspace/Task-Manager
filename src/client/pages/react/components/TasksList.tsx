@@ -50,7 +50,7 @@ export const TasksList: React.FC = () => {
     const tasks: ReactElement[] = dateList.map((date: string): ReactElement => {
         return (
             <Container as="ul" className="days-list">
-                <Container as="li" className="day-item">
+                <Container as="li" className="day-item d-flex flex-column justify-content-center align-items-center">
                     <Container className="day-title-wrap">
                         <h2 className="day-title">{date.toString()}</h2>
                         <Button className="day-add-btn" type="button">
