@@ -17,6 +17,9 @@ export const TasksList: React.FC = () => {
     const dispatch = useDispatch();
     const tasksData = useSelector((state: IRootState): ITasksInstance => state.task.tasks);
     const [addShow, setAddShow] = useState(false);
+    const [title, setTitle] = useState('');
+    const [task, setTask] = useState('');
+    const [dateToDo, setDateToDo] = useState(new Date);
 
     const tasksList = tasksData.getAllTasks();
     const dateArr: string[] = tasksList
@@ -67,7 +70,22 @@ export const TasksList: React.FC = () => {
             Add new task
         </Modal.Header>
         <Modal.Body>
-
+            <Form as="div">
+                <Form.Group as="div">
+                    <Form.Label as="p">Title</Form.Label>
+                    <Form.Control 
+                        as="textarea"
+                        placeholder="Enter the title"
+                    />
+                </Form.Group>
+                <Form.Group as="div">
+                    <Form.Label as="p">Task description</Form.Label>
+                    <Form.Control 
+                        as="textarea"
+                        placeholder="Enter the task description"
+                    />
+                </Form.Group>
+            </Form>
         </Modal.Body>
         <Modal.Footer>
             <Button variant="primary">
