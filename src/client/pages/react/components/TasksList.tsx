@@ -1,5 +1,5 @@
 import React, {ChangeEvent, MouseEvent, ReactElement, useState} from 'react'
-import {Container, Row, Col, Button, Form} from 'react-bootstrap'
+import {Container, Row, Col, Button, Form, Modal} from 'react-bootstrap'
 import {useSelector, useDispatch} from 'react-redux'
 import {IRootState} from '@interfaces/IStore'
 import {ITaskInstance, ITasksInstance} from '@interfaces/ITask'
@@ -14,10 +14,10 @@ type localDate = [number, number, number]
 
 
 export const TasksList: React.FC = () => {
-
-    
     const dispatch = useDispatch();
     const tasksData = useSelector((state: IRootState): ITasksInstance => state.task.tasks);
+    const [addShow, setAddShow] = useState(false);
+
     const tasksList = tasksData.getAllTasks();
     const dateArr: string[] = tasksList
         .map((task: ITaskInstance): localDate => [
@@ -45,6 +45,39 @@ export const TasksList: React.FC = () => {
         }
     });
 
+    const handleAddClose = ():void => {
+        setAddShow(false)
+    }
+
+    const handleAddOpen = (): void => {
+        setAddShow(true)
+    }
+
+
+    const addWindow: ReactElement = 
+    <Modal 
+        show={addShow}
+        backdrop="static"
+        onHide={handleAddClose}
+        size="sm"
+        className="add-window"
+        as="section"
+    >
+        <Modal.Header closeButton>
+            Add new task
+        </Modal.Header>
+        <Modal.Body>
+
+        </Modal.Body>
+        <Modal.Footer>
+            <Button variant="primary">
+                Add
+            </Button>
+            <Button variant="danger">
+                Cancel
+            </Button>
+        </Modal.Footer>
+    </Modal>
 
 
     const tasks: ReactElement[] = dateList.map((date: string): ReactElement => {
@@ -53,7 +86,7 @@ export const TasksList: React.FC = () => {
                 <Container as="li" className="day-item d-flex flex-column justify-content-center align-items-center">
                     <Container className="day-title-wrap">
                         <h2 className="day-title">{date.toString()}</h2>
-                        <Button className="day-add-btn" type="button">
+                        <Button className="day-add-btn" type="button" onClick={handleAddOpen}>
                             <FontAwesomeIcon className="day-add-ico" icon={faPlusSquare} />
                         </Button>
                         <Container as="ul" className="tasks-list">
@@ -92,6 +125,7 @@ export const TasksList: React.FC = () => {
         <Container as="main" className="main" fluid>
             <Container as="section" className="task-list d-flex flex-column justify-content-center align-items-center" fluid="xl">
                 {tasks}
+                {addWindow}
             </Container>
         </Container>
     )
