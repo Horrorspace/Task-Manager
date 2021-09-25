@@ -1,9 +1,11 @@
 import React, {ChangeEvent, MouseEvent, ReactElement, useState} from 'react'
 import {Container, Row, Col, Button, Form, Modal} from 'react-bootstrap'
 import {useSelector, useDispatch} from 'react-redux'
+import Calendar from 'react-calendar'
+import Moment from 'react-moment'
 import {IRootState} from '@interfaces/IStore'
 import {ITaskInstance, ITasksInstance} from '@interfaces/ITask'
-import {getLocalDataString, getLocalFullDataString} from '@core/functions/dateConverte'
+import {getLocalDataString, getLocalFullDataString, getLocalTimeString, getDateOnly} from '@core/functions/dateConverte'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {IconDefinition} from '@fortawesome/fontawesome-common-types'
 import {faPlusSquare} from '@fortawesome/free-solid-svg-icons'
@@ -19,7 +21,10 @@ export const TasksList: React.FC = () => {
     const [addShow, setAddShow] = useState(false);
     const [title, setTitle] = useState('');
     const [task, setTask] = useState('');
-    const [dateToDo, setDateToDo] = useState(new Date);
+    const [dateToDo, setDateToDo] = useState(new Date(Date.now()));
+    const [calendarClasses, setCalendarClasses] = useState(['hidden']);
+    const [timeClasses, setTimeClasses] = useState(['hidden']);
+
 
     const tasksList = tasksData.getAllTasks();
     const dateArr: string[] = tasksList
@@ -52,8 +57,58 @@ export const TasksList: React.FC = () => {
         setAddShow(false)
     }
 
+    const handleDate = (value: Date): void => {
+        setDateToDo(prev => {
+            const dateResult = new Date();
+            dateResult.setFullYear(value.getFullYear());
+            dateResult.setMonth(value.getMonth());
+            dateResult.setDate(value.getDate());
+            dateResult.setHours(prev.getHours());
+            dateResult.setMinutes(prev.getMinutes());
+            dateResult.setSeconds(prev.getSeconds());
+            return dateResult
+        })
+    }
+
+    const handleTime = (value: Date): void => {
+        setDateToDo(prev => {
+            const dateResult = new Date();
+            dateResult.setFullYear(prev.getFullYear());
+            dateResult.setMonth(prev.getMonth());
+            dateResult.setDate(prev.getDate());
+            dateResult.setHours(value.getHours());
+            dateResult.setMinutes(value.getMinutes());
+            dateResult.setSeconds(value.getSeconds());
+            return dateResult
+        })
+    }
+
     const handleAddOpen = (): void => {
         setAddShow(true)
+    }
+
+    const handleCalandarToggle = (): void => {
+        setCalendarClasses(prev => {
+            if(prev.indexOf('hidden') === -1) {
+                return [...prev, 'hidden']
+            }
+            else {
+                return prev.filter(className => className !== 'hidden')
+            }
+        })
+
+    }
+
+    const handleTimeToggle = (): void => {
+        setTimeClasses(prev => {
+            if(prev.indexOf('hidden') === -1) {
+                return [...prev, 'hidden']
+            }
+            else {
+                return prev.filter(className => className !== 'hidden')
+            }
+        })
+
     }
 
 
@@ -72,18 +127,37 @@ export const TasksList: React.FC = () => {
         <Modal.Body>
             <Form as="div">
                 <Form.Group as="div">
-                    <Form.Label as="p">Title</Form.Label>
+                    <Form.Label as="h3">Title</Form.Label>
                     <Form.Control 
                         as="textarea"
                         placeholder="Enter the title"
+                        value={title}
                     />
                 </Form.Group>
                 <Form.Group as="div">
-                    <Form.Label as="p">Task description</Form.Label>
+                    <Form.Label as="h3">Task description</Form.Label>
                     <Form.Control 
                         as="textarea"
                         placeholder="Enter the task description"
+                        value={task}
                     />
+                </Form.Group>
+                <Form.Group as="div">
+                    <Form.Label as="h3">Date to do</Form.Label>
+                    <Form.Control as="button" onClick={handleCalandarToggle}>
+                        {getLocalDataString(dateToDo)}
+                    </Form.Control>
+                    <Calendar 
+                        className={calendarClasses.join(' ')}
+                        onChange={handleDate}
+                        value={dateToDo}
+                    />
+                </Form.Group>
+                <Form.Group as="div">
+                    <Form.Label as="h3">Time to do</Form.Label>
+                    <Form.Control as="button" onClick={handleTimeToggle}>
+                        {getLocalTimeString(dateToDo)}
+                    </Form.Control>
                 </Form.Group>
             </Form>
         </Modal.Body>
