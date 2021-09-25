@@ -1,6 +1,7 @@
 import React from 'react'
 import {render} from 'react-dom'
 import '@scss/index.scss'
+import 'react-calendar/dist/Calendar.css'
 import {App} from '@react/App'
 import UserAPI from '@core/classes/UserAPI'
 import TaskAPI from '@core/classes/TaskAPI'
