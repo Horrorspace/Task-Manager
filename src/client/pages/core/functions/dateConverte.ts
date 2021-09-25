@@ -53,6 +53,14 @@ export function getLocalDataString(date: Date): string {
     return `${D}.${M}.${Y}`
 }
 
+export function getDateOnly(date: Date): Date {
+    const dateResult = new Date();
+    dateResult.setFullYear(date.getFullYear());
+    dateResult.setMonth(date.getMonth());
+    dateResult.setDate(date.getDate());
+    return dateResult
+}
+
 export function getLocalFullDataString(date: Date): string {
     const dateArr = [
         date.getFullYear(),
@@ -63,4 +71,15 @@ export function getLocalFullDataString(date: Date): string {
     ];
     const [Y, M, D, h, m] = dateArr;
     return `${D}.${M}.${Y} ${h}:${m}`
+}
+
+export function getLocalTimeString(date: Date): string {
+    const dateArr = [
+        date.getHours(),
+        date.getMinutes()
+    ];
+    const time: string[] = dateArr.map(val => val < 10 ? `0${val}` : `${val}`)
+    const [h, m] = time;
+
+    return `${h}:${m}`
 }
