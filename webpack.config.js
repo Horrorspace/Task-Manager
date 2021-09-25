@@ -79,7 +79,7 @@ module.exports = {
         }),
     ],
     resolve: {
-        extensions: ['.ts', '.tsx', '.js', '.json', '.scss', '.sass', '.html'],
+        extensions: ['.ts', '.tsx', '.js', '.json', 'css', '.scss', '.sass', '.html'],
         alias: {
             '@scss': path.resolve(__dirname, './src/client/public/scss'),
             '@react': path.resolve(__dirname, './src/client/pages/react'),
@@ -90,6 +90,16 @@ module.exports = {
     },
     module: {
         rules: [
+            {
+                test: /\.css$/,
+                use: [{
+                    loader: MiniCssExtractPlugin.loader,
+                    options: {
+                        
+                    }
+                },
+                'css-loader']
+            },
             {
                 test: /\.s[ac]ss$/,
                 use: [{
