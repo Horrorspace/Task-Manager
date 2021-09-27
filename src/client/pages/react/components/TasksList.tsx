@@ -1,11 +1,13 @@
 import React, {ChangeEvent, MouseEvent, ReactElement, useState} from 'react'
-import {Container, Row, Col, Button, Form, Modal} from 'react-bootstrap'
+import {Container, Row, Col, Button, Form, Modal, Dropdown} from 'react-bootstrap'
 import {useSelector, useDispatch} from 'react-redux'
 import Calendar from 'react-calendar'
+import {addTask} from '@redux/actions/taskActions'
 import Moment from 'react-moment'
 import {IRootState} from '@interfaces/IStore'
-import {ITaskInstance, ITasksInstance} from '@interfaces/ITask'
-import {getLocalDataString, getLocalFullDataString, getLocalTimeString, getDateOnly} from '@core/functions/dateConverte'
+import {ITaskInstance, ITasksInstance, INewTask} from '@interfaces/ITask'
+import {IUserInstance} from '@interfaces/IUser'
+import {getLocalDataString, getLocalFullDataString, getLocalTimeString, getDateOnly, dateStringify, dateParser} from '@core/functions/dateConverte'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {IconDefinition} from '@fortawesome/fontawesome-common-types'
 import {faPlusSquare} from '@fortawesome/free-solid-svg-icons'
@@ -17,6 +19,7 @@ type localDate = [number, number, number]
 
 export const TasksList: React.FC = () => {
     const dispatch = useDispatch();
+    const userData = useSelector((state: IRootState): IUserInstance => state.user.user!);
     const tasksData = useSelector((state: IRootState): ITasksInstance => state.task.tasks);
     const [addShow, setAddShow] = useState(false);
     const [title, setTitle] = useState('');
@@ -53,8 +56,56 @@ export const TasksList: React.FC = () => {
         }
     });
 
+    const setDefault = ():void => {
+        setTitle('');
+        setTask('');
+        setDateToDo(new Date(Date.now()));
+        setCalendarClasses(prev => {
+            if(prev.indexOf('hidden') === -1) {
+                return [...prev, 'hidden']
+            }
+            else{
+                return prev
+            }
+        });
+        setTimeClasses(prev => {
+            if(prev.indexOf('hidden') === -1) {
+                return [...prev, 'hidden']
+            }
+            else {
+                return prev
+            }
+        })
+    }
+
+    const handleAddTask = ():void => {
+        const taskToAdd: INewTask<string> = {
+            title,
+            task,
+            email: userData.getUserEmail(),
+            dateToDo: dateStringify(dateToDo)
+        }
+        dispatch(addTask(taskToAdd));
+        setDefault();
+        setAddShow(false);
+    }
+
     const handleAddClose = ():void => {
-        setAddShow(false)
+        setDefault();
+        setAddShow(false);
+
+    }
+
+    const handleTitleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+        const target = event.target as HTMLTextAreaElement;
+        const value = target.value;
+        setTitle(value);
+    }
+
+    const handleTaskChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+        const target = event.target as HTMLTextAreaElement;
+        const value = target.value;
+        setTask(value);
     }
 
     const handleDate = (value: Date): void => {
@@ -70,15 +121,32 @@ export const TasksList: React.FC = () => {
         })
     }
 
-    const handleTime = (value: Date): void => {
+    const handleHour = (event: MouseEvent<HTMLLIElement>): void => {
         setDateToDo(prev => {
+            const target = event.target as HTMLLIElement;
+            const value: number = parseInt(target.innerText, 10);
             const dateResult = new Date();
             dateResult.setFullYear(prev.getFullYear());
             dateResult.setMonth(prev.getMonth());
             dateResult.setDate(prev.getDate());
-            dateResult.setHours(value.getHours());
-            dateResult.setMinutes(value.getMinutes());
-            dateResult.setSeconds(value.getSeconds());
+            dateResult.setHours(value);
+            dateResult.setMinutes(prev.getMinutes());
+            dateResult.setSeconds(prev.getSeconds());
+            return dateResult
+        })
+    }
+
+    const handleMinutes = (event: MouseEvent<HTMLLIElement>): void => {
+        setDateToDo(prev => {
+            const target = event.target as HTMLLIElement;
+            const value: number = parseInt(target.innerText, 10);
+            const dateResult = new Date();
+            dateResult.setFullYear(prev.getFullYear());
+            dateResult.setMonth(prev.getMonth());
+            dateResult.setDate(prev.getDate());
+            dateResult.setHours(prev.getHours());
+            dateResult.setMinutes(value);
+            dateResult.setSeconds(prev.getSeconds());
             return dateResult
         })
     }
@@ -110,7 +178,23 @@ export const TasksList: React.FC = () => {
         })
 
     }
+    const hours: number[] = [];
+    const minutes: number[] = [];
+    for(let i = 0; i < 24; i++) {
+        hours.push(i)
+    }
+    for(let i = 0; i < 60; i++) {
+        minutes.push(i)
+    }
 
+    const hoursPicker: ReactElement = 
+        <Col as="ul">
+            {hours.map(hour => <li onClick={handleHour} key={hour}>{hour}</li>)}
+        </Col>
+    const minutesPicker: ReactElement = 
+        <Col as="ul">
+            {minutes.map(minute => <li onClick={handleMinutes} key={minute}>{minute}</li>)}
+        </Col>
 
     const addWindow: ReactElement = 
     <Modal 
@@ -131,6 +215,7 @@ export const TasksList: React.FC = () => {
                     <Form.Control 
                         as="textarea"
                         placeholder="Enter the title"
+                        onChange={handleTitleChange}
                         value={title}
                     />
                 </Form.Group>
@@ -139,6 +224,7 @@ export const TasksList: React.FC = () => {
                     <Form.Control 
                         as="textarea"
                         placeholder="Enter the task description"
+                        onChange={handleTaskChange}
                         value={task}
                     />
                 </Form.Group>
@@ -158,14 +244,18 @@ export const TasksList: React.FC = () => {
                     <Form.Control as="button" onClick={handleTimeToggle}>
                         {getLocalTimeString(dateToDo)}
                     </Form.Control>
+                    <Row className={timeClasses.join(' ')}>
+                        {hoursPicker}
+                        {minutesPicker}
+                    </Row>
                 </Form.Group>
             </Form>
         </Modal.Body>
         <Modal.Footer>
-            <Button variant="primary">
+            <Button variant="primary" onClick={handleAddTask}>
                 Add
             </Button>
-            <Button variant="danger">
+            <Button variant="danger" onClick={handleAddClose}>
                 Cancel
             </Button>
         </Modal.Footer>
@@ -182,29 +272,24 @@ export const TasksList: React.FC = () => {
                             <FontAwesomeIcon className="day-add-ico" icon={faPlusSquare} />
                         </Button>
                         <Container as="ul" className="tasks-list">
-                        {tasksList
-                            .map(task => {
-                                console.log(getLocalDataString(task.getDateToDo()));
-                                console.log(date);
-                                return task
-                            })
-                            .filter(task => getLocalDataString(task.getDateToDo()) === date)
-                            .map(task => {
-                                return (
-                                        <Row as="li" className="task-item d-flex align-items-center" role="button" tabIndex={0}>
-                                            <Col>
-                                                <Button className="task-complete-btn">
-                                                    <FontAwesomeIcon className="day-add-ico" icon={faSquare} />
-                                                </Button>
-                                            </Col>
-                                            <Col className="task-title">{task.getTitle()}</Col>
-                                            <Col className="task-time-wrap">
-                                                <p className="task-time">{getLocalFullDataString(task.getDateToDo())}</p>
-                                            </Col>
-                                        </Row>
-                                )
-                            })
-                        }
+                            {tasksList
+                                .filter(task => getLocalDataString(task.getDateToDo()) === date)
+                                .map(task => {
+                                    return (
+                                            <Row as="li" className="task-item d-flex align-items-center" role="button" tabIndex={0}>
+                                                <Col>
+                                                    <Button className="task-complete-btn">
+                                                        <FontAwesomeIcon className="day-add-ico" icon={faSquare} />
+                                                    </Button>
+                                                </Col>
+                                                <Col className="task-title">{task.getTitle()}</Col>
+                                                <Col className="task-time-wrap">
+                                                    <p className="task-time">{getLocalFullDataString(task.getDateToDo())}</p>
+                                                </Col>
+                                            </Row>
+                                    )
+                                })
+                            }
                         </Container>
                     </Container>
                 </Container>
