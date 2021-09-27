@@ -221,6 +221,7 @@ router.post(
     authMiddleware,
     async (req, res) => {
         try {
+            console.log(req.body);
             const userData = req.user as IUserResult;
             const newTaskRaw: ITask = req.body;
             const newTask: ITask = {
