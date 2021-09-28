@@ -94,6 +94,7 @@ export interface ITasksInstance {
     getNonCompleteTasks(): ITaskInstance[];
     getCancelTasks(): ITaskInstance[];
     getNonCancelTasks(): ITaskInstance[];
+    getIdList(): number[];
     addTask(task: ITaskInstance): void;
     editTask(task: ITaskInstance): void;
     removeTask(task: ITaskInstance): void;
