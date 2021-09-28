@@ -1,6 +1,6 @@
 import {TaskActTypes} from '@redux/types/TaskActTypes'
 import {ITaskAction, ITaskState, IThunkAction, IDoubleThunk, IThunkDispatch} from '@interfaces/IStore'
-import {INewTask, ITask, ITaskInstance, ITasksInstance} from '@interfaces/ITask'
+import {INewTask, ITask, ITaskInstance, ITasksInstance, ITaskToEdit} from '@interfaces/ITask'
 import TaskAPI from '@core/classes/TaskAPI'
 import {Dispatch} from 'redux'
 
@@ -151,7 +151,7 @@ export const toggleCancel = (id: number): IThunkAction<ITaskState> | IDoubleThun
     }
 }
 
-export const editTask = (task: ITask<string>): IThunkAction<ITaskState> | IDoubleThunk<IThunkAction<ITaskState>> => {
+export const editTask = (task: ITaskToEdit): IThunkAction<ITaskState> | IDoubleThunk<IThunkAction<ITaskState>> => {
     return async (dispatch: Dispatch<ITaskAction>): Promise<void> => {
         try {
             const thunkDispatch = dispatch as IThunkDispatch<IThunkAction<ITaskState>>;
