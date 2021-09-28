@@ -1,5 +1,5 @@
 import React, {ChangeEvent, MouseEvent, ReactElement, useState} from 'react'
-import {Container, Row, Col, Button, Form, Modal, ButtonGroup, ToggleButton} from 'react-bootstrap'
+import {Container, Row, Col, Button, Form, Modal, ButtonGroup, ToggleButton, Popover} from 'react-bootstrap'
 import {useSelector, useDispatch} from 'react-redux'
 import Calendar from 'react-calendar'
 import {addTask, editTask, deleteTask, toggleCancel, toggleComplete, togglePriority} from '@redux/actions/taskActions'
@@ -23,6 +23,7 @@ export const TasksList: React.FC = () => {
     const tasksData = useSelector((state: IRootState): ITasksInstance => state.task.tasks);
     const [addShow, setAddShow] = useState(false);
     const [editShow, setEditShow] = useState(false);
+    const [delShow, setDelShow] = useState(false);
     const [id, setId] = useState<number | null>(null);
     const [priority, setPriority] = useState(false);
     const [complite, setComplite] = useState(false);
@@ -102,6 +103,7 @@ export const TasksList: React.FC = () => {
 
     const handleEditTask = (): void => {
         if(id) {
+            const oldTask: ITaskInstance = tasksData.getTaskById(id);
             const taskToEdit: ITaskToEdit = {
                 id,
                 title,
@@ -109,19 +111,40 @@ export const TasksList: React.FC = () => {
                 dateToDo: dateStringify(dateToDo)
             }
             dispatch(editTask(taskToEdit));
+            if(oldTask.getPriority() !== priority {
+                dispatch(togglePriority(id));
+            }
+            if(oldTask.getComplite() !== complite {
+                dispatch(toggleComplite(id));
+            }
+            if(oldTask.getCancel() !== cancel {
+                dispatch(toggleCancel(id));
+            }
+        }
+        setDefault();
+        setEditShow(false);
+        setDelShow(false);
+    }
+    
+    const handleDelTask = (): void => {
+        if(id) {
+            dispatch(deleteTask(id));
         }
         setDefault();
         setAddShow(false);
+        setEditShow(false);
+        setDelShow(false);
     }
 
     const handleAddClose = (): void => {
         setDefault();
-        setAddShow(false);
+        setEditShow(false);
     }
 
     const handleEditClose = (): void => {
         setDefault();
         setEditShow(false);
+        setDelShow(false);
     }
 
     const handleTitleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
@@ -199,6 +222,16 @@ export const TasksList: React.FC = () => {
             setEditShow(true)
         }
     }
+    
+    const handlePriorityToggle = (): void => {
+        setPriority(prev => !prev)
+    }
+    const handleCompliteToggle = (): void => {
+        setComplite(prev => !prev)
+    }
+    const handleCancelToggle = (): void => {
+        setCancel(prev => !prev)
+    }
 
     const handleCalandarToggle = (): void => {
         setCalendarClasses(prev => {
@@ -221,7 +254,6 @@ export const TasksList: React.FC = () => {
                 return prev.filter(className => className !== 'hidden')
             }
         })
-
     }
     const hours: number[] = [];
     const minutes: number[] = [];
@@ -362,6 +394,37 @@ export const TasksList: React.FC = () => {
                 </Form.Group>
                 <Form.Group>
                     <ButtonGroup>
+                        <ToggleButton
+                            checked={priority}
+                            onChange={handlePriorityToggle}
+                            value={1}
+                            variant="warning"
+                        >
+                            Priority
+                        </ToggleButton>
+                        <ToggleButton
+                            checked={complite}
+                            onChange={handleCompliteToggle}
+                            value={2}
+                            variant="success"
+                        >
+                            Complite
+                        </ToggleButton>
+                        <ToggleButton
+                            checked={cancel}
+                            onChange={handleCancelToggle}
+                            value={3}
+                            variant="danger"
+                        >
+                            Cancel
+                        </ToggleButton>
+                        <OverlayTrigger trigger="click" placement="right" overlay={delWindow} onToggle={}>
+                            <Button
+                                variant="danger"
+                            >
+                                Delete task
+                            </Button>
+                        </OverlayTrigger>
                         
                     </ButtonGroup>
                 </Form.Group>
@@ -376,6 +439,15 @@ export const TasksList: React.FC = () => {
             </Button>
         </Modal.Footer>
     </Modal>
+        
+   const delWindow: ReactElement =  
+       <Popover>
+            <Popover.Header>Do you really want to delete this task?</Popover.Header>
+            <Popover.Body>
+                <Button variant="primary" onClick-{}>Yes</Button>
+                <Button variant="danger">No</Button>
+            </Popover.Body>
+       </Popover>
 
 
     const tasks: ReactElement[] = dateList.map((date: string): ReactElement => {
