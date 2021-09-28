@@ -1,11 +1,11 @@
 import React, {ChangeEvent, MouseEvent, ReactElement, useState} from 'react'
-import {Container, Row, Col, Button, Form, Modal, Dropdown} from 'react-bootstrap'
+import {Container, Row, Col, Button, Form, Modal, ButtonGroup, ToggleButton} from 'react-bootstrap'
 import {useSelector, useDispatch} from 'react-redux'
 import Calendar from 'react-calendar'
-import {addTask} from '@redux/actions/taskActions'
+import {addTask, editTask, deleteTask, toggleCancel, toggleComplete, togglePriority} from '@redux/actions/taskActions'
 import Moment from 'react-moment'
 import {IRootState} from '@interfaces/IStore'
-import {ITaskInstance, ITasksInstance, INewTask} from '@interfaces/ITask'
+import {ITaskInstance, ITasksInstance, INewTask, ITaskToEdit} from '@interfaces/ITask'
 import {IUserInstance} from '@interfaces/IUser'
 import {getLocalDataString, getLocalFullDataString, getLocalTimeString, getDateOnly, dateStringify, dateParser} from '@core/functions/dateConverte'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
@@ -22,6 +22,11 @@ export const TasksList: React.FC = () => {
     const userData = useSelector((state: IRootState): IUserInstance => state.user.user!);
     const tasksData = useSelector((state: IRootState): ITasksInstance => state.task.tasks);
     const [addShow, setAddShow] = useState(false);
+    const [editShow, setEditShow] = useState(false);
+    const [id, setId] = useState<number | null>(null);
+    const [priority, setPriority] = useState(false);
+    const [complite, setComplite] = useState(false);
+    const [cancel, setCancel] = useState(false);
     const [title, setTitle] = useState('');
     const [task, setTask] = useState('');
     const [dateToDo, setDateToDo] = useState(new Date(Date.now()));
@@ -57,9 +62,13 @@ export const TasksList: React.FC = () => {
     });
 
     const setDefault = ():void => {
+        setId(null);
         setTitle('');
         setTask('');
         setDateToDo(new Date(Date.now()));
+        setPriority(false);
+        setComplite(false);
+        setCancel(false);
         setCalendarClasses(prev => {
             if(prev.indexOf('hidden') === -1) {
                 return [...prev, 'hidden']
@@ -88,12 +97,31 @@ export const TasksList: React.FC = () => {
         dispatch(addTask(taskToAdd));
         setDefault();
         setAddShow(false);
+        setEditShow(false);
     }
 
-    const handleAddClose = ():void => {
+    const handleEditTask = (): void => {
+        if(id) {
+            const taskToEdit: ITaskToEdit = {
+                id,
+                title,
+                task,
+                dateToDo: dateStringify(dateToDo)
+            }
+            dispatch(editTask(taskToEdit));
+        }
         setDefault();
         setAddShow(false);
+    }
 
+    const handleAddClose = (): void => {
+        setDefault();
+        setAddShow(false);
+    }
+
+    const handleEditClose = (): void => {
+        setDefault();
+        setEditShow(false);
     }
 
     const handleTitleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
@@ -155,6 +183,23 @@ export const TasksList: React.FC = () => {
         setAddShow(true)
     }
 
+    const handleEditOpen = (event: MouseEvent<HTMLLIElement>): void => {
+        const target =  event.target as HTMLLIElement;
+        const idStr: string = target.id;
+        const id: number | null = idStr.length > 0 ? parseInt(idStr, 10) : null;
+        setId(id);
+        if(id) {
+            const taskToEdit = tasksData.getTaskById(id);
+            setTitle(taskToEdit.getTitle());
+            setTask(taskToEdit.getTask());
+            setDateToDo(taskToEdit.getDateToDo());
+            setPriority(taskToEdit.getPriority());
+            setComplite(taskToEdit.getComplete());
+            setCancel(taskToEdit.getCancel());
+            setEditShow(true)
+        }
+    }
+
     const handleCalandarToggle = (): void => {
         setCalendarClasses(prev => {
             if(prev.indexOf('hidden') === -1) {
@@ -198,7 +243,7 @@ export const TasksList: React.FC = () => {
 
     const addWindow: ReactElement = 
     <Modal 
-        show={addShow}
+        show={editShow}
         backdrop="static"
         onHide={handleAddClose}
         size="sm"
@@ -262,6 +307,77 @@ export const TasksList: React.FC = () => {
     </Modal>
 
 
+    const editWindow: ReactElement = 
+    <Modal 
+        show={addShow}
+        backdrop="static"
+        onHide={handleEditClose}
+        size="sm"
+        className="add-window"
+        as="section"
+    >
+        <Modal.Header closeButton>
+            Add new task
+        </Modal.Header>
+        <Modal.Body>
+            <Form as="div">
+                <Form.Group as="div">
+                    <Form.Label as="h3">Title</Form.Label>
+                    <Form.Control 
+                        as="textarea"
+                        placeholder="Enter the title"
+                        onChange={handleTitleChange}
+                        value={title}
+                    />
+                </Form.Group>
+                <Form.Group as="div">
+                    <Form.Label as="h3">Task description</Form.Label>
+                    <Form.Control 
+                        as="textarea"
+                        placeholder="Enter the task description"
+                        onChange={handleTaskChange}
+                        value={task}
+                    />
+                </Form.Group>
+                <Form.Group as="div">
+                    <Form.Label as="h3">Date to do</Form.Label>
+                    <Form.Control as="button" onClick={handleCalandarToggle}>
+                        {getLocalDataString(dateToDo)}
+                    </Form.Control>
+                    <Calendar 
+                        className={calendarClasses.join(' ')}
+                        onChange={handleDate}
+                        value={dateToDo}
+                    />
+                </Form.Group>
+                <Form.Group as="div">
+                    <Form.Label as="h3">Time to do</Form.Label>
+                    <Form.Control as="button" onClick={handleTimeToggle}>
+                        {getLocalTimeString(dateToDo)}
+                    </Form.Control>
+                    <Row className={timeClasses.join(' ')}>
+                        {hoursPicker}
+                        {minutesPicker}
+                    </Row>
+                </Form.Group>
+                <Form.Group>
+                    <ButtonGroup>
+                        
+                    </ButtonGroup>
+                </Form.Group>
+            </Form>
+        </Modal.Body>
+        <Modal.Footer>
+            <Button variant="primary" onClick={handleAddTask}>
+                Save
+            </Button>
+            <Button variant="secondary" onClick={handleEditClose}>
+                Cancel
+            </Button>
+        </Modal.Footer>
+    </Modal>
+
+
     const tasks: ReactElement[] = dateList.map((date: string): ReactElement => {
         return (
             <Container as="ul" className="days-list">
@@ -276,7 +392,12 @@ export const TasksList: React.FC = () => {
                                 .filter(task => getLocalDataString(task.getDateToDo()) === date)
                                 .map(task => {
                                     return (
-                                            <Row as="li" className="task-item d-flex align-items-center" role="button" tabIndex={0}>
+                                            <Row as="li" 
+                                                className="task-item d-flex align-items-center" 
+                                                role="button" tabIndex={0} 
+                                                id={`${task.getTaskId()}`}
+                                                onClick={handleEditOpen}
+                                                >
                                                 <Col>
                                                     <Button className="task-complete-btn">
                                                         <FontAwesomeIcon className="day-add-ico" icon={faSquare} />
@@ -303,6 +424,7 @@ export const TasksList: React.FC = () => {
             <Container as="section" className="task-list d-flex flex-column justify-content-center align-items-center" fluid="xl">
                 {tasks}
                 {addWindow}
+                {editWindow}
             </Container>
         </Container>
     )
