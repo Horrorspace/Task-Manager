@@ -79,4 +79,7 @@ export default class Tasks implements ITasksInstance {
             this.tasks = []
         }
     }
+    public getIdList(): number[] {
+        return this.tasks.map(task => task.getTaskId())
+    }
 }
