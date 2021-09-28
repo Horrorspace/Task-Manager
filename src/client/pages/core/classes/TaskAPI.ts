@@ -5,7 +5,7 @@ import {apiUrl} from '@core/const/urlConst'
 import NewTask from '@core/classes/NewTask'
 import Task from '@core/classes/Task'
 import Tasks from '@core/classes/Tasks'
-import {ITaskInstance, ITasksInstance, ITask, INewTask} from '@interfaces/ITask'
+import {ITaskInstance, ITasksInstance, ITask, INewTask, ITaskToEdit} from '@interfaces/ITask'
 
 
 export default class TaskAPI {
@@ -240,7 +240,7 @@ export default class TaskAPI {
         })
     }
     
-    public static async editTask(task: ITask<string>): Promise<void> {
+    public static async editTask(task: ITaskToEdit): Promise<void> {
         return new Promise((resolve, reject) => {
             const url: string = `${TaskAPI.tasksUrl}/edit_task`;
             const data$ = fromFetch(url, {
