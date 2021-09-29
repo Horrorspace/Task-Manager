@@ -1,5 +1,5 @@
 import React, {ChangeEvent, MouseEvent, ReactElement, useState} from 'react'
-import {Container, Row, Col, Button, Form, Modal, ButtonGroup, ToggleButton, Popover} from 'react-bootstrap'
+import {Container, Row, Col, Button, Form, Modal, ButtonGroup, ToggleButton, Popover, OverlayTrigger} from 'react-bootstrap'
 import {useSelector, useDispatch} from 'react-redux'
 import Calendar from 'react-calendar'
 import {addTask, editTask, deleteTask, toggleCancel, toggleComplete, togglePriority} from '@redux/actions/taskActions'
@@ -111,13 +111,13 @@ export const TasksList: React.FC = () => {
                 dateToDo: dateStringify(dateToDo)
             }
             dispatch(editTask(taskToEdit));
-            if(oldTask.getPriority() !== priority {
+            if(oldTask.getPriority() !== priority) {
                 dispatch(togglePriority(id));
             }
-            if(oldTask.getComplite() !== complite {
-                dispatch(toggleComplite(id));
+            if(oldTask.getComplete() !== complite) {
+                dispatch(toggleComplete(id));
             }
-            if(oldTask.getCancel() !== cancel {
+            if(oldTask.getCancel() !== cancel) {
                 dispatch(toggleCancel(id));
             }
         }
@@ -138,13 +138,17 @@ export const TasksList: React.FC = () => {
 
     const handleAddClose = (): void => {
         setDefault();
-        setEditShow(false);
+        setAddShow(false);
     }
 
     const handleEditClose = (): void => {
         setDefault();
         setEditShow(false);
         setDelShow(false);
+    }
+
+    const handleDelToggle = (): void => {
+        setDelShow(prev => !prev);
     }
 
     const handleTitleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
@@ -202,13 +206,16 @@ export const TasksList: React.FC = () => {
         })
     }
 
-    const handleAddOpen = (): void => {
+    const handleAddOpen = (event: MouseEvent<HTMLButtonElement>): void => {
+        //event.stopPropagation();
         setAddShow(true)
     }
 
     const handleEditOpen = (event: MouseEvent<HTMLLIElement>): void => {
+        console.log('test');
         const target =  event.target as HTMLLIElement;
         const idStr: string = target.id;
+        console.log(target, target.id)
         const id: number | null = idStr.length > 0 ? parseInt(idStr, 10) : null;
         setId(id);
         if(id) {
@@ -275,7 +282,7 @@ export const TasksList: React.FC = () => {
 
     const addWindow: ReactElement = 
     <Modal 
-        show={editShow}
+        show={addShow}
         backdrop="static"
         onHide={handleAddClose}
         size="sm"
@@ -338,10 +345,24 @@ export const TasksList: React.FC = () => {
         </Modal.Footer>
     </Modal>
 
+   const delWindow: ReactElement =  
+       <Popover id="delWindow">
+            <Container>
+                Do you really want to delete this task?
+            </Container>
+            <Row>
+                <Col>
+                    <Button variant="primary" onClick={handleDelTask}>Yes</Button>
+                </Col>
+                <Col>
+                    <Button variant="danger" onClick={handleDelToggle}>No</Button>
+                </Col>
+            </Row>
+       </Popover>
 
     const editWindow: ReactElement = 
     <Modal 
-        show={addShow}
+        show={editShow}
         backdrop="static"
         onHide={handleEditClose}
         size="sm"
@@ -349,7 +370,7 @@ export const TasksList: React.FC = () => {
         as="section"
     >
         <Modal.Header closeButton>
-            Add new task
+            Edit task
         </Modal.Header>
         <Modal.Body>
             <Form as="div">
@@ -418,7 +439,7 @@ export const TasksList: React.FC = () => {
                         >
                             Cancel
                         </ToggleButton>
-                        <OverlayTrigger trigger="click" placement="right" overlay={delWindow} onToggle={}>
+                        <OverlayTrigger trigger="click" placement="right" overlay={delWindow} onToggle={handleDelToggle} show={delShow}>
                             <Button
                                 variant="danger"
                             >
@@ -431,7 +452,7 @@ export const TasksList: React.FC = () => {
             </Form>
         </Modal.Body>
         <Modal.Footer>
-            <Button variant="primary" onClick={handleAddTask}>
+            <Button variant="primary" onClick={handleEditTask}>
                 Save
             </Button>
             <Button variant="secondary" onClick={handleEditClose}>
@@ -440,14 +461,7 @@ export const TasksList: React.FC = () => {
         </Modal.Footer>
     </Modal>
         
-   const delWindow: ReactElement =  
-       <Popover>
-            <Popover.Header>Do you really want to delete this task?</Popover.Header>
-            <Popover.Body>
-                <Button variant="primary" onClick-{}>Yes</Button>
-                <Button variant="danger">No</Button>
-            </Popover.Body>
-       </Popover>
+
 
 
     const tasks: ReactElement[] = dateList.map((date: string): ReactElement => {
