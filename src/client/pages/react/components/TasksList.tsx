@@ -214,8 +214,21 @@ export const TasksList: React.FC = () => {
     const handleEditOpen = (event: MouseEvent<HTMLLIElement>): void => {
         console.log('test');
         const target =  event.target as HTMLLIElement;
-        const idStr: string = target.id;
         console.log(target, target.id)
+        let idStr: string;
+        if(target.tagName === "LI") {
+            idStr = target.id;
+        }
+        else {
+            let newTarget = target;
+            for(let i = 0; i < 5; i++) {
+                newTarget = newTarget.parentElement
+                if(newTarget.tagName === "LI") {
+                    idStr = target.parentElement.id
+                }
+            }
+        }
+        
         const id: number | null = idStr.length > 0 ? parseInt(idStr, 10) : null;
         setId(id);
         if(id) {
@@ -489,7 +502,7 @@ export const TasksList: React.FC = () => {
                                                         <FontAwesomeIcon className="day-add-ico" icon={faSquare} />
                                                     </Button>
                                                 </Col>
-                                                <Col className="task-title">{task.getTitle()}</Col>
+                                                <Col as="h4" className="task-title">{task.getTitle()}</Col>
                                                 <Col className="task-time-wrap">
                                                     <p className="task-time">{getLocalFullDataString(task.getDateToDo())}</p>
                                                 </Col>
