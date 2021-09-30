@@ -303,7 +303,7 @@ export const TasksList: React.FC = () => {
         backdrop="static"
         onHide={handleAddClose}
         dialogClassName="add-task-wrap"
-        size="sm"
+        size="xl"
         as="section"
     >
         <Modal.Header 
