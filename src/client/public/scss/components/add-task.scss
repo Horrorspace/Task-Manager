@@ -42,13 +42,20 @@
 }
 
 .add-task-wrap {
-    @include flex-content(column, space-between, center);
+    // @include flex-content(column, space-between, center);
     width: 100%;
-    padding-top: 5px;
-    padding-bottom: 25px;
+    // padding-top: 5px;
+    // padding-bottom: 25px;
     background-color: $mainColorDark;
-    overflow: auto;
-    overflow-block: scroll;
+    // overflow: auto;
+    // overflow-block: scroll;
+}
+
+.add-task-title {
+    background-color: $mainColorDark;
+    width: 150px;
+    margin: 0;
+    padding: 0
 }
 
 .add-task-options-list {
