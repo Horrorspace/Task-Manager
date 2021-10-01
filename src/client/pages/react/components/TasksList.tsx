@@ -302,7 +302,7 @@ export const TasksList: React.FC = () => {
         show={addShow}
         backdrop={true}
         onHide={handleAddClose}
-        className="d-flex flex-column justify-content-center align-items-center"
+        className="d-flex flex-column justify-content-center align-items-center add-task-main-wrap"
         dialogClassName="add-task-main"
         contentClassName="add-task-wrap"
         size="xl"
