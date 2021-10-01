@@ -313,7 +313,7 @@ export const TasksList: React.FC = () => {
         >
             Create New Task
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body className="add-task-body">
             <Form as="div">
                 <Form.Group as="div">
                     <Form.Label as="h3">Title</Form.Label>
