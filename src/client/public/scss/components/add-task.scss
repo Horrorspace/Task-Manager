@@ -41,9 +41,16 @@
     overflow-block: scroll;
 }
 
+.add-task-main {
+    width: 100%;
+    min-height: 100vh;
+    margin: auto;
+    overflow: scroll;
+    overflow-block: scroll;
+}
+
 .add-task-wrap {
     // @include flex-content(column, space-between, center);
-    width: 100%;
     // padding-top: 5px;
     // padding-bottom: 25px;
     background-color: $mainColorDark;

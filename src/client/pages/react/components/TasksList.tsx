@@ -300,15 +300,16 @@ export const TasksList: React.FC = () => {
     const addWindow: ReactElement = 
     <Modal 
         show={addShow}
-        backdrop="static"
+        backdrop={true}
         onHide={handleAddClose}
+        className="d-flex flex-column justify-content-center align-items-center"
+        dialogClassName="add-task-main"
         contentClassName="add-task-wrap"
         size="xl"
         as="section"
     >
         <Modal.Header 
             closeButton
-            className="add-task-title"
         >
             Create New Task
         </Modal.Header>
