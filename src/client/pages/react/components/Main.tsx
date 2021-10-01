@@ -1,6 +1,8 @@
 import React, {useState} from 'react'
 import {Container, Row, Col, Button} from 'react-bootstrap'
 import {NavLink} from 'react-router-dom'
+import {useSelector, useDispatch} from 'react-redux'
+import {IRootState} from '@interfaces/IStore'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {IconDefinition} from '@fortawesome/fontawesome-common-types'
 import { faClipboardList, faUser, faBriefcase, faPlus } from '@fortawesome/free-solid-svg-icons'
@@ -15,19 +17,21 @@ interface IMenuItem {
 }
 
 export const Main: React.FC = () => {
+    const tasksData = useSelector((state: IRootState): ITasksInstance => state.task.tasks);
+    
     const MenuDataDefault: IMenuItem[] = [
         {
             ico: faClipboardList,
             link: '/List',
             title: 'All Tasks',
-            itemsNum: 5,
+            itemsNum: {tasksData.getAllTasks().length},
             items: 'Items'
         },
         {
             ico: faUser,
             link: '/List',
             title: 'Personal',
-            itemsNum: 5,
+            itemsNum: 0,
             items: 'Items'
         },
         {
@@ -41,7 +45,7 @@ export const Main: React.FC = () => {
             ico: faPlus,
             link: '/List',
             title: 'Add Task',
-            itemsNum: 5,
+            itemsNum: {tasksData.getAllTasks().length},
             items: 'Items'
         }
     ];
