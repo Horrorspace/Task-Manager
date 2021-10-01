@@ -68,6 +68,20 @@
     padding: 0
 }
 
+.add-task-body {
+    &::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: $scrolColorDark;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: $scrolColorLight;
+    }
+}
+
 .add-task-options-list {
     @include flex-content(row, space-between, center);
     width: calc(#{$MaxWidth} - 30px);
