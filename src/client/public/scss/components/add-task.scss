@@ -30,25 +30,25 @@
     }
 }
 
-.add-task-main-wrap {
-    @include flex-content(column, center, center);
-    width: 100%;
-    min-height: 100vh;
-    position: absolute;
-    bottom: 0;
-    z-index: 300;
-    overflow: auto;
-    overflow-block: scroll;
-}
+// .add-task-main-wrap {
+//     @include flex-content(column, space-between, center);
+//     width: 100%;
+//     min-height: 100vh;
+//     position: absolute;
+//     bottom: 0;
+//     z-index: 300;
+//     overflow: auto;
+//     overflow-block: scroll;
+// }
 
 .add-task-main-wrap {
-    overflow: scroll;
-    overflow-block: scroll;
+    max-width: $MaxWidthDesktop
 }
 
 .add-task-main {
+    @include flex-content(column, space-between, center);
     width: 100%;
-    min-height: 100vh;
+    max-height: 80vh;
     margin: auto;
 }
 
@@ -57,15 +57,20 @@
     // padding-top: 5px;
     // padding-bottom: 25px;
     background-color: $mainColorDark;
+    max-height: 80vh;
+    max-width: $MaxWidthDesktop
     // overflow: auto;
     // overflow-block: scroll;
 }
 
-.add-task-title {
-    background-color: $mainColorDark;
-    width: 150px;
-    margin: 0;
-    padding: 0
+.add-task-header {
+    max-height: 350px;
+    border: none;
+}
+
+.add-task-footer {
+    max-height: 350px;
+    border: none;
 }
 
 .add-task-body {
@@ -108,18 +113,31 @@
     }
 }
 
+.add-task-main-title {
+    @include font($LightFontColor, 26px, 300);
+}
+
 .add-task-title {
+    @include font($LightFontColor, 18px, 300);
+    margin-top: 15px;
+}
+
+.add-task-title-area {
     @include font($LightFontColor, 14px, 300);
-    overflow-inline: visible;
+    // overflow-inline: visible;
+    overflow: hidden;
+    // overflow-block: hidden;
+    // overflow-inline: hidden;
     overflow-wrap: break-word;
     background-color: $mainColorHover;
     border: 0;
     border-radius: 2px;
-    min-height: 50px;
-    width: calc(#{$MaxWidth} - 30px);
-    margin-right: 15px;
-    margin-left: 15px;
-    margin-bottom: 10px;
+    height: 50px;
+    // width: calc(#{$MaxWidth} - 30px);
+    // margin-right: 15px;
+    // margin-left: 15px;
+    width: 100%;
+    // margin-bottom: 10px;
     opacity: $opacity;
     resize: none;
 
@@ -127,19 +145,42 @@
         @include font($LightFontColor, 14px, 300);
         opacity: 0.4;
     }
+
+    &:focus {
+        @include font($LightFontColor, 14px, 300);
+        background-color: $mainColorHover;
+        box-shadow: 0px 0px 4px 2px rgba(220,221,252,0.75);
+    }
 }
 
-.add-task-text {
+.add-task-date-btn {
     @include font($LightFontColor, 14px, 300);
-    overflow-inline: visible;
+    background-color: $mainColorHover;
+    height: 32px;
+    border: none;
+
+    &:hover {
+        box-shadow: 0px 0px 4px 2px rgba(220,221,252,0.75);
+    }
+
+    &:focus {
+        @include font($LightFontColor, 14px, 300);
+        background-color: $mainColorHover;
+        box-shadow: 0px 0px 4px 2px rgba(220,221,252,0.75);
+    }
+}
+
+.add-task-text-area {
+    @include font($LightFontColor, 14px, 300);
+    overflow: hidden;
     overflow-wrap: break-word;
     background-color: $mainColorHover;
     border: 0;
     border-radius: 2px;
     min-height: 100px;
-    width: calc(#{$MaxWidth} - 30px);
-    margin-right: 15px;
-    margin-left: 15px;
+    // width: calc(#{$MaxWidth} - 30px);
+    // margin-right: 15px;
+    // margin-left: 15px;
     opacity: $opacity;
     resize: none;
 
@@ -147,6 +188,17 @@
         @include font($LightFontColor, 14px, 300);
         opacity: 0.4;
     }
+
+    &:focus {
+        @include font($LightFontColor, 14px, 300);
+        background-color: $mainColorHover;
+        box-shadow: 0px 0px 4px 2px rgba(220,221,252,0.75);
+    }
+}
+
+.calendar-wrap {
+    margin-right: auto;
+    margin-left: auto;
 }
 
 .add-task-options-ico {
@@ -205,30 +257,85 @@
     }
 }
 
-@media screen and (min-width: $mobile-breakpoint) {
-    .add-task-wrap {
-        width: $MaxWidthDesktop;
-        position: absolute;
-        bottom: 0;
-    }
+.add-task-status-btn {
+    @include font($LightFontColor, 14px, 300);
+    background-color: $mainColorHover;
+    height: 32px;
+    border: none;
+    margin-bottom: 10px;
 
-    .add-task-options-list {
-        width: calc(#{$MaxWidthDesktop} - 250px);
-    }
-    
-    .add-task-title {
-        width: calc(#{$MaxWidthDesktop} - 60px);
-    }
+    &:focus, &:hover {
+        @include font($LightFontColor, 14px, 300);
+        background-color: $mainColorHover;
+        box-shadow: 0px 0px 4px 2px rgba(220,221,252,0.75);
 
-    .add-task-text {
-        width: calc(#{$MaxWidthDesktop} - 60px);
-    }
-
-    .add-task-buttons {
-        width: calc(#{$MaxWidthDesktop} - 60px);
-    }
-
-    .add-task-btn {
-        width: calc(#{$MaxWidthDesktop} - 60px);
+        .status-title, .status-value, .priority-ico {
+            opacity: 1;
+        }
     }
 }
+
+.status-priority-ico {
+    margin: 0;
+    margin-right: 10px;
+    font-size: 14px;
+    opacity: $opacity;
+    color: $RedFontColor;
+}
+
+.status-complete-ico {
+    margin: 0;
+    margin-right: 10px;
+    font-size: 14px;
+    opacity: $opacity;
+    color: $GreenFontColor;
+}
+
+.status-cancel-ico {
+    margin: 0;
+    margin-right: 10px;
+    font-size: 14px;
+    opacity: $opacity;
+    color: $GrayFontColor;
+}
+
+.status-title {
+    @include font($LightFontColor, 14px, 300);
+    margin: 0;
+    margin-right: auto;
+    opacity: $opacity;
+}
+
+.status-value {
+    @include font($GreenFontColor, 14px, 300);
+    margin: 0;
+    opacity: $opacity;
+}
+
+// @media screen and (min-width: $mobile-breakpoint) {
+//     .add-task-wrap {
+//         width: $MaxWidthDesktop;
+//         position: absolute;
+//         bottom: 0;
+//     }
+
+//     .add-task-options-list {
+//         width: calc(#{$MaxWidthDesktop} - 250px);
+//     }
+    
+//     .add-task-title {
+//         width: calc(#{$MaxWidthDesktop} - 60px);
+//     }
+
+//     .add-task-text {
+//         width: calc(#{$MaxWidthDesktop} - 60px);
+//     }
+
+//     .add-task-buttons {
+//         width: calc(#{$MaxWidthDesktop} - 60px);
+//     }
+
+//     .add-task-btn {
+//         width: calc(#{$MaxWidthDesktop} - 60px);
+//     }
+// }
