@@ -24,6 +24,11 @@ export interface IAppState {
     messages: string[];
     errors: string[];
     notifications: boolean;
+    onlyImportant: boolean;
+    onlyToday: boolean;
+    showCompleted: boolean;
+    showCancel: boolean;
+    showOverdue: boolean;
 }
 
 export interface IRootState {
@@ -55,6 +60,11 @@ export interface IAppAction extends IAction {
     message?: string;
     error?: string;
     notifications?: boolean;
+    onlyImportant?: boolean;
+    onlyToday?: boolean;
+    showCompleted?: boolean;
+    showCancel?: boolean;
+    showOverdue?: boolean;
 }
 
 
