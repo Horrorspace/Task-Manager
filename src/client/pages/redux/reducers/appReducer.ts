@@ -7,7 +7,12 @@ const defaultState: IAppState = {
     isDataUpdating: false,
     messages: [],
     errors: [],
-    notifications: true
+    notifications: true,
+    onlyImportant: false,
+    onlyToday: false,
+    showCompleted: true,
+    showCancel: true,
+    showOverdue: true
 }
 
 
@@ -73,6 +78,58 @@ export const appReducer: Reducer<IAppState, IAppAction> = (state: IAppState = de
             else {
                 return state
             }
+        case AppActTypes.setOnlyImportant:
+            if(action.hasOwnProperty('onlyImportant') && typeof(action.onlyImportant) === 'boolean') {
+                return {
+                        ...state,
+                        onlyImportant: action.onlyImportant
+                    }
+            }
+            else {
+                return state
+            }
+        case AppActTypes.setOnlyToday:
+            if(action.hasOwnProperty('onlyToday') && typeof(action.onlyToday) === 'boolean') {
+                return {
+                        ...state,
+                        onlyToday: action.onlyToday
+                    }
+            }
+            else {
+                return state
+            }
+        case AppActTypes.setShowCompleted:
+            if(action.hasOwnProperty('showCompleted') && typeof(action.showCompleted) === 'boolean') {
+                return {
+                        ...state,
+                        showCompleted: action.showCompleted
+                    }
+            }
+            else {
+                return state
+            }
+        case AppActTypes.setShowCancel:
+            if(action.hasOwnProperty('showCancel') && typeof(action.showCancel) === 'boolean') {
+                return {
+                        ...state,
+                        showCancel: action.showCancel
+                    }
+            }
+            else {
+                return state
+            }
+        case AppActTypes.setShowOverdue:
+            if(action.hasOwnProperty('showOverdue') && typeof(action.showOverdue) === 'boolean') {
+                return {
+                        ...state,
+                        showOverdue: action.showOverdue
+                    }
+            }
+            else {
+                return state
+            }
+        case AppActTypes.setDefault:
+            return defaultState
         default:
             return state
     }
