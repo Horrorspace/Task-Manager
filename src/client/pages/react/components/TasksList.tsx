@@ -1,17 +1,18 @@
-import React, {ChangeEvent, MouseEvent, ReactElement, useState} from 'react'
+import React, {ChangeEvent, MouseEvent, ReactElement, useState, useEffect} from 'react'
 import {Container, Row, Col, Button, Form, Modal, ButtonGroup, ToggleButton, Popover, OverlayTrigger} from 'react-bootstrap'
 import {useSelector, useDispatch} from 'react-redux'
 import Calendar from 'react-calendar'
 import {addTask, editTask, deleteTask, toggleCancel, toggleComplete, togglePriority} from '@redux/actions/taskActions'
-import Moment from 'react-moment'
-import {IRootState} from '@interfaces/IStore'
+import {IRootState, IAppState} from '@interfaces/IStore'
 import {ITaskInstance, ITasksInstance, INewTask, ITaskToEdit} from '@interfaces/ITask'
 import {IUserInstance} from '@interfaces/IUser'
 import {getLocalDataString, getLocalFullDataString, getLocalTimeString, getDateOnly, dateStringify, dateParser} from '@core/functions/dateConverte'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {IconDefinition} from '@fortawesome/fontawesome-common-types'
-import {faPlusSquare, faCheckSquare} from '@fortawesome/free-solid-svg-icons'
-import {faSquare} from '@fortawesome/free-regular-svg-icons'
+import {faPlusSquare, faCheckSquare, faFlag as faFlagSolid, faHandPaper as faHandPaperSolid} from '@fortawesome/free-solid-svg-icons'
+import {faSquare, faFlag, faHandPaper} from '@fortawesome/free-regular-svg-icons'
+import {setDefault} from '@redux/actions/appActions'
+
 
 
 type localDate = [number, number, number]
@@ -21,6 +22,7 @@ export const TasksList: React.FC = () => {
     const dispatch = useDispatch();
     const userData = useSelector((state: IRootState): IUserInstance => state.user.user!);
     const tasksData = useSelector((state: IRootState): ITasksInstance => state.task.tasks);
+    const appState = useSelector((state: IRootState): IAppState => state.app);
     const [addShow, setAddShow] = useState(false);
     const [editShow, setEditShow] = useState(false);
     const [delShow, setDelShow] = useState(false);
@@ -31,12 +33,65 @@ export const TasksList: React.FC = () => {
     const [title, setTitle] = useState('');
     const [task, setTask] = useState('');
     const [dateToDo, setDateToDo] = useState(new Date(Date.now()));
-    const [calendarClasses, setCalendarClasses] = useState(['hidden']);
+    const [calendarClasses, setCalendarClasses] = useState(['hidden', 'calendar-wrap']);
     const [timeClasses, setTimeClasses] = useState(['hidden']);
+
+    useEffect(() => {
+        const titleArea: HTMLTextAreaElement | null = document.querySelector('.add-task-title-area');
+        const textArea: HTMLTextAreaElement | null = document.querySelector('.add-task-text-area');
+                       
+        if(titleArea && textArea) {
+            titleArea.style.height = `auto`;
+            textArea.style.height = `auto`;
+            titleArea.style.height = `${titleArea.scrollHeight}px`;
+            textArea.style.height = `${textArea.scrollHeight}px`;
+        }
+    });
 
 
     const tasksList = tasksData.getAllTasks();
     const dateArr: string[] = tasksList
+        .filter(task => {
+            if(appState.onlyImportant) {
+                return task.getPriority() === appState.onlyImportant
+            }
+            else {
+                return true
+            }
+        })
+        .filter(task => {
+            if(appState.onlyToday) {
+                return getLocalDataString(task.getDateToDo()) === getLocalDataString(new Date(Date.now()))
+            }
+            else {
+                return true
+            }
+        })
+        .filter(task => {
+            if(appState.showCompleted) {
+                return true
+            }
+            else {
+                return !task.getComplete()
+            }
+        })
+        .filter(task => {
+            if(appState.showCancel) {
+                return true
+            }
+            else {
+                return !task.getCancel()
+            }
+        })
+        .filter(task => {
+            if(appState.showOverdue) {
+                return true
+            }
+            else {
+                const nowTime = new Date(Date.now())
+                return task.getDateToDo().getTime() > nowTime.getTime()
+            }
+        })
         .map((task: ITaskInstance): localDate => [
             task.getDateToDo().getFullYear(),
             task.getDateToDo().getMonth()+1,
@@ -86,6 +141,25 @@ export const TasksList: React.FC = () => {
                 return prev
             }
         })
+    }
+
+    const takeId = (target: HTMLLIElement): string | null => {
+        let idStr: string | null = null;
+        if(target.tagName === "LI") {
+            idStr = target.id;
+        }
+        else {
+            let newTarget: any = target;
+            for(let i = 0; i < 5; i++) {
+                newTarget = newTarget.parentElement
+                if(newTarget && newTarget.tagName === "LI") {
+                    idStr = newTarget.id
+                    break;
+                }
+            }
+        }
+
+        return idStr
     }
 
     const handleAddTask = ():void => {
@@ -213,28 +287,13 @@ export const TasksList: React.FC = () => {
     }
 
     const handleEditOpen = (event: MouseEvent<HTMLLIElement>): void => {
-        console.log('test');
         const target =  event.target as HTMLLIElement;
-        console.log(target, target.id)
-        let idStr: string | null = null;
-        if(target.tagName === "LI") {
-            idStr = target.id;
-        }
-        else {
-            let newTarget: any = target;
-            for(let i = 0; i < 5; i++) {
-                newTarget = newTarget.parentElement
-                if(newTarget && newTarget.tagName === "LI") {
-                    idStr = newTarget.id
-                    break;
-                }
-            }
-        }
+        const idStr: string | null = takeId(target);
 
         if(idStr) {
             const id: number | null = idStr.length > 0 ? parseInt(idStr, 10) : null;
-            setId(id);
             if(id) {
+                setId(id);
                 const taskToEdit = tasksData.getTaskById(id);
                 setTitle(taskToEdit.getTitle());
                 setTask(taskToEdit.getTask());
@@ -246,8 +305,54 @@ export const TasksList: React.FC = () => {
             }
         }
     }
+
+    const handlePriorityChange = (event: MouseEvent<HTMLButtonElement>): void => {
+        event.stopPropagation();
+        const target =  event.target as HTMLLIElement;
+        const idStr: string | null = takeId(target);
+
+        if(idStr) {
+            const id: number | null = idStr.length > 0 ? parseInt(idStr, 10) : null;
+            if(id) {
+                dispatch(togglePriority(id));
+            }
+        }
+
+        setPriority(prev => !prev)
+    }
+
+    const handleCompleteChange = (event: MouseEvent<HTMLButtonElement>): void => {
+        event.stopPropagation();
+        const target =  event.target as HTMLLIElement;
+        const idStr: string | null = takeId(target);
+
+        if(idStr) {
+            const id: number | null = idStr.length > 0 ? parseInt(idStr, 10) : null;
+            if(id) {
+                dispatch(toggleComplete(id));
+            }
+        }
+
+        setPriority(prev => !prev)
+    }
+
+    const handleCancelChange = (event: MouseEvent<HTMLButtonElement>): void => {
+        event.stopPropagation();
+        const target =  event.target as HTMLLIElement;
+        const idStr: string | null = takeId(target);
+
+        if(idStr) {
+            const id: number | null = idStr.length > 0 ? parseInt(idStr, 10) : null;
+            if(id) {
+                dispatch(toggleCancel(id));
+            }
+        }
+
+        setPriority(prev => !prev)
+    }
     
-    const handlePriorityToggle = (): void => {
+    const handlePriorityToggle = (event: MouseEvent<HTMLButtonElement>): void => {
+        event.stopPropagation();
         setPriority(prev => !prev)
     }
     const handleCompliteToggle = (): void => {
@@ -257,7 +362,7 @@ export const TasksList: React.FC = () => {
         setCancel(prev => !prev)
     }
 
-    const handleCalandarToggle = (): void => {
+    const handleCalendarToggle = (): void => {
         setCalendarClasses(prev => {
             if(prev.indexOf('hidden') === -1) {
                 return [...prev, 'hidden']
@@ -266,7 +371,6 @@ export const TasksList: React.FC = () => {
                 return prev.filter(className => className !== 'hidden')
             }
         })
-
     }
 
     const handleTimeToggle = (): void => {
@@ -302,40 +406,66 @@ export const TasksList: React.FC = () => {
         show={addShow}
         backdrop={true}
         onHide={handleAddClose}
-        className="d-flex flex-column justify-content-center align-items-center add-task-main-wrap"
+        className=""
         dialogClassName="add-task-main"
         contentClassName="add-task-wrap"
+        scrollable={true}
         size="xl"
         as="section"
     >
         <Modal.Header 
-            closeButton
+            className="add-task-header"
         >
-            Create New Task
+            <h2 className="add-task-main-title">
+                Create New Task
+            </h2>
         </Modal.Header>
-        <Modal.Body className="add-task-body">
+        <Modal.Body 
+            className="add-task-body"
+        >
             <Form as="div">
                 <Form.Group as="div">
-                    <Form.Label as="h3">Title</Form.Label>
+                    <Form.Label 
+                        as="h3"
+                        className="add-task-title"
+                    >
+                        Title
+                    </Form.Label>
                     <Form.Control 
                         as="textarea"
                         placeholder="Task name"
                         onChange={handleTitleChange}
                         value={title}
+                        className="add-task-title-area"
                     />
                 </Form.Group>
                 <Form.Group as="div">
-                    <Form.Label as="h3">Task description</Form.Label>
+                    <Form.Label 
+                        as="h3"
+                        className="add-task-title"
+                    >
+                        Task description
+                    </Form.Label>
                     <Form.Control 
                         as="textarea"
                         placeholder="Task Note"
                         onChange={handleTaskChange}
                         value={task}
+                        className="add-task-text-area"
                     />
                 </Form.Group>
                 <Form.Group as="div">
-                    <Form.Label as="h3">Date to do</Form.Label>
-                    <Form.Control as="button" onClick={handleCalandarToggle}>
+                    <Form.Label 
+                        as="h3"
+                        className="add-task-title"
+                    >
+                        Date to do
+                    </Form.Label>
+                    <Form.Control 
+                        as="button"
+                        onClick={handleCalendarToggle}
+                        className="add-task-date-btn"
+                    >
                         {getLocalDataString(dateToDo)}
                     </Form.Control>
                     <Calendar 
@@ -345,8 +475,17 @@ export const TasksList: React.FC = () => {
                     />
                 </Form.Group>
                 <Form.Group as="div">
-                    <Form.Label as="h3">Time to do</Form.Label>
-                    <Form.Control as="button" onClick={handleTimeToggle}>
+                    <Form.Label 
+                        as="h3"
+                        className="add-task-title"
+                    >
+                        Time to do
+                    </Form.Label>
+                    <Form.Control 
+                        as="button" 
+                        onClick={handleTimeToggle}
+                        className="add-task-date-btn"
+                    >
                         {getLocalTimeString(dateToDo)}
                     </Form.Control>
                     <Row className={timeClasses.join(' ')}>
@@ -356,7 +495,9 @@ export const TasksList: React.FC = () => {
                 </Form.Group>
             </Form>
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer
+            className="add-task-footer"
+        >
             <Button variant="primary" onClick={handleAddTask}>
                 Add
             </Button>
@@ -386,36 +527,66 @@ export const TasksList: React.FC = () => {
         show={editShow}
         backdrop="static"
         onHide={handleEditClose}
-        size="sm"
+        size="xl"
+        scrollable={true}
+        dialogClassName="add-task-main"
+        contentClassName="add-task-wrap"
         className="add-window"
         as="section"
     >
-        <Modal.Header closeButton>
-            Edit task
+        <Modal.Header 
+            className="add-task-header"
+        >
+            <h2 className="add-task-main-title">
+                Edit task
+            </h2>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body
+            className="add-task-body"
+        >
             <Form as="div">
                 <Form.Group as="div">
-                    <Form.Label as="h3">Title</Form.Label>
+                    <Form.Label 
+                        as="h3"
+                        className="add-task-title"
+                    >
+                        Title
+                    </Form.Label>
                     <Form.Control 
                         as="textarea"
                         placeholder="Enter the title"
                         onChange={handleTitleChange}
+                        className="add-task-title-area"
                         value={title}
                     />
                 </Form.Group>
                 <Form.Group as="div">
-                    <Form.Label as="h3">Task description</Form.Label>
+                    <Form.Label 
+                        as="h3"
+                        className="add-task-title"
+                    >
+                        Task description
+                    </Form.Label>
                     <Form.Control 
                         as="textarea"
                         placeholder="Enter the task description"
                         onChange={handleTaskChange}
+                        className="add-task-text-area"
                         value={task}
                     />
                 </Form.Group>
                 <Form.Group as="div">
-                    <Form.Label as="h3">Date to do</Form.Label>
-                    <Form.Control as="button" onClick={handleCalandarToggle}>
+                    <Form.Label 
+                        as="h3"
+                        className="add-task-title"
+                    >
+                        Date to do
+                    </Form.Label>
+                    <Form.Control 
+                        as="button" 
+                        onClick={handleCalendarToggle}
+                        className="add-task-date-btn"
+                    >
                         {getLocalDataString(dateToDo)}
                     </Form.Control>
                     <Calendar 
@@ -425,8 +596,17 @@ export const TasksList: React.FC = () => {
                     />
                 </Form.Group>
                 <Form.Group as="div">
-                    <Form.Label as="h3">Time to do</Form.Label>
-                    <Form.Control as="button" onClick={handleTimeToggle}>
+                    <Form.Label 
+                        as="h3"
+                        className="add-task-title"
+                    >
+                        Time to do
+                    </Form.Label>
+                    <Form.Control 
+                        as="button" 
+                        onClick={handleTimeToggle}
+                        className="add-task-date-btn"
+                    >
                         {getLocalTimeString(dateToDo)}
                     </Form.Control>
                     <Row className={timeClasses.join(' ')}>
@@ -434,41 +614,60 @@ export const TasksList: React.FC = () => {
                         {minutesPicker}
                     </Row>
                 </Form.Group>
-                <Form.Group>
-                    <ButtonGroup>
-                        <Button
-                            active={priority}
-                            onClick={handlePriorityToggle}
-                            variant="outline-warning"
-                        >
-                            Priority
-                        </Button>
-                        <Button
-                            active={complite}
-                            onClick={handleCompliteToggle}
-                            variant="outline-success"
-                        >
-                            Complite
-                        </Button>
-                        <Button
-                            active={cancel}
-                            onClick={handleCancelToggle}
-                            variant="outline-danger"
-                        >
-                            Cancel
-                        </Button>
-                        <OverlayTrigger trigger="click" placement="right" overlay={delWindow} onToggle={handleDelToggle} show={delShow}>
+                <Form.Group as="div">
+                    <Form.Label
+                        as="h3"
+                        className="add-task-title"
+                    >
+                        Status
+                    </Form.Label>
+                    <Form.Control
+                        as="button" 
+                        onClick={handlePriorityToggle}
+                        className="add-task-status-btn d-flex flex-row"
+                    >
+                        <FontAwesomeIcon className="status-priority-ico" icon={faFlagSolid} />
+                        <h3 className="status-title">Priority</h3>
+                        <p className="status-value">{priority ? 'Yes' : 'No'}</p>
+                    </Form.Control>
+                    <Form.Control
+                        as="button" 
+                        onClick={handleCompliteToggle}
+                        className="add-task-status-btn d-flex flex-row"
+                    >
+                        <FontAwesomeIcon className="status-complete-ico" icon={faCheckSquare} />
+                        <h3 className="status-title">Complete</h3>
+                        <p className="status-value">{complite ? 'Yes' : 'No'}</p>
+                    </Form.Control>
+                    <Form.Control
+                        as="button" 
+                        onClick={handleCancelToggle}
+                        className="add-task-status-btn d-flex flex-row"
+                    >
+                        <FontAwesomeIcon className="status-cancel-ico" icon={faHandPaperSolid} />
+                        <h3 className="status-title">Cancel</h3>
+                        <p className="status-value">{cancel ? 'Yes' : 'No'}</p>
+                    </Form.Control>
+                    <OverlayTrigger 
+                        trigger="click" 
+                        placement="right" 
+                        overlay={delWindow} 
+                        onToggle={handleDelToggle} 
+                        show={delShow}
+                    >
                             <Button
                                 variant="danger"
+                                className="add-task-status-btn d-flex flex-row"
                             >
                                 Delete task
                             </Button>
                         </OverlayTrigger>
-                    </ButtonGroup>
                 </Form.Group>
             </Form>
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer
+            className="add-task-footer"
+        >
             <Button variant="primary" onClick={handleEditTask}>
                 Save
             </Button>
@@ -492,7 +691,56 @@ export const TasksList: React.FC = () => {
                         </Button>
                         <Container as="ul" className="tasks-list">
                             {tasksList
+                                .filter(task => {
+                                    if(appState.onlyImportant) {
+                                        return task.getPriority() === appState.onlyImportant
+                                    }
+                                    else {
+                                        return true
+                                    }
+                                })
+                                .filter(task => {
+                                    if(appState.onlyToday) {
+                                        return getLocalDataString(task.getDateToDo()) === getLocalDataString(new Date(Date.now()))
+                                    }
+                                    else {
+                                        return true
+                                    }
+                                })
+                                .filter(task => {
+                                    if(appState.showCompleted) {
+                                        return true
+                                    }
+                                    else {
+                                        return !task.getComplete()
+                                    }
+                                })
+                                .filter(task => {
+                                    if(appState.showCancel) {
+                                        return true
+                                    }
+                                    else {
+                                        return !task.getCancel()
+                                    }
+                                })
+                                .filter(task => {
+                                    if(appState.showOverdue) {
+                                        return true
+                                    }
+                                    else {
+                                        const nowTime = new Date(Date.now())
+                                        return task.getDateToDo().getTime() > nowTime.getTime()
+                                    }
+                                })
                                 .filter(task => getLocalDataString(task.getDateToDo()) === date)
+                                .sort((task1, task2) => {
+                                    if(task1.getDateToDo().getTime() !== task2.getDateToDo().getTime()) {
+                                        return task1.getDateToDo().getTime() - task2.getDateToDo().getTime()
+                                    }
+                                    else {
+                                        return task1.getDateCreated().getTime() - task2.getDateCreated().getTime()
+                                    }
+                                })
                                 .map(task => {
                                     return (
                                             <Row as="li" 
@@ -501,17 +749,49 @@ export const TasksList: React.FC = () => {
                                                 id={`${task.getTaskId()}`}
                                                 onClick={handleEditOpen}
                                                 >
-                                                <Col>
-                                                    <Button className="task-complete-btn" variant="success">
-                                                        <FontAwesomeIcon 
-                                                            className="day-add-ico" 
-                                                            icon={task.getComplete() ? faCheckSquare : faSquare} 
-                                                        />
-                                                    </Button>
+                                                <Col
+                                                    xs={4} 
+                                                    className="task-complete-btn-wrap"
+                                                >
+                                                    <ButtonGroup>
+                                                        <Button 
+                                                            className="task-priority-btn" 
+                                                            variant="warning"
+                                                            onClick={handlePriorityChange}                                                    
+                                                        >
+                                                            <FontAwesomeIcon 
+                                                                className="task-priority-ico" 
+                                                                icon={task.getPriority() ? faFlagSolid : faFlag} 
+                                                            />
+                                                        </Button>
+                                                        <Button 
+                                                            className="task-complete-btn" 
+                                                            variant="success"
+                                                            onClick={handleCompleteChange}                                                    
+                                                        >
+                                                            <FontAwesomeIcon 
+                                                                className="task-complete-ico" 
+                                                                icon={task.getComplete() ? faCheckSquare : faSquare} 
+                                                            />
+                                                        </Button>
+                                                        <Button 
+                                                            className="task-cancel-btn" 
+                                                            variant="danger"
+                                                            onClick={handleCancelChange}                                                    
+                                                        >
+                                                            <FontAwesomeIcon 
+                                                                className="task-cancel-ico" 
+                                                                icon={task.getCancel() ? faHandPaperSolid : faHandPaper} 
+                                                            />
+                                                        </Button>
+                                                    </ButtonGroup>
                                                 </Col>
-                                                <Col as="h4" className="task-title">{task.getTitle()}</Col>
-                                                <Col className="task-time-wrap">
-                                                    <p className="task-time">{getLocalFullDataString(task.getDateToDo())}</p>
+                                                <Col as="h4" className="task-title text-center">{task.getTitle()}</Col>
+                                                <Col 
+                                                    xs={4}
+                                                    className="task-time-wrap"
+                                                >
+                                                    <p className="task-time">{getLocalTimeString(task.getDateToDo())}</p>
                                                 </Col>
                                             </Row>
                                     )
