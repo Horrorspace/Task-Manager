@@ -54,3 +54,44 @@ export const setUpdatingStatus = (isDataUpdating: boolean): IAppAction => {
         isDataUpdating
     }
 };
+
+export const setOnlyImportant = (onlyImportant: boolean): IAppAction => {
+    return {
+        type: AppActTypes.setOnlyImportant,
+        onlyImportant
+    }
+};
+
+export const setOnlyToday = (onlyToday: boolean): IAppAction => {
+    return {
+        type: AppActTypes.setOnlyToday,
+        onlyToday
+    }
+};
+
+export const setShowCompleted = (showCompleted: boolean): IAppAction => {
+    return {
+        type: AppActTypes.setShowCompleted,
+        showCompleted
+    }
+};
+
+export const setShowCancel = (showCancel: boolean): IAppAction => {
+    return {
+        type: AppActTypes.setShowCancel,
+        showCancel
+    }
+};
+
+export const setShowOverdue = (showOverdue: boolean): IAppAction => {
+    return {
+        type: AppActTypes.setShowOverdue,
+        showOverdue
+    }
+};
+
+export const setDefault = (): IAppAction => {
+    return {
+        type: AppActTypes.setDefault,
+    }
+};
