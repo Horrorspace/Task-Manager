@@ -6,6 +6,7 @@
     text-decoration: none;
     margin-left: 20px;
     margin-right: 20px;
+    border: none;
 
     flex-shrink: 0;
 
@@ -15,6 +16,10 @@
         .menu-ico, .menu-title, .menu-description {
             opacity: 1;
         }
+    }
+
+    &:active {
+        border: none;
     }
 }
 
