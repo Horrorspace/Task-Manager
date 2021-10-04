@@ -30,8 +30,8 @@
 }
 
 .day-add-btn {
-    height: 24px;
-    width: 24px;
+    height: 21px;
+    width: 21px;
     border: 0;
     margin: 0;
     padding: 0;
@@ -52,7 +52,8 @@
     height: 24px;
     width: 24px;
     margin: 0;
-    font-size: 23px;
+    padding: 0;
+    font-size: 24px;
     color: $GreenFontColor;
 }
 
@@ -92,7 +93,7 @@
 
 .task-time-wrap {
     @include flex-content(column, center, center);
-    min-width: 75px;
+    max-width: 60px;
     min-height: 20px;
 
     border: 1px, solid, $GreenFontColor;
@@ -104,34 +105,74 @@
 .task-time {
     @include font($LightFontColor, 14px, 700);
     margin: 0;
+    padding: 0;
     opacity: $opacity;
 }
 
-.task-complete-btn {
-    height: 17px;
-    width: 17px;
+.task-complete-btn-wrap {
+    width: 120px;
+}
+
+.task-complete-btn, .task-priority-btn, .task-cancel-btn {
+    height: 24px;
+    width: 24px;
     border: 0;
     margin: 0;
+    margin-right: 10px;
     padding: 0;
     opacity: $opacity;
     background-color: transparent;
+    box-shadow: none;
+    outline: none;
 
     &:active {
         outline: none;
+        box-shadow: none;
     }
 
     &:hover, &:focus {
         opacity: 1;
+        background-color: transparent;
+        box-shadow: none;
+        outline: none;
+
+        .task-complete-ico {
+            opacity: 1;
+        }
     }
 }
 
 .task-complete-ico {
     @include flex-content(column, center, center);
-    height: 17px;
-    width: 17px;
+    height: 24px;
+    width: 24px;
     margin: 0;
-    font-size: 16px;
-    color: $LightFontColor;
+    padding: 0;
+    font-size: 24px;
+    color: $GreenFontColor;
+    opacity: $opacity;
+}
+
+.task-priority-ico {
+    @include flex-content(column, center, center);
+    height: 24px;
+    width: 24px;
+    margin: 0;
+    padding: 0;
+    font-size: 24px;
+    color: $RedFontColor;
+    opacity: $opacity;
+}
+
+.task-cancel-ico {
+    @include flex-content(column, center, center);
+    height: 24px;
+    width: 24px;
+    margin: 0;
+    padding: 0;
+    font-size: 24px;
+    color: $GrayFontColor;
+    opacity: $opacity;
 }
 
 
