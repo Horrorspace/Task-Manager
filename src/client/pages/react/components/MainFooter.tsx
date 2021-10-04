@@ -21,7 +21,7 @@ export const MainFooter: React.FC = () => {
         },
         {
             ico: faCalendarCheck,
-            link: '/calendar',
+            link: '/Calendar',
             title: 'Calendar'
         },
         {
