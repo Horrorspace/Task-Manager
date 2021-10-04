@@ -1,56 +1,106 @@
-import React, {useState} from 'react'
+import React, {MouseEvent, useState} from 'react'
 import {Container, Row, Col, Button, Dropdown} from 'react-bootstrap'
+import {useSelector, useDispatch} from 'react-redux'
+import {setOnlyImportant, setOnlyToday, setShowCompleted, setShowCancel, setShowOverdue} from '@redux/actions/appActions'
+import {IRootState, IAppState} from '@interfaces/IStore'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {IconDefinition} from '@fortawesome/fontawesome-common-types'
-import { faBars, faTh, faFilter, faCheckSquare, faFlag } from '@fortawesome/free-solid-svg-icons'
-import { faTimesCircle, faCalendarCheck } from '@fortawesome/free-regular-svg-icons'
+import { faBars, faTh, faFilter, faCheckSquare, faFlag, faHandPaper } from '@fortawesome/free-solid-svg-icons'
+import { faTimesCircle, faCalendarCheck, faClock } from '@fortawesome/free-regular-svg-icons'
+
 
 interface IFilter {
     ico: IconDefinition;
     filter: string;
     values: string[];
-    valueNum: number;
+    value: boolean;
+    handler: () => void;
 }
 
 export const MainHeader: React.FC = () => {
-    const FiltersDataDefault: IFilter[] = [
+    const dispatch = useDispatch();
+    const appState = useSelector((state: IRootState): IAppState => state.app);
+    
+    const handleOnlyPriority = () => {
+        dispatch(setOnlyImportant(!appState.onlyImportant))
+    }
+    const handleOnlyToday = () => {
+        dispatch(setOnlyToday(!appState.onlyToday))
+    }
+    const handleShowCompleted = () => {
+        dispatch(setShowCompleted(!appState.showCompleted))
+    }
+    const handleShowCancel = () => {
+        dispatch(setShowCancel(!appState.showCancel))
+    }
+    const handleShowOverdue = () => {
+        dispatch(setShowOverdue(!appState.showOverdue))
+    }
+    
+    const FiltersData: IFilter[] = [
         {
             ico: faFilter,
             filter: 'Sort by',
             values: ['Time descending', 'Time ascending'],
-            valueNum: 0
-        },
-        {
-            ico: faCheckSquare,
-            filter: 'Show completed',
-            values: ['Yes', 'No'],
-            valueNum: 0
+            value: false,
+            handler: () => {}
         },
         {
             ico: faFlag,
             filter: 'Only important',
             values: ['No', 'Yes'],
-            valueNum: 0
+            value: appState.onlyImportant,
+            handler: handleOnlyPriority
         },
         {
             ico: faCalendarCheck,
             filter: 'Only today tasks',
+            values: ['No', 'Yes']   ,
+            value: appState.onlyToday,
+            handler: handleOnlyToday
+        },
+        {
+            ico: faCheckSquare,
+            filter: 'Show completed',
             values: ['No', 'Yes'],
-            valueNum: 0
+            value: appState.showCompleted,
+            handler: handleShowCompleted
+        },
+        {
+            ico: faHandPaper,
+            filter: 'Show cancel',
+            values: ['No', 'Yes']   ,
+            value: appState.showCancel,
+            handler: handleShowCancel
+        },
+        {
+            ico: faClock,
+            filter: 'Show Overdue',
+            values: ['No', 'Yes']   ,
+            value: appState.showOverdue,
+            handler: handleShowOverdue
         }
     ];
-    const [filterState, setFilter] = useState(FiltersDataDefault);
+    const [filterState, setFilter] = useState(FiltersData);
     const [titleState, setTitle] = useState('My List');
 
-    const Filters: React.ReactElement[] = filterState.map((filter: IFilter): React.ReactElement => {
+    const Filters: React.ReactElement[] = FiltersData.map((filter: IFilter): React.ReactElement => {
         return (
-        <Dropdown.Item as="button" className="filter-item">
+        <Dropdown.Item 
+            as="button" 
+            className="filter-item"
+            onClick={filter.handler}
+        >
             <Row className="align-items-center" sm="12">
                 <Col xs="1">
                     <FontAwesomeIcon className="filter-ico" icon={filter.ico} />
                 </Col>
-                <Col as="h3" className="filter-setting" xs="6">{`${filter.filter}:`}</Col>
-                <Col as="p" className="filter-value" xs="3">{filter.values[filter.valueNum]}</Col>
+                <Col as="h3" className="filter-setting" xs="6">
+                    {`${filter.filter}:`}
+                </Col>
+                <Col as="p" className="filter-value" xs="3">
+                    {filter.value ? filter.values[1] : filter.values[0]}
+                </Col>
             </Row>
         </Dropdown.Item>
         )
