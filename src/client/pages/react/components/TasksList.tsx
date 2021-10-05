@@ -1,4 +1,5 @@
 import React, {ChangeEvent, MouseEvent, ReactElement, useState, useEffect} from 'react'
+import {AddTask} from '@react/components/AddTask'
 import {Container, Row, Col, Button, Form, Modal, ButtonGroup, ToggleButton, Popover, OverlayTrigger} from 'react-bootstrap'
 import {useSelector, useDispatch} from 'react-redux'
 import Calendar from 'react-calendar'
@@ -226,63 +227,72 @@ export const TasksList: React.FC = () => {
         setDelShow(prev => !prev);
     }
 
-    const handleTitleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-        const target = event.target as HTMLTextAreaElement;
-        const value = target.value;
-        setTitle(value);
+    const handleTitleChange = (event?: ChangeEvent<HTMLElement>) => {
+        if(event) {
+            const target = event.target as HTMLTextAreaElement;
+            const value = target.value;
+            setTitle(value);
+        }
     }
 
-    const handleTaskChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-        const target = event.target as HTMLTextAreaElement;
-        const value = target.value;
-        setTask(value);
+    const handleTaskChange = (event?: ChangeEvent<HTMLElement>) => {
+        if(event) {
+            const target = event.target as HTMLTextAreaElement;
+            const value = target.value;
+            setTask(value);
+        }
     }
 
-    const handleDate = (value: Date): void => {
-        setDateToDo(prev => {
-            const dateResult = new Date();
-            dateResult.setFullYear(value.getFullYear());
-            dateResult.setMonth(value.getMonth());
-            dateResult.setDate(value.getDate());
-            dateResult.setHours(prev.getHours());
-            dateResult.setMinutes(prev.getMinutes());
-            dateResult.setSeconds(prev.getSeconds());
-            return dateResult
-        })
+    const handleDate = (value?: Date): void => {
+        if(value) {
+            setDateToDo(prev => {
+                const dateResult = new Date();
+                dateResult.setFullYear(value.getFullYear());
+                dateResult.setMonth(value.getMonth());
+                dateResult.setDate(value.getDate());
+                dateResult.setHours(prev.getHours());
+                dateResult.setMinutes(prev.getMinutes());
+                dateResult.setSeconds(prev.getSeconds());
+                return dateResult
+            })
+        }
     }
 
-    const handleHour = (event: MouseEvent<HTMLLIElement>): void => {
-        setDateToDo(prev => {
-            const target = event.target as HTMLLIElement;
-            const value: number = parseInt(target.innerText, 10);
-            const dateResult = new Date();
-            dateResult.setFullYear(prev.getFullYear());
-            dateResult.setMonth(prev.getMonth());
-            dateResult.setDate(prev.getDate());
-            dateResult.setHours(value);
-            dateResult.setMinutes(prev.getMinutes());
-            dateResult.setSeconds(prev.getSeconds());
-            return dateResult
-        })
+    const handleHour = (event?: MouseEvent<HTMLElement>): void => {
+        if(event) {
+            setDateToDo(prev => {
+                const target = event.target as HTMLLIElement;
+                const value: number = parseInt(target.innerText, 10);
+                const dateResult = new Date();
+                dateResult.setFullYear(prev.getFullYear());
+                dateResult.setMonth(prev.getMonth());
+                dateResult.setDate(prev.getDate());
+                dateResult.setHours(value);
+                dateResult.setMinutes(prev.getMinutes());
+                dateResult.setSeconds(prev.getSeconds());
+                return dateResult
+            })
+        }
     }
 
-    const handleMinutes = (event: MouseEvent<HTMLLIElement>): void => {
-        setDateToDo(prev => {
-            const target = event.target as HTMLLIElement;
-            const value: number = parseInt(target.innerText, 10);
-            const dateResult = new Date();
-            dateResult.setFullYear(prev.getFullYear());
-            dateResult.setMonth(prev.getMonth());
-            dateResult.setDate(prev.getDate());
-            dateResult.setHours(prev.getHours());
-            dateResult.setMinutes(value);
-            dateResult.setSeconds(prev.getSeconds());
-            return dateResult
-        })
+    const handleMinutes = (event?: MouseEvent<HTMLElement>): void => {
+        if(event) {
+            setDateToDo(prev => {
+                const target = event.target as HTMLLIElement;
+                const value: number = parseInt(target.innerText, 10);
+                const dateResult = new Date();
+                dateResult.setFullYear(prev.getFullYear());
+                dateResult.setMonth(prev.getMonth());
+                dateResult.setDate(prev.getDate());
+                dateResult.setHours(prev.getHours());
+                dateResult.setMinutes(value);
+                dateResult.setSeconds(prev.getSeconds());
+                return dateResult
+            })
+        }
     }
 
     const handleAddOpen = (event: MouseEvent<HTMLButtonElement>): void => {
-        //event.stopPropagation();
         setAddShow(true)
     }
 
@@ -400,112 +410,6 @@ export const TasksList: React.FC = () => {
         <Col as="ul">
             {minutes.map(minute => <li onClick={handleMinutes} key={minute}>{minute}</li>)}
         </Col>
-
-    const addWindow: ReactElement = 
-    <Modal 
-        show={addShow}
-        backdrop={true}
-        onHide={handleAddClose}
-        className=""
-        dialogClassName="add-task-main"
-        contentClassName="add-task-wrap"
-        scrollable={true}
-        size="xl"
-        as="section"
-    >
-        <Modal.Header 
-            className="add-task-header"
-        >
-            <h2 className="add-task-main-title">
-                Create New Task
-            </h2>
-        </Modal.Header>
-        <Modal.Body 
-            className="add-task-body"
-        >
-            <Form as="div">
-                <Form.Group as="div">
-                    <Form.Label 
-                        as="h3"
-                        className="add-task-title"
-                    >
-                        Title
-                    </Form.Label>
-                    <Form.Control 
-                        as="textarea"
-                        placeholder="Task name"
-                        onChange={handleTitleChange}
-                        value={title}
-                        className="add-task-title-area"
-                    />
-                </Form.Group>
-                <Form.Group as="div">
-                    <Form.Label 
-                        as="h3"
-                        className="add-task-title"
-                    >
-                        Task description
-                    </Form.Label>
-                    <Form.Control 
-                        as="textarea"
-                        placeholder="Task Note"
-                        onChange={handleTaskChange}
-                        value={task}
-                        className="add-task-text-area"
-                    />
-                </Form.Group>
-                <Form.Group as="div">
-                    <Form.Label 
-                        as="h3"
-                        className="add-task-title"
-                    >
-                        Date to do
-                    </Form.Label>
-                    <Form.Control 
-                        as="button"
-                        onClick={handleCalendarToggle}
-                        className="add-task-date-btn"
-                    >
-                        {getLocalDataString(dateToDo)}
-                    </Form.Control>
-                    <Calendar 
-                        className={calendarClasses.join(' ')}
-                        onChange={handleDate}
-                        value={dateToDo}
-                    />
-                </Form.Group>
-                <Form.Group as="div">
-                    <Form.Label 
-                        as="h3"
-                        className="add-task-title"
-                    >
-                        Time to do
-                    </Form.Label>
-                    <Form.Control 
-                        as="button" 
-                        onClick={handleTimeToggle}
-                        className="add-task-date-btn"
-                    >
-                        {getLocalTimeString(dateToDo)}
-                    </Form.Control>
-                    <Row className={timeClasses.join(' ')}>
-                        {hoursPicker}
-                        {minutesPicker}
-                    </Row>
-                </Form.Group>
-            </Form>
-        </Modal.Body>
-        <Modal.Footer
-            className="add-task-footer"
-        >
-            <Button variant="primary" onClick={handleAddTask}>
-                Add
-            </Button>
-            <Button variant="danger" onClick={handleAddClose}>
-                Cancel
-            </Button>
-        </Modal.Footer>
-    </Modal>
 
    const delWindow: ReactElement =  
        <Popover id="delWindow">
@@ -809,9 +713,27 @@ export const TasksList: React.FC = () => {
         <Container as="main" className="main" fluid>
             <Container as="section" className="task-list d-flex flex-column justify-content-center align-items-center" fluid="xl">
                 {tasks}
-                {addWindow}
+
                 {editWindow}
             </Container>
+            <AddTask
+                onHide={handleAddClose}
+                onTitleChange={handleTitleChange}
+                onTaskChange={handleTaskChange}
+                onCalendarClick={handleCalendarToggle}
+                onTimeClick={handleTimeToggle}
+                onDateChange={handleDate}
+                onHourClick={handleHour}
+                onMinuteClick={handleMinutes}
+                onAddClick={handleAddTask}
+                onCloseClick={handleAddClose}
+                show={addShow}
+                title={title}
+                task={task}
+                dateToDo={dateToDo}
+                calendarClasses={calendarClasses}
+                timeClasses={timeClasses}
+            />
         </Container>
     )
 }
