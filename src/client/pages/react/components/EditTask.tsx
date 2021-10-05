@@ -20,8 +20,11 @@ interface EditTaskProps {
     onCancelClick?: (event?: MouseEvent<HTMLButtonElement>) => void;
     onSaveClick?: (event?: MouseEvent<HTMLElement>) => void;
     onCloseClick?: (event?: MouseEvent<HTMLElement>) => void;
+    onDeleteClick?: (event?: MouseEvent<HTMLElement>) => void;
+    onCloseDeleteClick?: () => void;
     onDeleteTask?: (event?: MouseEvent<HTMLElement>) => void;
     show?: boolean;
+    delWindowShow?: boolean;
     title?: string;
     task?: string;
     dateToDo?: Date;
@@ -46,8 +49,11 @@ const defaultProps: EditTaskProps = {
     onCancelClick: () => {},
     onSaveClick: () => {},
     onCloseClick: () => {},
+    onDeleteClick: () => {},
+    onCloseDeleteClick: () => {},
     onDeleteTask: () => {},
     show: false,
+    delWindowShow: false,
     title: '',
     task: '',
     dateToDo: new Date(Date.now()),
@@ -74,8 +80,11 @@ export const EditTask: React.FC<EditTaskProps> = (
         onCancelClick,
         onSaveClick,
         onCloseClick,
+        onDeleteClick,
+        onCloseDeleteClick,
         onDeleteTask,
         show,
+        delWindowShow,
         title,
         task,
         dateToDo,
@@ -86,13 +95,6 @@ export const EditTask: React.FC<EditTaskProps> = (
         timeClasses
     }: EditTaskProps = defaultProps
 ) => {
-    const [delShow, setDelShow] = useState(false);
-
-
-    const handleDelToggle = (): void => {
-        setDelShow(prev => !prev);
-    }
-
     const hoursList: number[] = [];
     const minutesList: number[] = [];
     for(let i = 0; i < 24; i++) {
@@ -121,7 +123,7 @@ export const EditTask: React.FC<EditTaskProps> = (
                     <Button variant="primary" onClick={onDeleteTask}>Yes</Button>
                 </Col>
                 <Col>
-                    <Button variant="danger" onClick={handleDelToggle}>No</Button>
+                    <Button variant="danger" onClick={onDeleteClick}>No</Button>
                 </Col>
             </Row>
         </Popover>
@@ -257,8 +259,8 @@ export const EditTask: React.FC<EditTaskProps> = (
                             trigger="click" 
                             placement="right" 
                             overlay={delWindow} 
-                            onToggle={handleDelToggle} 
-                            show={delShow}
+                            onToggle={onCloseDeleteClick} 
+                            show={delWindowShow}
                         >
                                 <Button
                                     variant="danger"

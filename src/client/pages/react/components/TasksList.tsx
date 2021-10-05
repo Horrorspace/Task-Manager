@@ -1,5 +1,6 @@
 import React, {ChangeEvent, MouseEvent, ReactElement, useState, useEffect} from 'react'
 import {AddTask} from '@react/components/AddTask'
+import {EditTask} from '@react/components/EditTask'
 import {Container, Row, Col, Button, Form, Modal, ButtonGroup, ToggleButton, Popover, OverlayTrigger} from 'react-bootstrap'
 import {useSelector, useDispatch} from 'react-redux'
 import Calendar from 'react-calendar'
@@ -361,8 +362,7 @@ export const TasksList: React.FC = () => {
         setPriority(prev => !prev)
     }
     
-    const handlePriorityToggle = (event: MouseEvent<HTMLButtonElement>): void => {
-        event.stopPropagation();
+    const handlePriorityToggle = (): void => {
         setPriority(prev => !prev)
     }
     const handleCompliteToggle = (): void => {
@@ -713,8 +713,6 @@ export const TasksList: React.FC = () => {
         <Container as="main" className="main" fluid>
             <Container as="section" className="task-list d-flex flex-column justify-content-center align-items-center" fluid="xl">
                 {tasks}
-
-                {editWindow}
             </Container>
             <AddTask
                 onHide={handleAddClose}
@@ -731,6 +729,31 @@ export const TasksList: React.FC = () => {
                 title={title}
                 task={task}
                 dateToDo={dateToDo}
+                calendarClasses={calendarClasses}
+                timeClasses={timeClasses}
+            />
+            <EditTask
+                onHide={handleEditClose}
+                onTitleChange={handleTitleChange}
+                onTaskChange={handleTaskChange}
+                onCalendarClick={handleCalendarToggle}
+                onTimeClick={handleTimeToggle}
+                onDateChange={handleDate}
+                onHourClick={handleHour}
+                onMinuteClick={handleMinutes}
+                onPriorityClick={handlePriorityToggle}
+                onCompleteClick={handleCompliteToggle}
+                onCancelClick={handleCancelToggle}
+                onSaveClick={handleEditTask}
+                onCloseClick={handleEditClose}
+                onDeleteTask={handleDelTask}
+                show={editShow}
+                title={title}
+                task={task}
+                dateToDo={dateToDo}
+                priority={priority}
+                complite={complite}
+                cancel={cancel}
                 calendarClasses={calendarClasses}
                 timeClasses={timeClasses}
             />
