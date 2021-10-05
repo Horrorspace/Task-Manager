@@ -15,9 +15,9 @@ interface EditTaskProps {
     onDateChange?: (value?: Date) => void;
     onHourClick?: (event?: MouseEvent<HTMLElement>) => void;
     onMinuteClick?: (event?: MouseEvent<HTMLElement>) => void;
-    onPriorityClick?: (event?: MouseEvent<HTMLElement>) => void;
-    onCompleteClick?: (event?: MouseEvent<HTMLElement>) => void;
-    onCancelClick?: (event?: MouseEvent<HTMLElement>) => void;
+    onPriorityClick?: (event?: MouseEvent<HTMLButtonElement>) => void;
+    onCompleteClick?: (event?: MouseEvent<HTMLButtonElement>) => void;
+    onCancelClick?: (event?: MouseEvent<HTMLButtonElement>) => void;
     onSaveClick?: (event?: MouseEvent<HTMLElement>) => void;
     onCloseClick?: (event?: MouseEvent<HTMLElement>) => void;
     onDeleteTask?: (event?: MouseEvent<HTMLElement>) => void;
