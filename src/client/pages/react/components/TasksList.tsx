@@ -1,19 +1,16 @@
 import React, {ChangeEvent, MouseEvent, ReactElement, useState, useEffect} from 'react'
 import {AddTask} from '@react/components/AddTask'
 import {EditTask} from '@react/components/EditTask'
-import {Container, Row, Col, Button, Form, Modal, ButtonGroup, ToggleButton, Popover, OverlayTrigger} from 'react-bootstrap'
+import {Container, Row, Col, Button, ButtonGroup} from 'react-bootstrap'
 import {useSelector, useDispatch} from 'react-redux'
-import Calendar from 'react-calendar'
 import {addTask, editTask, deleteTask, toggleCancel, toggleComplete, togglePriority} from '@redux/actions/taskActions'
 import {IRootState, IAppState} from '@interfaces/IStore'
 import {ITaskInstance, ITasksInstance, INewTask, ITaskToEdit} from '@interfaces/ITask'
 import {IUserInstance} from '@interfaces/IUser'
-import {getLocalDataString, getLocalFullDataString, getLocalTimeString, getDateOnly, dateStringify, dateParser} from '@core/functions/dateConverte'
+import {getLocalDataString, getLocalTimeString, dateStringify} from '@core/functions/dateConverte'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {IconDefinition} from '@fortawesome/fontawesome-common-types'
 import {faPlusSquare, faCheckSquare, faFlag as faFlagSolid, faHandPaper as faHandPaperSolid} from '@fortawesome/free-solid-svg-icons'
 import {faSquare, faFlag, faHandPaper} from '@fortawesome/free-regular-svg-icons'
-import {setDefault} from '@redux/actions/appActions'
 
 
 
