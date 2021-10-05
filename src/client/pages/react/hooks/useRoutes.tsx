@@ -52,6 +52,18 @@ export const useRoutes = (isLogined: boolean): React.ReactElement => {
                     path="/Today" 
                     exact 
                 />
+                <Route 
+                    render={() => {
+                        dispatch(setOnlyImportant(false));
+                        dispatch(setOnlyToday(false))
+
+                        return(
+                            <Calendar />
+                        )
+                    }}
+                    path="/Calendar" 
+                    exact 
+                />
                 <Route component={Settings} path="/Settings" exact />
                 <Redirect to="/" />
             </Switch>
