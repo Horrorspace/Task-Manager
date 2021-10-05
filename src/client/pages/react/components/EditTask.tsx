@@ -3,9 +3,7 @@ import {Container, Row, Col, Button, Form, Modal, Popover, OverlayTrigger} from 
 import Calendar from 'react-calendar'
 import {getLocalDataString, getLocalTimeString} from '@core/functions/dateConverte'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {IconDefinition} from '@fortawesome/fontawesome-common-types'
-import {faPlusSquare, faCheckSquare, faFlag as faFlagSolid, faHandPaper as faHandPaperSolid} from '@fortawesome/free-solid-svg-icons'
-import {faSquare, faFlag, faHandPaper} from '@fortawesome/free-regular-svg-icons'
+import {faCheckSquare, faFlag as faFlagSolid, faHandPaper as faHandPaperSolid} from '@fortawesome/free-solid-svg-icons'
 
 
 interface EditTaskProps {
