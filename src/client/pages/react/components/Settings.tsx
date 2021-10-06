@@ -1,6 +1,9 @@
 import React, {useState, ReactElement, MouseEvent} from 'react'
 import {Container, Row, Col, Button, Dropdown, Modal} from 'react-bootstrap'
 import {useSelector, useDispatch} from 'react-redux'
+import {IRootState, IAppState} from '@interfaces/IStore'
+import {ITaskInstance, ITasksInstance, INewTask, ITaskToEdit} from '@interfaces/ITask'
+import {IUserInstance} from '@interfaces/IUser'
 import {toLogout} from '@redux/actions/userActions'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {IconDefinition} from '@fortawesome/fontawesome-common-types'
@@ -20,6 +23,7 @@ interface ISetting {
 
 export const Settings: React.FC = () => {
     const dispatch = useDispatch();
+    const userData = useSelector((state: IRootState): IUserInstance => state.user.user!);
     const groups: string[] = ['Account', 'Personal', 'Authorization'];
     const languageList: string[] = ['English', 'Russian'];
     const booleanList: string[] = ['Yes', 'No']
@@ -35,7 +39,7 @@ export const Settings: React.FC = () => {
     const [logoutShow, setLogoutShow] = useState(false);
 
     const handleEmailClick = (event: MouseEvent<HTMLButtonElement>): void => {
-
+        
     }
     const handlePhoneClick = (event: MouseEvent<HTMLButtonElement>): void => {
 
@@ -83,7 +87,7 @@ export const Settings: React.FC = () => {
             ico: faEnvelope,
             title: 'Email',
             group: 'Account',
-            value: email,
+            value: userData.getUserEmail(),
             handler: handleEmailClick
         },
         {
@@ -97,7 +101,7 @@ export const Settings: React.FC = () => {
             ico: faUser,
             title: 'Name',
             group: 'Account',
-            value: name,
+            value: userData.getUserName(),
             handler: handleNameClick
         },
         {
@@ -111,7 +115,7 @@ export const Settings: React.FC = () => {
             ico: faKey,
             title: 'Password',
             group: 'Account',
-            value: password,
+            value: '*********',
             handler: handlePasswordClick
         },
         {
