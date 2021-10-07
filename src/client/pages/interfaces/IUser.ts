@@ -4,6 +4,7 @@ export interface INewUser {
     password: string;
 }
 
+
 export interface ILogin {
     email: string;
     password: string;
@@ -11,6 +12,10 @@ export interface ILogin {
 
 export interface IUser extends INewUser {
     id: number;
+}
+
+export interface IEmailUp extends ILogin {
+    newEmail: string;
 }
 
 export interface INewUserInstance {

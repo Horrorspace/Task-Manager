@@ -2,7 +2,7 @@ import {Router} from 'express'
 import {check, validationResult} from 'express-validator'
 import config from '../config/default.json'
 import User from '../models/User'
-import {IUser, IUserResult, IUserName, IUserEmail, IUserPass, IUserInstance} from 'interfaces/user'
+import {IUser, IUserResult, IEmailChange, IUserName, IUserEmail, IUserPass, IUserInstance} from 'interfaces/user'
 import passport from 'passport'
 import {authMiddleware} from '../middleware/auth.middleware'
 
@@ -34,6 +34,47 @@ router.post(
         catch (e) {
             res.status(500).json({ 
                 auth: false,
+                message: 'Something wrong, try again' 
+            })
+        }
+    }
+)
+
+router.post(
+    '/email_update',
+    [
+        check('email', 'Invalid email')
+            .isEmail(),
+        check('password', 'Empty password')
+            .exists()
+    ],
+    passport.authenticate(
+        'local', {
+            successFlash: true,
+            successMessage: 'You have been logined',
+            failureFlash: true,
+            session: false
+        }
+    ),
+    async (req, res) => {
+        try {
+            const body: IEmailChange = req.body;
+            const user = req.user as IUserResult;
+            const newEmail = body.newEmail;
+            const oldEmail = user.email;
+
+            const users: IUserInstance = new User(config.PostgreSQL);
+            await users.userEmailUp({
+                id: user.id, 
+                email: newEmail
+            });
+
+            res.status(200).json({
+                message: `Email have been changed from ${oldEmail} to ${newEmail}`
+            });
+        } 
+        catch (e) {
+            res.status(500).json({ 
                 message: 'Something wrong, try again' 
             })
         }

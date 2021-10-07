@@ -1,5 +1,5 @@
-import React, {useState, ReactElement, MouseEvent} from 'react'
-import {Container, Row, Col, Button, Dropdown, Modal} from 'react-bootstrap'
+import React, {useState, ReactElement, MouseEvent, ChangeEvent} from 'react'
+import {Container, Row, Col, Button, Form, Modal} from 'react-bootstrap'
 import {useSelector, useDispatch} from 'react-redux'
 import {IRootState, IAppState} from '@interfaces/IStore'
 import {ITaskInstance, ITasksInstance, INewTask, ITaskToEdit} from '@interfaces/ITask'
@@ -28,6 +28,7 @@ export const Settings: React.FC = () => {
     const languageList: string[] = ['English', 'Russian'];
     const booleanList: string[] = ['Yes', 'No']
 
+    const [emailShow, setEmailShow] = useState(false);
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
     const [name, setName] = useState('');
@@ -38,9 +39,26 @@ export const Settings: React.FC = () => {
     const [sound, setSound] = useState(true);
     const [logoutShow, setLogoutShow] = useState(false);
 
-    const handleEmailClick = (event: MouseEvent<HTMLButtonElement>): void => {
+    const setDefault = () => {
         
     }
+
+    const handleEmailOpen = (event: MouseEvent<HTMLElement>): void => {
+
+    }
+    const handleEmailClose = (event: MouseEvent<HTMLElement>): void => {
+
+    }
+    const handleEmailChange = (event: ChangeEvent<HTMLElement>): void => {
+
+    }
+    const handlePasswordChange = (event: ChangeEvent<HTMLElement>): void => {
+
+    }
+    const handleEmailSave = (event: MouseEvent<HTMLElement>): void => {
+
+    }
+
     const handlePhoneClick = (event: MouseEvent<HTMLButtonElement>): void => {
 
     }
@@ -88,7 +106,7 @@ export const Settings: React.FC = () => {
             title: 'Email',
             group: 'Account',
             value: userData.getUserEmail(),
-            handler: handleEmailClick
+            handler: handleEmailOpen
         },
         {
             ico: faMobileAlt,
@@ -147,6 +165,74 @@ export const Settings: React.FC = () => {
             handler: handleLogOutClick
         }
     ];
+
+    const emailUp: ReactElement =
+        <Modal 
+            show={emailShow}
+            backdrop={true}
+            onHide={handleEmailClose}
+            className=""
+            dialogClassName="add-task-main"
+            contentClassName="add-task-wrap"
+            scrollable={true}
+            size="xl"
+            as="div"
+        >
+            <Modal.Header 
+                className="add-task-header"
+            >
+                <h2 className="add-task-main-title">
+                    Change Email
+                </h2>
+            </Modal.Header>
+            <Modal.Body 
+                className="add-task-body"
+            >
+                <Form as="div">
+                    <Form.Group as="div">
+                        <Form.Label 
+                            as="h3"
+                            className="add-task-title"
+                        >
+                            new Email
+                        </Form.Label>
+                        <Form.Control 
+                            as="textarea"
+                            placeholder="Task name"
+                            onChange={handleEmailChange}
+                            value={email}
+                            className="add-task-title-area"
+                        />
+                    </Form.Group>
+                    <Form.Group as="div">
+                        <Form.Label 
+                            as="h3"
+                            className="add-task-title"
+                        >
+                            Password
+                        </Form.Label>
+                        <Form.Control 
+                            as="textarea"
+                            placeholder="Task Note"
+                            onChange={handlePasswordChange}
+                            value={password}
+                            className="add-task-text-area"
+                            type="password"
+                        />
+                    </Form.Group>
+                </Form>
+            </Modal.Body>
+            <Modal.Footer
+                className="add-task-footer"
+            >
+                <Button variant="primary" onClick={handleEmailSave}>
+                    Save
+                </Button>
+                <Button variant="danger" onClick={handleEmailClose}>
+                    Cancel
+                </Button>
+            </Modal.Footer>
+        </Modal>
 
     const logoutModal: ReactElement =
             <Modal show={logoutShow} onHide={handleCloseLogout}>
