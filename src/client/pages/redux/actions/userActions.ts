@@ -1,6 +1,6 @@
 import {UserActTypes} from '@redux/types/UserActTypes'
 import {IUserAction, IUserState, IThunkAction, IThunkDispatch} from '@interfaces/IStore'
-import {INewUser, IUserInstance, ILogin, IEmailUp} from '@interfaces/IUser'
+import {INewUser, IUserInstance, ILogin, IEmailUp, INameUp} from '@interfaces/IUser'
 import UserAPI from '@core/classes/UserAPI'
 import {Dispatch} from 'redux'
 
@@ -144,6 +144,29 @@ export const toUpdateEmail = (data: IEmailUp): IThunkAction<IUserState> => {
             const newEmail = data.newEmail;
             await UserAPI.toUpdateEmail(data);
             dispatch(setMessage(`Email have been changed from ${oldEmail} to ${newEmail}`));
+            thunkDispatch(getCurrentUser());
+        }
+        catch(e) {
+            dispatch(setUpdatingStatus(false));
+            if(typeof(e) === 'string') {
+                dispatch(setError(e));
+            }
+            else {
+                dispatch(setError('Authorization error'));
+            }
+        }
+    }
+}
+
+export const toUpdateName = (data: INameUp): IThunkAction<IUserState> => {
+    return async (dispatch: Dispatch<IUserAction>): Promise<void> => {
+        try {
+            const thunkDispatch = dispatch as IThunkDispatch<IThunkAction<IUserState>>;
+            dispatch(setUpdatingStatus(true));
+            const oldName = data.name;
+            const newName = data.newName;
+            await UserAPI.toUpdateName(data);
+            dispatch(setMessage(`Name have been changed from ${oldName} to ${newName}`));
             thunkDispatch(getCurrentUser());
         }
         catch(e) {
