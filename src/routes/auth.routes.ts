@@ -2,7 +2,7 @@ import {Router} from 'express'
 import {check, validationResult} from 'express-validator'
 import config from '../config/default.json'
 import User from '../models/User'
-import {IUser, IUserResult, IEmailChange, IUserName, IUserEmail, IUserPass, IUserInstance} from 'interfaces/user'
+import {IUser, IUserResult, IEmailChange, IUserName, IUserEmail, IUserPass, IUserInstance, INameChange} from 'interfaces/user'
 import passport from 'passport'
 import {authMiddleware} from '../middleware/auth.middleware'
 
@@ -71,6 +71,47 @@ router.post(
 
             res.status(200).json({
                 message: `Email have been changed from ${oldEmail} to ${newEmail}`
+            });
+        } 
+        catch (e) {
+            res.status(500).json({ 
+                message: 'Something wrong, try again' 
+            })
+        }
+    }
+)
+
+router.post(
+    '/name_update',
+    [
+        check('email', 'Invalid email')
+            .isEmail(),
+        check('password', 'Empty password')
+            .exists()
+    ],
+    passport.authenticate(
+        'local', {
+            successFlash: true,
+            successMessage: 'You have been logined',
+            failureFlash: true,
+            session: false
+        }
+    ),
+    async (req, res) => {
+        try {
+            const body: INameChange = req.body;
+            const user = req.user as IUserResult;
+            const newName = body.newName;
+            const oldname = user.name;
+
+            const users: IUserInstance = new User(config.PostgreSQL);
+            await users.userNameUp({
+                id: user.id, 
+                name: newName
+            });
+
+            res.status(200).json({
+                message: `Name have been changed from ${oldname} to ${newName}`
             });
         } 
         catch (e) {
