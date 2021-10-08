@@ -3,8 +3,8 @@ import {Container, Row, Col, Button, Form, Modal} from 'react-bootstrap'
 import {useSelector, useDispatch} from 'react-redux'
 import {IRootState, IAppState} from '@interfaces/IStore'
 import {ITaskInstance, ITasksInstance, INewTask, ITaskToEdit} from '@interfaces/ITask'
-import {IUserInstance} from '@interfaces/IUser'
-import {toLogout} from '@redux/actions/userActions'
+import {IEmailUp, INameUp, IUserInstance} from '@interfaces/IUser'
+import {toLogout, toUpdateEmail, toUpdateName} from '@redux/actions/userActions'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {IconDefinition} from '@fortawesome/fontawesome-common-types'
 import { faMobileAlt, faKey, faGlobeEurope, faVolumeUp, faUser, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
@@ -29,6 +29,8 @@ export const Settings: React.FC = () => {
     const booleanList: string[] = ['Yes', 'No']
 
     const [emailShow, setEmailShow] = useState(false);
+    const [nameShow, setNameShow] = useState(false);
+    const [passShow, setPassShow] = useState(false);
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
     const [name, setName] = useState('');
@@ -40,29 +42,68 @@ export const Settings: React.FC = () => {
     const [logoutShow, setLogoutShow] = useState(false);
 
     const setDefault = () => {
-        
+        setEmailShow(false);
+        setNameShow(false);
+        setEmail('');
+        setName('');
+        setPassword('');
     }
 
     const handleEmailOpen = (event: MouseEvent<HTMLElement>): void => {
-
+        setEmailShow(true)
     }
     const handleEmailClose = (event: MouseEvent<HTMLElement>): void => {
-
+        setEmailShow(false)
     }
-    const handleEmailChange = (event: ChangeEvent<HTMLElement>): void => {
-
+    const handleEmailChange = (event?: ChangeEvent<HTMLElement>): void => {
+        if(event) {
+            const target = event.target as HTMLInputElement;
+            const email: string = target.value;
+            setEmail(email);
+        }
     }
-    const handlePasswordChange = (event: ChangeEvent<HTMLElement>): void => {
-
+    const handlePasswordChange = (event?: ChangeEvent<HTMLElement>): void => {
+        if(event) {
+            const target = event.target as HTMLInputElement;
+            const password: string = target.value;
+            setPassword(password);
+        }
     }
     const handleEmailSave = (event: MouseEvent<HTMLElement>): void => {
+        const data: IEmailUp = {
+            newEmail: email,
+            email: userData.getUserEmail(),
+            password
+        }
+        dispatch(toUpdateEmail(data));
+        setDefault();
+    }
 
+    const handleNameOpen = (event: MouseEvent<HTMLElement>): void => {
+        setNameShow(true)
+    }
+    const handleNameClose = (event: MouseEvent<HTMLElement>): void => {
+        setNameShow(false)
+    }
+    const handleNameChange = (event?: ChangeEvent<HTMLElement>): void => {
+        if(event) {
+            const target = event.target as HTMLInputElement;
+            const name: string = target.value;
+            setName(name);
+        }
+    }
+    const handleNameSave = (event: MouseEvent<HTMLElement>): void => {
+        const data: INameUp = {
+            name: userData.getUserName(),
+            newName: name,
+            email: userData.getUserEmail(),
+            password
+        }
+        dispatch(toUpdateName(data));
+        setDefault();
     }
 
     const handlePhoneClick = (event: MouseEvent<HTMLButtonElement>): void => {
-
-    }
-    const handleNameClick = (event: MouseEvent<HTMLButtonElement>): void => {
 
     }
     const handleTelegramClick = (event: MouseEvent<HTMLButtonElement>): void => {
@@ -120,7 +161,7 @@ export const Settings: React.FC = () => {
             title: 'Name',
             group: 'Account',
             value: userData.getUserName(),
-            handler: handleNameClick
+            handler: handleNameOpen
         },
         {
             ico: faTelegramPlane,
@@ -194,10 +235,9 @@ export const Settings: React.FC = () => {
                             as="h3"
                             className="add-task-title"
                         >
-                            new Email
+                            New Email
                         </Form.Label>
                         <Form.Control 
-                            as="textarea"
                             placeholder="Task name"
                             onChange={handleEmailChange}
                             value={email}
@@ -212,11 +252,10 @@ export const Settings: React.FC = () => {
                             Password
                         </Form.Label>
                         <Form.Control 
-                            as="textarea"
                             placeholder="Task Note"
                             onChange={handlePasswordChange}
                             value={password}
-                            className="add-task-text-area"
+                            className="add-task-title-area"
                             type="password"
                         />
                     </Form.Group>
@@ -229,6 +268,72 @@ export const Settings: React.FC = () => {
                     Save
                 </Button>
                 <Button variant="danger" onClick={handleEmailClose}>
+                    Cancel
+                </Button>
+            </Modal.Footer>
+        </Modal>
+
+    const nameUp: ReactElement =
+        <Modal 
+            show={nameShow}
+            backdrop={true}
+            onHide={handleNameClose}
+            className=""
+            dialogClassName="add-task-main"
+            contentClassName="add-task-wrap"
+            scrollable={true}
+            size="xl"
+            as="div"
+        >
+            <Modal.Header 
+                className="add-task-header"
+            >
+                <h2 className="add-task-main-title">
+                    Change Name
+                </h2>
+            </Modal.Header>
+            <Modal.Body 
+                className="add-task-body"
+            >
+                <Form as="div">
+                    <Form.Group as="div">
+                        <Form.Label 
+                            as="h3"
+                            className="add-task-title"
+                        >
+                            New Name
+                        </Form.Label>
+                        <Form.Control 
+                            placeholder="Task name"
+                            onChange={handleNameChange}
+                            value={name}
+                            className="add-task-title-area"
+                        />
+                    </Form.Group>
+                    <Form.Group as="div">
+                        <Form.Label 
+                            as="h3"
+                            className="add-task-title"
+                        >
+                            Password
+                        </Form.Label>
+                        <Form.Control 
+                            placeholder="Task Note"
+                            onChange={handlePasswordChange}
+                            value={password}
+                            className="add-task-title-area"
+                            type="password"
+                        />
+                    </Form.Group>
+                </Form>
+            </Modal.Body>
+            <Modal.Footer
+                className="add-task-footer"
+            >
+                <Button variant="primary" onClick={handleNameSave}>
+                    Save
+                </Button>
+                <Button variant="danger" onClick={handleNameClose}>
                     Cancel
                 </Button>
             </Modal.Footer>
@@ -287,8 +392,10 @@ export const Settings: React.FC = () => {
         <Container as="main" className="main" fluid>
             <Container as="section" className="settings d-flex flex-column justify-content-center align-items-center" fluid="xl">
                 {Settings}
-                {logoutModal}
             </Container>
+            {emailUp}
+            {nameUp}
+            {logoutModal}
         </Container>
     )
 }
