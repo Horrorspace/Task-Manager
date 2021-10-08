@@ -18,6 +18,11 @@ export interface IEmailUp extends ILogin {
     newEmail: string;
 }
 
+export interface INameUp extends ILogin {
+    name: string
+    newName: string;
+}
+
 export interface INewUserInstance {
     getUserEmail(): string;
     getUserName(): string;
