@@ -28,6 +28,12 @@ export interface IEmailChange {
     password: string;
 }
 
+export interface INameChange {
+    email: string;
+    newName: string;
+    password: string;
+}
+
 export interface IUserResult extends IUser {
     id: number;
 }
