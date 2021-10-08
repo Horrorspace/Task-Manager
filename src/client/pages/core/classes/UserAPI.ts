@@ -4,7 +4,7 @@ import {map, filter, switchMap} from 'rxjs/operators'
 import {apiUrl} from '@core/const/urlConst'
 import User from '@core/classes/User'
 import NewUser from '@core/classes/NewUser'
-import {INewUser, IEmailUp, IUser, IUserInstance, ILogin} from '@interfaces/IUser'
+import {INewUser, IEmailUp, IUser, IUserInstance, ILogin, INameUp} from '@interfaces/IUser'
 
 
 
@@ -181,6 +181,37 @@ export default class UserAPI {
     public static async toUpdateEmail(data: IEmailUp): Promise<void> {
         return new Promise((resolve, reject) => {
             const url: string = `${UserAPI.authUrl}/email_update`;
+            const data$ = fromFetch(url, {
+                method: 'POST',
+                headers: UserAPI.headers,
+                body: JSON.stringify(data)
+            }).pipe(
+                map(res => {
+                    if(res.status === 200 ) {
+                        return res.json()
+                    }
+                    else {
+                        throw {
+                            status: res.status,
+                            message: 'API error'
+                        }
+                    }
+                })
+            );
+            const sub: Subscription = data$.subscribe({
+                complete: () => {
+                    resolve()
+                },
+                error: (e) => {
+                    reject(e)
+                }
+            })
+        })
+    }
+
+    public static async toUpdateName(data: INameUp): Promise<void> {
+        return new Promise((resolve, reject) => {
+            const url: string = `${UserAPI.authUrl}/name_update`;
             const data$ = fromFetch(url, {
                 method: 'POST',
                 headers: UserAPI.headers,
