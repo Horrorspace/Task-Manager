@@ -15,9 +15,28 @@ interface IFilter {
     values: string[];
     value: boolean;
     handler: () => void;
+    show: boolean;
 }
 
-export const MainHeader: React.FC = () => {
+interface MainHeaderProps {
+    titleState?: string;
+    hideOnlyImportant?: boolean;
+    hideOnlyToday?: boolean;
+}
+
+const defProps: MainHeaderProps = {
+    titleState: 'My List',
+    hideOnlyImportant: true,
+    hideOnlyToday: true,
+}
+
+export const MainHeader: React.FC<MainHeaderProps> = (
+    {
+        titleState,
+        hideOnlyImportant,
+        hideOnlyToday
+    }: MainHeaderProps = defProps
+) => {
     const dispatch = useDispatch();
     const appState = useSelector((state: IRootState): IAppState => state.app);
     
@@ -43,55 +62,62 @@ export const MainHeader: React.FC = () => {
             filter: 'Sort by',
             values: ['Time descending', 'Time ascending'],
             value: false,
-            handler: () => {}
+            handler: () => {},
+            show: true
         },
         {
             ico: faFlag,
             filter: 'Only important',
             values: ['No', 'Yes'],
             value: appState.onlyImportant,
-            handler: handleOnlyPriority
+            handler: handleOnlyPriority,
+            show: !hideOnlyImportant!
         },
         {
             ico: faCalendarCheck,
             filter: 'Only today tasks',
             values: ['No', 'Yes']   ,
             value: appState.onlyToday,
-            handler: handleOnlyToday
+            handler: handleOnlyToday,
+            show: !hideOnlyToday!
         },
         {
             ico: faCheckSquare,
             filter: 'Show completed',
             values: ['No', 'Yes'],
             value: appState.showCompleted,
-            handler: handleShowCompleted
+            handler: handleShowCompleted,
+            show: true
         },
         {
             ico: faHandPaper,
             filter: 'Show cancel',
             values: ['No', 'Yes']   ,
             value: appState.showCancel,
-            handler: handleShowCancel
+            handler: handleShowCancel,
+            show: true
         },
         {
             ico: faClock,
             filter: 'Show Overdue',
             values: ['No', 'Yes']   ,
             value: appState.showOverdue,
-            handler: handleShowOverdue
+            handler: handleShowOverdue,
+            show: true
         }
     ];
-    const [filterState, setFilter] = useState(FiltersData);
-    const [titleState, setTitle] = useState('My List');
 
     const Filters: React.ReactElement[] = FiltersData.map((filter: IFilter): React.ReactElement => {
         return (
         <Dropdown.Item 
             as="button" 
-            className="filter-item"
+            className={filter.show ? "filter-item" : "hidden"}
             onClick={filter.handler}
         >
-            <Row className="align-items-center" sm="12">
+            <Row 
+                className="align-items-center"
+                sm="12"
+            >
                 <Col xs="1">
                     <FontAwesomeIcon className="filter-ico" icon={filter.ico} />
                 </Col>
