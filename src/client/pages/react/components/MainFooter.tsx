@@ -26,7 +26,7 @@ export const MainFooter: React.FC = () => {
         },
         {
             ico: faSlidersH,
-            link: '/settings',
+            link: '/Settings',
             title: 'Settings'
         }
     ];
