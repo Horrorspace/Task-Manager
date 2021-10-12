@@ -1,4 +1,4 @@
-import React, {ChangeEvent, MouseEvent, ReactElement} from 'react'
+import React, {ChangeEvent, MouseEvent, ReactElement, useState} from 'react'
 import {Row, Col, Button, Form, Modal, FormControl} from 'react-bootstrap'
 import Calendar from 'react-calendar'
 import {getLocalDataString, getLocalTimeString} from '@core/functions/dateConverte'
@@ -7,7 +7,9 @@ import {getLocalDataString, getLocalTimeString} from '@core/functions/dateConver
 interface AddTaskProps {
     onHide?: () => void;
     onTitleChange?: (event?: ChangeEvent<HTMLElement>) => void;
+    onTitleClick?: (event?: MouseEvent<HTMLElement>) => void;
     onTaskChange?: (event?: ChangeEvent<HTMLElement>) => void;
+    onTaskClick?: (event?: MouseEvent<HTMLElement>) => void;
     onCalendarClick?: (event?: MouseEvent<HTMLElement>) => void;
     onTimeClick?: (event?: MouseEvent<HTMLElement>) => void;
     onDateChange?: (value?: Date) => void;
@@ -16,6 +18,8 @@ interface AddTaskProps {
     onAddClick?: (event?: MouseEvent<HTMLElement>) => void;
     onCloseClick?: (event?: MouseEvent<HTMLElement>) => void;
     show?: boolean;
+    isInvalidTitle?: boolean;
+    isInvalidTask?: boolean;
     title?: string;
     task?: string;
     dateToDo?: Date;
@@ -26,7 +30,9 @@ interface AddTaskProps {
 const defaultProps: AddTaskProps = {
     onHide: () => {},
     onTitleChange: () => {},
+    onTitleClick: () => {},
     onTaskChange: () => {},
+    onTaskClick: () => {},
     onCalendarClick: () => {},
     onTimeClick: () => {},
     onDateChange: () => {},
@@ -35,6 +41,8 @@ const defaultProps: AddTaskProps = {
     onAddClick: () => {},
     onCloseClick: () => {},
     show: false,
+    isInvalidTitle: false,
+    isInvalidTask: false,
     title: '',
     task: '',
     dateToDo: new Date(Date.now()),
@@ -46,7 +54,9 @@ export const AddTask: React.FC<AddTaskProps> = (
     {
         onHide,
         onTitleChange,
+        onTitleClick,
         onTaskChange,
+        onTaskClick,
         onCalendarClick,
         onTimeClick,
         onDateChange,
@@ -55,6 +65,8 @@ export const AddTask: React.FC<AddTaskProps> = (
         onAddClick,
         onCloseClick,
         show,
+        isInvalidTitle,
+        isInvalidTask,
         title,
         task,
         dateToDo,
@@ -62,7 +74,10 @@ export const AddTask: React.FC<AddTaskProps> = (
         timeClasses
     }: AddTaskProps = defaultProps
 ) => {
-    
+    const titleDefClasses: string[] = [];
+    const taskDefClasses: string[] = [];
+    const titleClasses = isInvalidTitle ? [...titleDefClasses, "add-task-title-area__invalid"] : [...titleDefClasses, "add-task-title-area"];
+    const taskClasses = isInvalidTask ? [...taskDefClasses, "add-task-text-area__invalid"] : [...taskDefClasses, "add-task-text-area"];
     const hoursList: number[] = [];
     const minutesList: number[] = [];
     for(let i = 0; i < 24; i++) {
@@ -115,9 +130,10 @@ export const AddTask: React.FC<AddTaskProps> = (
                         <Form.Control 
                             as="textarea"
                             placeholder="Task name"
+                            onClick={onTitleClick}
                             onChange={onTitleChange}
                             value={title}
-                            className="add-task-title-area"
+                            className={titleClasses.join(' ')}
                         />
                     </Form.Group>
                     <Form.Group as="div">
@@ -130,9 +146,10 @@ export const AddTask: React.FC<AddTaskProps> = (
                         <Form.Control 
                             as="textarea"
                             placeholder="Task Note"
+                            onClick={onTaskClick}
                             onChange={onTaskChange}
                             value={task}
-                            className="add-task-text-area"
+                            className={taskClasses.join(' ')}
                         />
                     </Form.Group>
                     <Form.Group as="div">
