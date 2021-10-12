@@ -33,7 +33,7 @@ module.exports = {
             patterns: [
                 {
                     from: path.resolve(__dirname, 'src/client/static/favicon.ico'),
-                    to: path.resolve(__dirname, 'build/src/client')
+                    to: path.resolve(__dirname, 'build/src/client/public/ico')
                 },
                 {
                     from: path.resolve(__dirname, 'src/client/static/main.html'),
