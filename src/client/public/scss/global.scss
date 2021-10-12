@@ -14,3 +14,7 @@ li {
 .hidden {
   display: none;
 }
+
+.invalid {
+  @include invalid();
+}
