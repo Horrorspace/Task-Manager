@@ -24,7 +24,7 @@ interface ISetting {
 export const Settings: React.FC = () => {
     const dispatch = useDispatch();
     const userData = useSelector((state: IRootState): IUserInstance => state.user.user!);
-    const groups: string[] = ['Account', 'Personal', 'Authorization'];
+    const groups: string[] = ['Account', 'Authorization'];
     const languageList: string[] = ['English', 'Russian'];
     const booleanList: string[] = ['Yes', 'No']
 
@@ -149,13 +149,13 @@ export const Settings: React.FC = () => {
             value: userData.getUserEmail(),
             handler: handleEmailOpen
         },
-        {
-            ico: faMobileAlt,
-            title: 'Phone',
-            group: 'Account',
-            value: phone,
-            handler: handlePhoneClick
-        },
+        // {
+        //     ico: faMobileAlt,
+        //     title: 'Phone',
+        //     group: 'Account',
+        //     value: phone,
+        //     handler: handlePhoneClick
+        // },
         {
             ico: faUser,
             title: 'Name',
@@ -163,13 +163,13 @@ export const Settings: React.FC = () => {
             value: userData.getUserName(),
             handler: handleNameOpen
         },
-        {
-            ico: faTelegramPlane,
-            title: 'Telegram',
-            group: 'Account',
-            value: telegram,
-            handler: handleTelegramClick
-        },
+        // {
+        //     ico: faTelegramPlane,
+        //     title: 'Telegram',
+        //     group: 'Account',
+        //     value: telegram,
+        //     handler: handleTelegramClick
+        // },
         {
             ico: faKey,
             title: 'Password',
@@ -177,27 +177,27 @@ export const Settings: React.FC = () => {
             value: '*********',
             handler: handlePasswordClick
         },
-        {
-            ico: faGlobeEurope,
-            title: 'Language',
-            group: 'Personal',
-            value: language,
-            handler: handleLanguageClick
-        },
-        {
-            ico: faVolumeUp,
-            title: 'Sound',
-            group: 'Personal',
-            value: notification ? booleanList[0] : booleanList[1],
-            handler: handleNotificationClick
-        },
-        {
-            ico: faBell,
-            title: 'Notifications',
-            group: 'Personal',
-            value: sound ? booleanList[0] : booleanList[1],
-            handler: handleSoundClick
-        },
+        // {
+        //     ico: faGlobeEurope,
+        //     title: 'Language',
+        //     group: 'Personal',
+        //     value: language,
+        //     handler: handleLanguageClick
+        // },
+        // {
+        //     ico: faVolumeUp,
+        //     title: 'Sound',
+        //     group: 'Personal',
+        //     value: notification ? booleanList[0] : booleanList[1],
+        //     handler: handleNotificationClick
+        // },
+        // {
+        //     ico: faBell,
+        //     title: 'Notifications',
+        //     group: 'Personal',
+        //     value: sound ? booleanList[0] : booleanList[1],
+        //     handler: handleSoundClick
+        // },
         {
             ico: faSignOutAlt,
             title: 'Log out',
