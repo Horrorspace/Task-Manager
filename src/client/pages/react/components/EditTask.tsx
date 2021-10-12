@@ -9,7 +9,9 @@ import {faCheckSquare, faFlag as faFlagSolid, faHandPaper as faHandPaperSolid} f
 interface EditTaskProps {
     onHide?: () => void;
     onTitleChange?: (event?: ChangeEvent<HTMLElement>) => void;
+    onTitleClick?: (event?: MouseEvent<HTMLElement>) => void;
     onTaskChange?: (event?: ChangeEvent<HTMLElement>) => void;
+    onTaskClick?: (event?: MouseEvent<HTMLElement>) => void;
     onCalendarClick?: (event?: MouseEvent<HTMLElement>) => void;
     onTimeClick?: (event?: MouseEvent<HTMLElement>) => void;
     onDateChange?: (value?: Date) => void;
@@ -24,6 +26,8 @@ interface EditTaskProps {
     onCloseDeleteClick?: () => void;
     onDeleteTask?: (event?: MouseEvent<HTMLElement>) => void;
     show?: boolean;
+    isInvalidTitle?: boolean;
+    isInvalidTask?: boolean;
     delWindowShow?: boolean;
     title?: string;
     task?: string;
@@ -38,7 +42,9 @@ interface EditTaskProps {
 const defaultProps: EditTaskProps = {
     onHide: () => {},
     onTitleChange: () => {},
+    onTitleClick: () => {},
     onTaskChange: () => {},
+    onTaskClick: () => {},
     onCalendarClick: () => {},
     onTimeClick: () => {},
     onDateChange: () => {},
@@ -53,6 +59,8 @@ const defaultProps: EditTaskProps = {
     onCloseDeleteClick: () => {},
     onDeleteTask: () => {},
     show: false,
+    isInvalidTitle: false,
+    isInvalidTask: false,
     delWindowShow: false,
     title: '',
     task: '',
@@ -64,12 +72,13 @@ const defaultProps: EditTaskProps = {
     timeClasses: ['hidden']
 }
 
-
 export const EditTask: React.FC<EditTaskProps> = (
     {
         onHide,
         onTitleChange,
+        onTitleClick,
         onTaskChange,
+        onTaskClick,
         onCalendarClick,
         onTimeClick,
         onDateChange,
@@ -84,6 +93,8 @@ export const EditTask: React.FC<EditTaskProps> = (
         onCloseDeleteClick,
         onDeleteTask,
         show,
+        isInvalidTitle,
+        isInvalidTask,
         delWindowShow,
         title,
         task,
@@ -95,6 +106,10 @@ export const EditTask: React.FC<EditTaskProps> = (
         timeClasses
     }: EditTaskProps = defaultProps
 ) => {
+    const titleDefClasses: string[] = [];
+    const taskDefClasses: string[] = [];
+    const titleClasses = isInvalidTitle ? [...titleDefClasses, "add-task-title-area__invalid"] : [...titleDefClasses, "add-task-title-area"];
+    const taskClasses = isInvalidTask ? [...taskDefClasses, "add-task-text-area__invalid"] : [...taskDefClasses, "add-task-text-area"];
     const hoursList: number[] = [];
     const minutesList: number[] = [];
     for(let i = 0; i < 24; i++) {
@@ -163,7 +178,8 @@ export const EditTask: React.FC<EditTaskProps> = (
                             as="textarea"
                             placeholder="Enter the title"
                             onChange={onTitleChange}
-                            className="add-task-title-area"
+                            onClick={onTitleClick}
+                            className={titleClasses.join(' ')}
                             value={title}
                         />
                     </Form.Group>
@@ -178,7 +194,8 @@ export const EditTask: React.FC<EditTaskProps> = (
                             as="textarea"
                             placeholder="Enter the task description"
                             onChange={onTaskChange}
-                            className="add-task-text-area"
+                            onClick={onTaskClick}
+                            className={taskClasses.join(' ')}
                             value={task}
                         />
                     </Form.Group>
