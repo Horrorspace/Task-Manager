@@ -151,7 +151,13 @@
         background-color: $mainColorHover;
         box-shadow: 0px 0px 4px 2px rgba(220,221,252,0.75);
     }
+
+    &:invalid {
+        border: 2px, solid, red;
+        box-shadow: 0px 0px 4px 4px rgba(255,0,0,1);
+    }
 }
+
 
 .add-task-date-btn {
     @include font($LightFontColor, 14px, 300);
@@ -181,6 +187,59 @@
     // width: calc(#{$MaxWidth} - 30px);
     // margin-right: 15px;
     // margin-left: 15px;
+    opacity: $opacity;
+    resize: none;
+
+    &::placeholder {
+        @include font($LightFontColor, 14px, 300);
+        opacity: 0.4;
+    }
+
+    &:focus {
+        @include font($LightFontColor, 14px, 300);
+        background-color: $mainColorHover;
+        box-shadow: 0px 0px 4px 2px rgba(220,221,252,0.75);
+    }
+
+    &:invalid {
+        @include invalid();
+    }
+}
+
+.add-task-text-area__invalid {
+    @include font($LightFontColor, 14px, 300);
+    @include invalid();
+    overflow: hidden;
+    overflow-wrap: break-word;
+    background-color: $mainColorHover;
+    border: 0;
+    border-radius: 2px;
+    min-height: 100px;
+    opacity: $opacity;
+    resize: none;
+
+    &::placeholder {
+        @include font($LightFontColor, 14px, 300);
+        opacity: 0.4;
+    }
+
+    &:focus {
+        @include font($LightFontColor, 14px, 300);
+        background-color: $mainColorHover;
+        box-shadow: 0px 0px 4px 2px rgba(220,221,252,0.75);
+    }
+}
+
+
+.add-task-title-area__invalid {
+    @include font($LightFontColor, 14px, 300);
+    @include invalid();
+    overflow: hidden;
+    overflow-wrap: break-word;
+    background-color: $mainColorHover;
+    border: 0;
+    border-radius: 2px;
+    min-height: 100px;
     opacity: $opacity;
     resize: none;
 
