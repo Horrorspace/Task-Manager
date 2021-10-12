@@ -11,8 +11,10 @@ import messageSaga from '@redux/saga/appSaga/messageSaga'
 export default function* sagaWatcher() {
     yield takeEvery([
         TaskActTypes.setUpdatingStatus,
+        TaskActTypes.setTasks,
         TaskActTypes.setDefault,
         UserActTypes.setUpdatingStatus,
+        UserActTypes.setUser,
         UserActTypes.setDefault,
     ], appUpSaga);
     yield takeEvery(AppActTypes.addMessage, messageSaga);
