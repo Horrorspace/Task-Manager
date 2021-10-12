@@ -1,6 +1,7 @@
 import React, {useState, ReactElement, MouseEvent, ChangeEvent} from 'react'
 import {Container, Row, Col, Button, Form, Modal} from 'react-bootstrap'
 import {useSelector, useDispatch} from 'react-redux'
+import {emailValidate} from '@core/functions/validation'
 import {IRootState, IAppState} from '@interfaces/IStore'
 import {ITaskInstance, ITasksInstance, INewTask, ITaskToEdit} from '@interfaces/ITask'
 import {IEmailUp, INameUp, IUserInstance} from '@interfaces/IUser'
@@ -27,7 +28,7 @@ export const Settings: React.FC = () => {
     const groups: string[] = ['Account', 'Authorization'];
     const languageList: string[] = ['English', 'Russian'];
     const booleanList: string[] = ['Yes', 'No']
-
+    const [isInvalidEmail, setInvalidEmail] = useState(false);
     const [emailShow, setEmailShow] = useState(false);
     const [nameShow, setNameShow] = useState(false);
     const [passShow, setPassShow] = useState(false);
@@ -44,6 +45,7 @@ export const Settings: React.FC = () => {
     const setDefault = () => {
         setEmailShow(false);
         setNameShow(false);
+        setInvalidEmail(false);
         setEmail('');
         setName('');
         setPassword('');
@@ -70,13 +72,19 @@ export const Settings: React.FC = () => {
         }
     }
     const handleEmailSave = (event: MouseEvent<HTMLElement>): void => {
-        const data: IEmailUp = {
-            newEmail: email,
-            email: userData.getUserEmail(),
-            password
+        if(emailValidate(email)) {
+            const data: IEmailUp = {
+                newEmail: email,
+                email: userData.getUserEmail(),
+                password
+            }
+            dispatch(toUpdateEmail(data));
+            setDefault();
         }
-        dispatch(toUpdateEmail(data));
-        setDefault();
+        else {
+            setInvalidEmail(true);
+            setTimeout(() => {setInvalidEmail(false)}, 4000)
+        }
     }
 
     const handleNameOpen = (event: MouseEvent<HTMLElement>): void => {
@@ -139,6 +147,9 @@ export const Settings: React.FC = () => {
     const handleSoundClick = (event: MouseEvent<HTMLButtonElement>): void => {
         setSound(prev => !prev)
     }
+
+    const emailDefClasses: string[] = [];
+    const emailClasses = isInvalidEmail ? [...emailDefClasses, "add-task-title-area__invalid"] : [...emailDefClasses, "add-task-title-area"];
     
 
     const staticSettings: ISetting[] = [
@@ -241,7 +252,7 @@ export const Settings: React.FC = () => {
                             placeholder="Task name"
                             onChange={handleEmailChange}
                             value={email}
-                            className="add-task-title-area"
+                            className={emailClasses.join(' ')}
                         />
                     </Form.Group>
                     <Form.Group as="div">
