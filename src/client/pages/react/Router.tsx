@@ -16,7 +16,7 @@ import {downloadAllTasks} from '@redux/actions/taskActions'
 export const Router: React.FC = () => {
     const dispatch = useDispatch();
     dispatch(getCurrentUser());
-    const isLogined = useSelector((state: IRootState) => state.user.isLogined);
+    const isLogined = useSelector((state: IRootState): boolean => state.user.isLogined);
     const routes: React.ReactElement = useRoutes(isLogined);
     if(isLogined) {
         dispatch(downloadAllTasks());
