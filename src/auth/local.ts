@@ -27,7 +27,6 @@ export const localStrategy = new LocalStrategy(
             }
         }
         catch(e) {
-            console.log(e);
             return done(e)
         }
     }
