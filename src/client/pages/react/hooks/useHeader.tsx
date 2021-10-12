@@ -1,6 +1,8 @@
 import React from 'react'
 import {Container, Row, Col, Button, Dropdown} from 'react-bootstrap'
 import {MainHeader} from '@react/components/MainHeader'
+import {SimpleHeader} from '@react/components/SimpleHeader'
+
 
 
 export const useHeader = (routeName: string): React.ReactElement => {
@@ -9,9 +11,47 @@ export const useHeader = (routeName: string): React.ReactElement => {
             return (
                 <Container as="header" className="header mx-auto" fluid />
             )
+        case '/List':
+            return (
+                <MainHeader 
+                    titleState="All Tasks"
+                />
+            )
+        case '/':
+            return (
+                <MainHeader 
+                    titleState="My Tasks"
+                />
+            )
+        case '/Important':
+            return (
+                <MainHeader 
+                    titleState="Important Tasks"
+                    hideOnlyImportant={true}
+                />
+            )
+        case '/Today':
+            return (
+                <MainHeader 
+                    titleState="Today Tasks"
+                    hideOnlyToday={true}
+                />
+            )
+        case '/Calendar':
+            return (
+                <MainHeader 
+                    titleState="Calendar"
+                />
+            )
+        case '/Settings':
+            return (
+                <SimpleHeader 
+                    titleState="Settings"
+                />
+            )
         default:
             return (
-                <MainHeader />
+                <Container as="header" className="header mx-auto" fluid />
             )
     }
 }
