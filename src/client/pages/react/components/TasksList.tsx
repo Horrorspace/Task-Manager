@@ -23,6 +23,8 @@ export const TasksList: React.FC = () => {
     const tasksData = useSelector((state: IRootState): ITasksInstance => state.task.tasks);
     const appState = useSelector((state: IRootState): IAppState => state.app);
     const [addShow, setAddShow] = useState(false);
+    const [isInvalidTitle, setInvalidTitle] = useState(false);
+    const [isInvalidTask, setInvalidTask] = useState(false);
     const [editShow, setEditShow] = useState(false);
     const [delShow, setDelShow] = useState(false);
     const [id, setId] = useState<number | null>(null);
@@ -124,6 +126,8 @@ export const TasksList: React.FC = () => {
         setPriority(false);
         setComplite(false);
         setCancel(false);
+        setInvalidTitle(false);
+        setInvalidTask(false);
         setCalendarClasses(prev => {
             if(prev.indexOf('hidden') === -1) {
                 return [...prev, 'hidden']
@@ -162,42 +166,62 @@ export const TasksList: React.FC = () => {
     }
 
     const handleAddTask = ():void => {
-        const taskToAdd: INewTask<string> = {
-            title,
-            task,
-            email: userData.getUserEmail(),
-            dateToDo: dateStringify(dateToDo)
+        if(title && task) {
+            const taskToAdd: INewTask<string> = {
+                title,
+                task,
+                email: userData.getUserEmail(),
+                dateToDo: dateStringify(dateToDo)
+            }
+            dispatch(addTask(taskToAdd));
+            setDefault();
+            setAddShow(false);
+            setEditShow(false);
         }
-        dispatch(addTask(taskToAdd));
-        setDefault();
-        setAddShow(false);
-        setEditShow(false);
+        if(!title) {
+            setInvalidTitle(true);
+            setTimeout(() => {setInvalidTitle(false)}, 4000)
+        }
+        if(!task) {
+            setInvalidTask(true);
+            setTimeout(() => {setInvalidTask(false)}, 4000)
+        }
     }
 
     const handleEditTask = (): void => {
-        if(id) {
-            const oldTask: ITaskInstance = tasksData.getTaskById(id);
-            const taskToEdit: ITaskToEdit = {
-                id,
-                title,
-                task,
-                dateToDo: dateStringify(dateToDo)
+        if(title && task) {
+            if(id) {
+                const oldTask: ITaskInstance = tasksData.getTaskById(id);
+                const taskToEdit: ITaskToEdit = {
+                    id,
+                    title,
+                    task,
+                    dateToDo: dateStringify(dateToDo)
+                }
+                dispatch(editTask(taskToEdit));
+                console.log(oldTask.getPriority(), priority)
+                if(oldTask.getPriority() !== priority) {
+                    dispatch(togglePriority(id));
+                }
+                if(oldTask.getComplete() !== complite) {
+                    dispatch(toggleComplete(id));
+                }
+                if(oldTask.getCancel() !== cancel) {
+                    dispatch(toggleCancel(id));
+                }
             }
-            dispatch(editTask(taskToEdit));
-            console.log(oldTask.getPriority(), priority)
-            if(oldTask.getPriority() !== priority) {
-                dispatch(togglePriority(id));
-            }
-            if(oldTask.getComplete() !== complite) {
-                dispatch(toggleComplete(id));
-            }
-            if(oldTask.getCancel() !== cancel) {
-                dispatch(toggleCancel(id));
-            }
+            setDefault();
+            setEditShow(false);
+            setDelShow(false);
         }
-        setDefault();
-        setEditShow(false);
-        setDelShow(false);
+        if(!title) {
+            setInvalidTitle(true);
+            setTimeout(() => {setInvalidTitle(false)}, 4000)
+        }
+        if(!task) {
+            setInvalidTask(true);
+            setTimeout(() => {setInvalidTask(false)}, 4000)
+        }
     }
     
     const handleDelTask = (): void => {
@@ -227,10 +251,15 @@ export const TasksList: React.FC = () => {
 
     const handleTitleChange = (event?: ChangeEvent<HTMLElement>) => {
         if(event) {
+            setInvalidTitle(false);
             const target = event.target as HTMLTextAreaElement;
             const value = target.value;
             setTitle(value);
         }
+    }
+
+    const handleTitleClick = () => {
+        setInvalidTitle(false);
     }
 
     const handleTaskChange = (event?: ChangeEvent<HTMLElement>) => {
@@ -239,6 +268,10 @@ export const TasksList: React.FC = () => {
             const value = target.value;
             setTask(value);
         }
+    }
+
+    const handleTaskClick = () => {
+        setInvalidTask(false);
     }
 
     const handleDate = (value?: Date): void => {
@@ -488,7 +521,7 @@ export const TasksList: React.FC = () => {
                                                         </Button>
                                                         <Button 
                                                             className="task-cancel-btn" 
-                                                            variant="danger"
+                                                            variant="light"
                                                             onClick={handleCancelChange}                                                    
                                                         >
                                                             <FontAwesomeIcon 
@@ -525,7 +558,9 @@ export const TasksList: React.FC = () => {
             <AddTask
                 onHide={handleAddClose}
                 onTitleChange={handleTitleChange}
+                onTitleClick={handleTitleClick}
                 onTaskChange={handleTaskChange}
+                onTaskClick={handleTaskClick}
                 onCalendarClick={handleCalendarToggle}
                 onTimeClick={handleTimeToggle}
                 onDateChange={handleDate}
@@ -534,6 +569,8 @@ export const TasksList: React.FC = () => {
                 onAddClick={handleAddTask}
                 onCloseClick={handleAddClose}
                 show={addShow}
+                isInvalidTitle={isInvalidTitle}
+                isInvalidTask={isInvalidTask}
                 title={title}
                 task={task}
                 dateToDo={dateToDo}
@@ -543,7 +580,9 @@ export const TasksList: React.FC = () => {
             <EditTask
                 onHide={handleEditClose}
                 onTitleChange={handleTitleChange}
+                onTitleClick={handleTitleClick}
                 onTaskChange={handleTaskChange}
+                onTaskClick={handleTaskClick}
                 onCalendarClick={handleCalendarToggle}
                 onTimeClick={handleTimeToggle}
                 onDateChange={handleDate}
@@ -558,6 +597,8 @@ export const TasksList: React.FC = () => {
                 onCloseDeleteClick={handleDelToggle}
                 onDeleteTask={handleDelTask}
                 show={editShow}
+                isInvalidTitle={isInvalidTitle}
+                isInvalidTask={isInvalidTask}
                 delWindowShow={delShow}
                 title={title}
                 task={task}
