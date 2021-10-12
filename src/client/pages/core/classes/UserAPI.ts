@@ -125,8 +125,8 @@ export default class UserAPI {
                 headers: UserAPI.headers
             }).pipe(
                 map(res => {
-                    if(res.status === 200 ) {
-                        return res.json()
+                    if(res.status === 200) {
+                        return res.status
                     }
                     else {
                         throw {
@@ -178,7 +178,7 @@ export default class UserAPI {
         })
     }
 
-    public static async toUpdateEmail(data: IEmailUp): Promise<void> {
+    public static async toUpdateEmail(data: IEmailUp): Promise<boolean> {
         return new Promise((resolve, reject) => {
             const url: string = `${UserAPI.authUrl}/email_update`;
             const data$ = fromFetch(url, {
@@ -187,8 +187,8 @@ export default class UserAPI {
                 body: JSON.stringify(data)
             }).pipe(
                 map(res => {
-                    if(res.status === 200 ) {
-                        return res.json()
+                    if(res.status === 200 || res.status === 401) {
+                        return res.status
                     }
                     else {
                         throw {
@@ -199,8 +199,8 @@ export default class UserAPI {
                 })
             );
             const sub: Subscription = data$.subscribe({
-                complete: () => {
-                    resolve()
+                next: (status) => {
+                    resolve(status === 200 ? true : false)
                 },
                 error: (e) => {
                     reject(e)
