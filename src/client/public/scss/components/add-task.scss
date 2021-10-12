@@ -132,7 +132,7 @@
     background-color: $mainColorHover;
     border: 0;
     border-radius: 2px;
-    height: 50px;
+    // height: 50px;
     // width: calc(#{$MaxWidth} - 30px);
     // margin-right: 15px;
     // margin-left: 15px;
@@ -183,7 +183,6 @@
     background-color: $mainColorHover;
     border: 0;
     border-radius: 2px;
-    min-height: 100px;
     // width: calc(#{$MaxWidth} - 30px);
     // margin-right: 15px;
     // margin-left: 15px;
@@ -214,7 +213,6 @@
     background-color: $mainColorHover;
     border: 0;
     border-radius: 2px;
-    min-height: 100px;
     opacity: $opacity;
     resize: none;
 
@@ -239,7 +237,6 @@
     background-color: $mainColorHover;
     border: 0;
     border-radius: 2px;
-    min-height: 100px;
     opacity: $opacity;
     resize: none;
 
