@@ -50,9 +50,9 @@ router.post(
     ],
     passport.authenticate(
         'local', {
-            successFlash: true,
+            successFlash: false,
             successMessage: 'You have been logined',
-            failureFlash: true,
+            failureFlash: false,
             session: false
         }
     ),
