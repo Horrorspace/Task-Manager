@@ -26,6 +26,7 @@ export const setUpdatingStatus = (isDataUpdating: boolean): IUserAction => {
 };
 
 export const setValidPass = (isValidPass: boolean): IUserAction => {
+    console.log(`isValidPass: ${isValidPass}`)
     return {
         type: UserActTypes.setValidPass,
         isValidPass

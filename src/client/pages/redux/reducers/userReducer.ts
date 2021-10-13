@@ -39,7 +39,8 @@ export const userReducer: Reducer<IUserState, IUserAction> = (state: IUserState 
                 return state
             }
         case UserActTypes.setValidPass:
-            if(action.isValidPass) {
+            if(action.hasOwnProperty('isValidPass') && typeof(action.isValidPass) === 'boolean') {
+                console.log(`setValidPass: ${action.isValidPass}`)
                 return {
                     ...state,
                     isValidPass: action.isValidPass

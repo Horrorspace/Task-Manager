@@ -84,33 +84,31 @@ export const Settings: React.FC = () => {
                 password
             }
             dispatch(toUpdateEmail(data));
-            const $timer: Observable<void> = interval(500)
+            const $timer: Observable<number> = interval(500)
                 .pipe(
-                    take(60),
-                    map((val) => {
-                        if(!isUpdating) {
-                            if(!isValidPass) {
-                                setPassword('');
-                                setInvalidPass(true);
-                                setTimeout(() => {setInvalidPass(false)}, 4000)
-                            }
-                            else {
-                                setDefault();
-                            }
-                        }
-                        else {
-                            if(val > 59) {
-                                throw `Response from server hasn't been receive`
-                            }
-                        }
-                    }),
-                    filter(() => isUpdating)
+                    take(60)
                 );
             const sub: Subscription = $timer.subscribe({
-                next: () => {
-
+                next: (val) => {
+                    if(!isUpdating) {
+                        if(!isValidPass) {
+                            setPassword('');
+                            setInvalidPass(true);
+                            setTimeout(() => {setInvalidPass(false)}, 4000)
+                        }
+                        else {
+                            setDefault();
+                        }
+                        sub.unsubscribe();
+                    }
+                    else {
+                        if(val > 59) {
+                            throw `Response from server hasn't been receive`
+                        }
+                    }
                 },
                 complete: () => {
+                    dispatch(setError(`Response from server hasn't been receive`));
                     setDefault();
                 },
                 error: (e) => {
