@@ -17,6 +17,7 @@ export interface IUserState {
     isLogined: boolean;
     error: string | null;
     message: string | null;
+    isValidPass: boolean;
 }
 
 export interface IAppState {
@@ -53,6 +54,7 @@ export interface IUserAction extends IAction {
     isDataUpdating?: boolean;
     error?: string;
     message?: string;
+    isValidPass?: boolean;
 }
 
 export interface IAppAction extends IAction {

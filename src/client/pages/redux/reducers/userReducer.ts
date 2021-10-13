@@ -9,6 +9,7 @@ const defaultState: IUserState = {
     isLogined: false,
     error: null,
     message: null,
+    isValidPass: true
 };
 
 export const userReducer: Reducer<IUserState, IUserAction> = (state: IUserState = defaultState, action: IUserAction): IUserState => {
@@ -33,6 +34,16 @@ export const userReducer: Reducer<IUserState, IUserAction> = (state: IUserState 
                         ...state,
                         isDataUpdating: action.isDataUpdating
                     }
+            }
+            else {
+                return state
+            }
+        case UserActTypes.setValidPass:
+            if(action.isValidPass) {
+                return {
+                    ...state,
+                    isValidPass: action.isValidPass
+                }
             }
             else {
                 return state

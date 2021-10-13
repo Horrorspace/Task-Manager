@@ -1,3 +1,5 @@
+import { interval, Subscription, Observable } from 'rxjs';
+import { take, map, filter } from 'rxjs/operators';
 import React, {useState, ReactElement, MouseEvent, ChangeEvent} from 'react'
 import {Container, Row, Col, Button, Form, Modal} from 'react-bootstrap'
 import {useSelector, useDispatch} from 'react-redux'
@@ -5,7 +7,7 @@ import {emailValidate} from '@core/functions/validation'
 import {IRootState, IAppState} from '@interfaces/IStore'
 import {ITaskInstance, ITasksInstance, INewTask, ITaskToEdit} from '@interfaces/ITask'
 import {IEmailUp, INameUp, IUserInstance} from '@interfaces/IUser'
-import {toLogout, toUpdateEmail, toUpdateName} from '@redux/actions/userActions'
+import {setError, toLogout, toUpdateEmail, toUpdateName} from '@redux/actions/userActions'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {IconDefinition} from '@fortawesome/fontawesome-common-types'
 import { faMobileAlt, faKey, faGlobeEurope, faVolumeUp, faUser, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
@@ -25,10 +27,13 @@ interface ISetting {
 export const Settings: React.FC = () => {
     const dispatch = useDispatch();
     const userData = useSelector((state: IRootState): IUserInstance => state.user.user!);
+    const isUpdating = useSelector((state: IRootState): boolean => state.user.isDataUpdating!);
+    const isValidPass = useSelector((state: IRootState): boolean => state.user.isValidPass!);
     const groups: string[] = ['Account', 'Authorization'];
     const languageList: string[] = ['English', 'Russian'];
     const booleanList: string[] = ['Yes', 'No']
     const [isInvalidEmail, setInvalidEmail] = useState(false);
+    const [isInvalidPass, setInvalidPass] = useState(false);
     const [emailShow, setEmailShow] = useState(false);
     const [nameShow, setNameShow] = useState(false);
     const [passShow, setPassShow] = useState(false);
@@ -79,7 +84,41 @@ export const Settings: React.FC = () => {
                 password
             }
             dispatch(toUpdateEmail(data));
-            setDefault();
+            const $timer: Observable<void> = interval(500)
+                .pipe(
+                    take(60),
+                    map((val) => {
+                        if(!isUpdating) {
+                            if(!isValidPass) {
+                                setPassword('');
+                                setInvalidPass(true);
+                                setTimeout(() => {setInvalidPass(false)}, 4000)
+                            }
+                            else {
+                                setDefault();
+                            }
+                        }
+                        else {
+                            if(val > 59) {
+                                throw `Response from server hasn't been receive`
+                            }
+                        }
+                    }),
+                    filter(() => isUpdating)
+                );
+            const sub: Subscription = $timer.subscribe({
+                next: () => {
+
+                },
+                complete: () => {
+                    setDefault();
+                },
+                error: (e) => {
+                    dispatch(setError(`${e}`));
+                    setDefault();
+                }
+            })
+            
         }
         else {
             setInvalidEmail(true);
@@ -149,8 +188,10 @@ export const Settings: React.FC = () => {
     }
 
     const emailDefClasses: string[] = [];
+    const passDefClasses: string[] = [];
     const emailClasses = isInvalidEmail ? [...emailDefClasses, "add-task-title-area__invalid"] : [...emailDefClasses, "add-task-title-area"];
-    
+    const passClasses = isInvalidPass ? [...passDefClasses, "add-task-title-area__invalid"] : [...passDefClasses, "add-task-title-area"];
+
 
     const staticSettings: ISetting[] = [
         {
@@ -266,7 +307,7 @@ export const Settings: React.FC = () => {
                             placeholder="Task Note"
                             onChange={handlePasswordChange}
                             value={password}
-                            className="add-task-title-area"
+                            className={passClasses.join(' ')}
                             type="password"
                         />
                     </Form.Group>

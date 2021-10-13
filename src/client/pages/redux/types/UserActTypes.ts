@@ -6,4 +6,5 @@ export enum UserActTypes {
     setMessage = 'setMessage2',
     clearError = 'clearError2',
     clearMessage = 'clearMessage2',
+    setValidPass = 'setValidPass'
 }

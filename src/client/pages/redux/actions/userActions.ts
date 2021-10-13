@@ -25,6 +25,13 @@ export const setUpdatingStatus = (isDataUpdating: boolean): IUserAction => {
     }
 };
 
+export const setValidPass = (isValidPass: boolean): IUserAction => {
+    return {
+        type: UserActTypes.setValidPass,
+        isValidPass
+    }
+};
+
 export const setError = (error: string): IUserAction => {
     return {
         type: UserActTypes.setError,
@@ -142,9 +149,16 @@ export const toUpdateEmail = (data: IEmailUp): IThunkAction<IUserState> => {
             dispatch(setUpdatingStatus(true));
             const oldEmail = data.email;
             const newEmail = data.newEmail;
-            await UserAPI.toUpdateEmail(data);
-            dispatch(setMessage(`Email have been changed from ${oldEmail} to ${newEmail}`));
-            thunkDispatch(getCurrentUser());
+            const isMatch = await UserAPI.toUpdateEmail(data);
+            if(isMatch) {
+                dispatch(setMessage(`Email have been changed from ${oldEmail} to ${newEmail}`));
+                thunkDispatch(getCurrentUser());
+            }
+            else {
+                dispatch(setValidPass(false));
+                dispatch(setUpdatingStatus(false));
+            }
+
         }
         catch(e) {
             dispatch(setUpdatingStatus(false));
