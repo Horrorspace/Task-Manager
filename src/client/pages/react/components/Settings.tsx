@@ -97,6 +97,7 @@ export const Settings: React.FC = () => {
                             setTimeout(() => {setInvalidPass(false)}, 4000)
                         }
                         else {
+                            console.log(`setDefault`);
                             setDefault();
                         }
                         sub.unsubscribe();
@@ -108,10 +109,12 @@ export const Settings: React.FC = () => {
                     }
                 },
                 complete: () => {
+                    console.log(`complete`);
                     dispatch(setError(`Response from server hasn't been receive`));
                     setDefault();
                 },
                 error: (e) => {
+                    console.log(`error`);
                     dispatch(setError(`${e}`));
                     setDefault();
                 }
