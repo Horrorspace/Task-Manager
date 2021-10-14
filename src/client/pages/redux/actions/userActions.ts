@@ -5,6 +5,8 @@ import UserAPI from '@core/classes/UserAPI'
 import {Dispatch} from 'redux'
 
 
+
+
 export const setUser = (user: IUserInstance): IUserAction => {
     return {
         type: UserActTypes.setUser,
@@ -19,6 +21,7 @@ export const setDefault = (): IUserAction => {
 };
 
 export const setUpdatingStatus = (isDataUpdating: boolean): IUserAction => {
+    console.log(`isDataUpdating: ${isDataUpdating}`)
     return {
         type: UserActTypes.setUpdatingStatus,
         isDataUpdating

@@ -1,18 +1,19 @@
 import { interval, Subscription, Observable } from 'rxjs';
 import { take, map, filter } from 'rxjs/operators';
-import React, {useState, ReactElement, MouseEvent, ChangeEvent} from 'react'
+import React, {useState, useMemo, ReactElement, MouseEvent, ChangeEvent} from 'react'
 import {Container, Row, Col, Button, Form, Modal} from 'react-bootstrap'
 import {useSelector, useDispatch} from 'react-redux'
 import {emailValidate} from '@core/functions/validation'
 import {IRootState, IAppState} from '@interfaces/IStore'
 import {ITaskInstance, ITasksInstance, INewTask, ITaskToEdit} from '@interfaces/ITask'
 import {IEmailUp, INameUp, IUserInstance} from '@interfaces/IUser'
-import {setError, toLogout, toUpdateEmail, toUpdateName} from '@redux/actions/userActions'
+import {setError, toLogout, toUpdateEmail, toUpdateName, setUpdatingStatus} from '@redux/actions/userActions'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {IconDefinition} from '@fortawesome/fontawesome-common-types'
 import { faMobileAlt, faKey, faGlobeEurope, faVolumeUp, faUser, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
 import { faEnvelope, faBell } from '@fortawesome/free-regular-svg-icons'
 import { faTelegramPlane } from '@fortawesome/free-brands-svg-icons'
+import {store} from '@redux/store'
 
 
 interface ISetting {
@@ -27,8 +28,6 @@ interface ISetting {
 export const Settings: React.FC = () => {
     const dispatch = useDispatch();
     const userData = useSelector((state: IRootState): IUserInstance => state.user.user!);
-    const isUpdating = useSelector((state: IRootState): boolean => state.user.isDataUpdating!);
-    const isValidPass = useSelector((state: IRootState): boolean => state.user.isValidPass!);
     const groups: string[] = ['Account', 'Authorization'];
     const languageList: string[] = ['English', 'Russian'];
     const booleanList: string[] = ['Yes', 'No']
@@ -83,6 +82,7 @@ export const Settings: React.FC = () => {
                 email: userData.getUserEmail(),
                 password
             }
+            dispatch(setUpdatingStatus(true));
             dispatch(toUpdateEmail(data));
             const $timer: Observable<number> = interval(500)
                 .pipe(
@@ -90,8 +90,13 @@ export const Settings: React.FC = () => {
                 );
             const sub: Subscription = $timer.subscribe({
                 next: (val) => {
+                    const state = store.getState();
+                    const isUpdating = state.user.isDataUpdating;
+                    const isValidPass = state.user.isValidPass;
+                    console.log(`isUpdating: ${isUpdating}`);
                     if(!isUpdating) {
                         if(!isValidPass) {
+                            console.log('validPass')
                             setPassword('');
                             setInvalidPass(true);
                             setTimeout(() => {setInvalidPass(false)}, 4000)
