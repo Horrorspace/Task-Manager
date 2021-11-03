@@ -7,6 +7,7 @@ import UserAPI from '@core/classes/UserAPI'
 import TaskAPI from '@core/classes/TaskAPI'
 import { ILogin } from '@interfaces/IUser'
 import { INewTask } from '@interfaces/ITask'
+
 import {saga} from '@redux/saga/saga'
 import rootSaga from '@redux/saga/rootSaga'
 
@@ -40,6 +41,25 @@ async function testAPI() {
 // testAPI().then(
 //   d => console.log('ok', d)
 // )
+
+try {
+  const wsConnection = new WebSocket('ws://37.193.148.113:3009');
+  wsConnection.onopen = () => {
+    console.log('connection open');
+  }
+  wsConnection.onmessage = (event) => {
+    console.log(`Data: ${event.data}`);
+  }
+  wsConnection.onclose = () => {
+    console.log('connection closed');
+  }
+  wsConnection.onerror = (e: any) => {
+    console.error(`Error is: ${e}`);
+  }
+}
+catch(e) {
+  console.error(`Error is: ${e}`);
+}
 
 
 saga.run(rootSaga);
