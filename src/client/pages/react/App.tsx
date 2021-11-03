@@ -5,8 +5,10 @@ import {store} from '@redux/store'
 import {CookiesProvider} from 'react-cookie'
 
 
+
+
 export const App: React.FC = () => {
-    return (
+  return (
         <CookiesProvider>
           <Provider store={store}>
             <Router />
