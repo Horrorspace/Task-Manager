@@ -1,3 +1,5 @@
+import http from 'http'
+import {WebSocketServer} from 'ws'
 import express from 'express'
 import path from 'path'
 import {IConf} from './interfaces/config'
@@ -166,11 +168,24 @@ app.use('/public/', express.static(path.join(__dirname, 'client', 'public')))
 app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'client', 'index.html'))
 })
-  
+
+const server = http.createServer(app);
+const webSocketServer = new WebSocketServer({ port: 3009 });
+webSocketServer.on('connection', ws => {
+    ws.on('open', () => {
+        const msg : string = 'connection open';
+        console.log(msg);
+        webSocketServer.clients.forEach(client => {
+            client.send(msg)
+        })
+    });
+
+    ws.send('Hi there, I am a WebSocket server');
+});
 
 async function start(): Promise<void> {
     try {
-        app.listen(PORT, () => {
+        server.listen(PORT, () => {
             console.log(`Server has been started on port ${PORT}...`);
         });
     }
