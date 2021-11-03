@@ -1,11 +1,13 @@
 import React from 'react'
+import {useLocation} from 'react-router-dom'
 import {Container, Row, Col, Button, Dropdown} from 'react-bootstrap'
 import {MainHeader} from '@react/components/MainHeader'
 import {SimpleHeader} from '@react/components/SimpleHeader'
 
 
 
-export const useHeader = (routeName: string): React.ReactElement => {
+export const useHeader = (): React.ReactElement => {
+    const routeName = useLocation().pathname;
     switch(routeName) {
         case '/Auth':
             return (
