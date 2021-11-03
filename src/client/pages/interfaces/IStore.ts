@@ -2,6 +2,9 @@ import {ITasksInstance} from '@interfaces/ITask'
 import {IUserInstance} from '@interfaces/IUser'
 import {ThunkAction} from 'redux-thunk'
 import {AnyAction, Reducer} from 'redux'
+import {TaskActTypes} from '@redux/types/TaskActTypes'
+import {UserActTypes} from '@redux/types/UserActTypes'
+import {AppActTypes} from '@redux/types/AppActTypes'
 
 
 export interface ITaskState {
@@ -42,14 +45,16 @@ export interface IAction {
     type: string;
 }
 
-export interface ITaskAction extends IAction {
+export interface ITaskAction {
+    type: TaskActTypes;
     tasks?: ITasksInstance;
     isDataUpdating?: boolean;
     error?: string;
     message?: string;
 }
 
-export interface IUserAction extends IAction {
+export interface IUserAction {
+    type: UserActTypes;
     user?: IUserInstance;
     isDataUpdating?: boolean;
     error?: string;
@@ -57,7 +62,8 @@ export interface IUserAction extends IAction {
     isValidPass?: boolean;
 }
 
-export interface IAppAction extends IAction {
+export interface IAppAction {
+    type: AppActTypes;
     isDataUpdating?: boolean;
     message?: string;
     error?: string;
