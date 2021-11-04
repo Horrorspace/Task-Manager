@@ -14,7 +14,7 @@ module.exports = {
     mode: 'development',
     context: path.resolve(__dirname),
     entry: {
-        app: './src/client/pages/index.tsx',
+        app: './src/client/index.tsx',
     },
     output: {
         filename: 'public/js/[name].js',
@@ -23,7 +23,7 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             title: 'Tasks',
-            template: './src/client/pages/template.html',
+            template: './src/client/assets/html/template.html',
             scriptLoading: 'defer',
             minify: {
                 collapseWhitespace: isProd
@@ -32,43 +32,43 @@ module.exports = {
         new CopyWebpackPlugin({
             patterns: [
                 {
-                    from: path.resolve(__dirname, 'src/client/static/favicon.ico'),
+                    from: path.resolve(__dirname, 'src/client/assets/img/ico/favicon.ico'),
                     to: path.resolve(__dirname, 'build/src/client/public/ico')
                 },
                 {
-                    from: path.resolve(__dirname, 'src/client/static/main.html'),
+                    from: path.resolve(__dirname, 'src/client/assets/html/static/main.html'),
                     to: path.resolve(__dirname, 'build/src/client')
                 },
                 {
-                    from: path.resolve(__dirname, 'src/client/static/list.html'),
+                    from: path.resolve(__dirname, 'src/client/assets/html/static/list.html'),
                     to: path.resolve(__dirname, 'build/src/client')
                 },
                 {
-                    from: path.resolve(__dirname, 'src/client/static/calendar.html'),
+                    from: path.resolve(__dirname, 'src/client/assets/html/static/calendar.html'),
                     to: path.resolve(__dirname, 'build/src/client')
                 },
                 {
-                    from: path.resolve(__dirname, 'src/client/static/settings.html'),
+                    from: path.resolve(__dirname, 'src/client/assets/html/static/settings.html'),
                     to: path.resolve(__dirname, 'build/src/client')
                 },
                 {
-                    from: path.resolve(__dirname, 'src/client/static/AddTask.html'),
+                    from: path.resolve(__dirname, 'src/client/assets/html/static/AddTask.html'),
                     to: path.resolve(__dirname, 'build/src/client')
                 },
                 {
-                    from: path.resolve(__dirname, 'src/client/static/img/Path 14.svg'),
+                    from: path.resolve(__dirname, 'src/client/assets/img/svg/Path 14.svg'),
                     to: path.resolve(__dirname, 'build/src/client/public/img')
                 },
                 {
-                    from: path.resolve(__dirname, 'src/client/static/img/CompositeLayer.svg'),
+                    from: path.resolve(__dirname, 'src/client/assets/img/svg/CompositeLayer.svg'),
                     to: path.resolve(__dirname, 'build/src/client/public/img')
                 },
                 {
-                    from: path.resolve(__dirname, 'src/client/static/img/Path 19.svg'),
+                    from: path.resolve(__dirname, 'src/client/assets/img/svg/Path 19.svg'),
                     to: path.resolve(__dirname, 'build/src/client/public/img')
                 },
                 {
-                    from: path.resolve(__dirname, 'src/client/static/img/Union 1.svg'),
+                    from: path.resolve(__dirname, 'src/client/assets/img/svg/Union 1.svg'),
                     to: path.resolve(__dirname, 'build/src/client/public/img')
                 }
             ],
@@ -81,11 +81,13 @@ module.exports = {
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.json', 'css', '.scss', '.sass', '.html'],
         alias: {
-            '@scss': path.resolve(__dirname, './src/client/public/scss'),
-            '@react': path.resolve(__dirname, './src/client/pages/react'),
-            '@redux': path.resolve(__dirname, './src/client/pages/redux'),
-            '@core': path.resolve(__dirname, './src/client/pages/core'),
-            '@interfaces': path.resolve(__dirname, './src/client/pages/interfaces'),
+            '@api': path.resolve(__dirname, './src/client/api'),
+            '@scss': path.resolve(__dirname, './src/client/assets/styles'),
+            '@react': path.resolve(__dirname, './src/client/ui'),
+            '@redux': path.resolve(__dirname, './src/client/store'),
+            '@core': path.resolve(__dirname, './src/client/core'),
+            '@utilities': path.resolve(__dirname, './src/client/utilities'),
+            '@interfaces': path.resolve(__dirname, './src/client/types'),
         }
     },
     module: {
