@@ -46,6 +46,7 @@
     "baseUrl": "./src",                       /* Base directory to resolve non-absolute module names. */
     "paths": {
       "@api/*": ["client/api/*"],
+      "@config/*": ["client/config/*"],
       "@core/*": ["client/core/*"],
       "@utilities/*": ["client/utilities/*"],
       "@scss/*": ["client/assets/styles/*"],

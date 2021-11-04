@@ -85,6 +85,7 @@ module.exports = {
             '@scss': path.resolve(__dirname, './src/client/assets/styles'),
             '@react': path.resolve(__dirname, './src/client/ui'),
             '@redux': path.resolve(__dirname, './src/client/store'),
+            '@config': path.resolve(__dirname, './src/client/config'),
             '@core': path.resolve(__dirname, './src/client/core'),
             '@utilities': path.resolve(__dirname, './src/client/utilities'),
             '@interfaces': path.resolve(__dirname, './src/client/types'),
