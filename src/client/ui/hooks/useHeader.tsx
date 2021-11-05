@@ -1,8 +1,8 @@
 import React from 'react'
 import {useLocation} from 'react-router-dom'
 import {Container, Row, Col, Button, Dropdown} from 'react-bootstrap'
-import {MainHeader} from '@react/components/MainHeader'
-import {SimpleHeader} from '@react/components/SimpleHeader'
+import {MainHeader} from '@react/components/header/MainHeader'
+import {SimpleHeader} from '@react/components/header/SimpleHeader'
 
 
 

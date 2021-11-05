@@ -1,7 +1,7 @@
 import React from 'react'
 import {useLocation} from 'react-router-dom'
 import {Container, Row, Col, Button, Dropdown} from 'react-bootstrap'
-import {MainFooter} from '@react/components/MainFooter'
+import {MainFooter} from '@react/components/footer/MainFooter'
 
 
 export const useFooter = (): React.ReactElement => {

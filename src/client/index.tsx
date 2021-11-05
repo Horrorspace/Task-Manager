@@ -28,19 +28,17 @@ async function start() {
 
 async function wsTest() {
   try {
-    const wsConnection = new WebSocket('ws://37.193.148.113:3009');
-    wsConnection.onopen = () => {
-      console.log('connection open');
-    }
-    wsConnection.onmessage = (event) => {
-      console.log(`Data: ${event.data}`);
-    }
-    wsConnection.onclose = () => {
-      console.log('connection closed');
-    }
-    wsConnection.onerror = (e: any) => {
-      console.error(`Error is: ${e}`);
-    }
+    const wsConnection = new WebSocket('ws://37.193.148.113:80');
+    wsConnection.addEventListener('error', (event: any) => {
+      console.error(`${event}`);
+    });
+    wsConnection.addEventListener('close', (event: any) => {
+      console.error(`${event.code}`);
+      console.error(`${event.reason}`);
+    });
+    wsConnection.addEventListener('open', (event: Event) => {
+      console.log('connection has been opened');
+    });
   }
   catch(e) {
     console.error(`Error is: ${e}`);

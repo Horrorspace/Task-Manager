@@ -170,14 +170,12 @@ app.get('*', (req, res) => {
 })
 
 const server = http.createServer(app);
-const webSocketServer = new WebSocketServer({ port: 3009 });
+const webSocketServer = new WebSocketServer({ server });
 webSocketServer.on('connection', ws => {
-    ws.on('open', () => {
-        const msg : string = 'connection open';
-        console.log(msg);
-        webSocketServer.clients.forEach(client => {
-            client.send(msg)
-        })
+    console.log('start');
+
+    ws.on('message', (message) => {
+        console.log(message.toString());
     });
 
     ws.send('Hi there, I am a WebSocket server');

@@ -1,5 +1,5 @@
 import React, {useState, useEffect, ChangeEvent, MouseEvent} from 'react'
-import {AddTask} from '@react/components/AddTask'
+import {AddTask} from '@react/components/tasks/AddTask'
 import {Container, Row, Col, Button} from 'react-bootstrap'
 import {NavLink} from 'react-router-dom'
 import {useSelector, useDispatch} from 'react-redux'

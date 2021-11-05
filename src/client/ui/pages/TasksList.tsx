@@ -1,6 +1,6 @@
 import React, {ChangeEvent, MouseEvent, ReactElement, useState, useEffect} from 'react'
-import {AddTask} from '@react/components/AddTask'
-import {EditTask} from '@react/components/EditTask'
+import {AddTask} from '@react/components/tasks/AddTask'
+import {EditTask} from '@react/components/tasks/EditTask'
 import {Container, Row, Col, Button, ButtonGroup} from 'react-bootstrap'
 import {useSelector, useDispatch} from 'react-redux'
 import {addTask, editTask, deleteTask, toggleCancel, toggleComplete, togglePriority} from '@redux/actions/taskActions'
